@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { conceptRoutes, parentRoutes, projects } from "../src/lib/content";
 import { contactSchema } from "../src/lib/contact";
+import { vaultProducts } from "../src/lib/vault";
 
 test("parent route inventory covers every requested public route", () => {
   assert.deepEqual(parentRoutes, [
@@ -24,6 +25,10 @@ test("four concept route trees are unique and include their required commerce an
   assert.ok(all("axiom-strategy").includes("insights/decision-models"));
   assert.ok(all("vault-tcg").includes("account/wishlist"));
   assert.ok(all("vault-tcg").includes("checkout-demo"));
+  assert.deepEqual(
+    conceptRoutes["vault-tcg"].filter(route => route.kind === "product").map(route => route.path).sort(),
+    vaultProducts.map(product => `cards/${product.slug}`).sort(),
+  );
 });
 
 test("contact validation accepts the brief shape and rejects invalid fields and the honeypot", () => {
