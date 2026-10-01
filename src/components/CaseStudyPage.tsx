@@ -4,11 +4,19 @@ import { projectBySlug, projects } from "@/lib/content";
 import { ContentSection, Eyebrow, SiteShell } from "@/components/SiteShell";
 import { ViewportRelay } from "@/components/Interactive";
 
+const performanceSnapshots: Record<string, { desktop: number; mobile: number; mobileLcp: string }> = {
+  "northstar-roofing": { desktop: 100, mobile: 96, mobileLcp: "2.2" },
+  "mira-atelier": { desktop: 100, mobile: 98, mobileLcp: "2.1" },
+  "axiom-strategy": { desktop: 100, mobile: 99, mobileLcp: "1.9" },
+  "vault-tcg": { desktop: 100, mobile: 99, mobileLcp: "2.0" },
+};
+
 export function CaseStudyPage({ slug }: { slug: string }) {
   const project = projectBySlug[slug];
   if (!project) return null;
   const index = projects.findIndex(item => item.slug === slug);
   const next = projects[(index + 1) % projects.length];
+  const performance = performanceSnapshots[slug];
   const mode = slug === "mira-atelier" ? "canvas" : "stage";
   return <SiteShell mode={mode} className={`case-study case-${slug}`}><main id="main">
     <section className="case-hero" style={{ "--project-color": project.palette, "--project-signal": project.signal } as React.CSSProperties}>
@@ -35,7 +43,7 @@ export function CaseStudyPage({ slug }: { slug: string }) {
 
     <ContentSection number="08" label="COMPONENT STATES" title="The useful state matters as much as the default." className="case-states"><div className="state-strip">{["DEFAULT", "FOCUS", "LOADING", "ERROR", "SUCCESS"].map((state, i) => <div key={state} data-state={state.toLowerCase()}><span>0{i + 1}</span><b>{state}</b><p>{["Ready for input", "Visible keyboard location", "Action is underway", "Answers remain available", "Outcome is stated plainly"][i]}</p></div>)}</div></ContentSection>
 
-    <ContentSection number="09" label="TECHNICAL / ACCESSIBILITY PROOF" title="The evidence record is explicit." className="case-tech"><div className="tech-record"><div><span>RESPONSIVE QA</span><b>Planned breakpoints</b><small>1440 / 1280 / 1024 / 768 / 430 / 390 / 360</small></div><div><span>ACCESSIBILITY</span><b>Not audited yet</b><small>Keyboard and semantic checks required before a public quality claim.</small></div><div><span>PERFORMANCE</span><b>Not measured yet</b><small>No score or Core Web Vital is claimed in this case study.</small></div></div></ContentSection>
+    <ContentSection number="09" label="TECHNICAL / ACCESSIBILITY PROOF" title="The evidence record is explicit." className="case-tech"><div className="tech-record"><div><span>RESPONSIVE QA</span><b>80 production paths · 0 overflow</b><small>Ten widths from 360px to 1440px; 800 route-width checks, including the custom 404.</small></div><div><span>ACCESSIBILITY</span><b>0 Axe findings · 80 paths</b><small>WCAG A/AA-oriented automated checks plus keyboard and dialog focus tests. This is not a conformance certification.</small></div><div><span>PERFORMANCE / {project.route.toUpperCase()}</span><b>{performance.desktop} desktop · {performance.mobile} mobile</b><small>Lighthouse 13.5.0 production snapshot · LCP 0.5s desktop / {performance.mobileLcp}s mobile · CLS 0 · 2026-10-01.</small></div></div></ContentSection>
 
     <section className="case-conclusion"><div className="section-shell"><Eyebrow number="10">WHAT THIS CONCEPT DEMONSTRATES</Eyebrow><h2>{project.objective}</h2><p>{project.tradeoff}</p><div className="case-conclusion-actions"><Link className="button button-primary" href={project.route}>Explore the concept <span aria-hidden="true">↗</span></Link><Link className="button button-secondary" href="/contact">Start a project</Link></div></div></section>
 

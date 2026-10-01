@@ -682,7 +682,7 @@
   .decision-connector i { flex: 1; height: 1px; background: #b8d8c8; }
   .decision-detail { min-height: 105px; padding: 12px; border-left: 2px solid #163b31; background: #f6f5f0; }
   .decision-detail > span, .decision-detail small { color: #58665f; font: 8px var(--font-mono); }
-  .decision-detail h3 { margin-block: 8px 3px; font: 600 17px var(--font-display); }
+  .decision-detail h2 { margin-block: 8px 3px; font: 600 17px var(--font-display); }
   .decision-detail p { font-size: 11px; }
   .axiom-diagram-note { margin-block: 9px; color: #58665f; font-size: 9px; }
   .axiom-decision-field > .text-link { margin-top: 11px; font-size: 11px; }

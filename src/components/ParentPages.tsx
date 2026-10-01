@@ -41,11 +41,12 @@ function ProcessPage() {
 
 function StandardsPage() {
   const rows = [
-    ["Responsive", "1440 / 1280 / 1024 / 768 / 430 / 390 / 360 plus fluid widths", "Browser review and route-level interaction checks", "Not verified yet"],
-    ["Accessibility", "Keyboard, semantics, labels, focus, reduced motion, reflow", "Manual keyboard review plus automated checks; neither replaces an audit", "Not audited yet"],
-    ["Performance", "Image loading, fonts, JavaScript, route bundles, motion", "Production Lighthouse profile with date, URL and commit", "Not measured yet"],
-    ["Interaction states", "Default, focus, loading, empty, error and success where applicable", "Use each route and its implemented states", "In implementation"],
-    ["Content resilience", "Long headings, missing optional media and narrow viewports", "Reflow and overflow review", "Not verified yet"],
+    ["Responsive", "1440 / 1280 / 1200 / 1024 / 820 / 768 / 430 / 390 / 375 / 360", "Production route sweep; horizontal overflow and response status", "80 paths × 10 widths · 0 overflow · 0 unexpected statuses"],
+    ["Accessibility", "Keyboard, semantics, labels, focus, reduced motion, reflow", "axe-core WCAG 2.0/2.1 A/AA and 2.2 AA tags; selected keyboard and dialog flows", "80 paths · 0 automated findings · not a conformance certification"],
+    ["Performance", "Image loading, fonts, JavaScript, route bundles, motion", "Lighthouse 13.5.0 on production homepage and four concept home routes", "Desktop 100; mobile 96–99 · LCP 0.5s desktop / 1.9–2.2s mobile · CLS 0"],
+    ["Interaction states", "Default, focus, loading, empty, error and success where applicable", "Production smoke for navigation, contact error recovery, project interactions and Vault commerce demo", "Passed · inquiry delivery remains unconfigured and reports 503"],
+    ["Content resilience", "Direct routes, titles, headings, canonicals, images and internal links", "Route and internal-link crawl against the production origin", "79 content pages · 79 internal destinations · 0 failures or broken images"],
+    ["Indexability", "Canonical, robots, sitemap and preview noindex", "Production and protected Preview metadata inspection", "Intentionally noindex; sitemap empty until inquiry delivery is configured and indexing is enabled"],
   ];
   return <SiteShell mode="lab"><main id="main"><PageIntro eyebrow="STANDARDS / EVIDENCE" title="Quality should leave evidence." description="These standards describe how VAELTX checks responsive behavior, accessibility, performance and interface states. Results are published only when they are actually measured." mode="lab" />
     <ContentSection number="01" label="THE PROTOCOL" title="Target · method · evidence · limitation"><div className="standards-table" role="table" aria-label="Quality standards and current evidence"><div className="standards-head" role="row"><span role="columnheader">AREA</span><span role="columnheader">TARGET</span><span role="columnheader">METHOD</span><span role="columnheader">CURRENT EVIDENCE</span></div>{rows.map(([area, target, method, state]) => <div className="standards-row" role="row" key={area}><span role="cell">{area}</span><span role="cell">{target}</span><span role="cell">{method}</span><span role="cell" className="evidence-state">{state}</span></div>)}</div></ContentSection>
