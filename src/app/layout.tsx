@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   applicationName: "VAELTX",
   openGraph: { type: "website", siteName: "VAELTX", title: "VAELTX — Web & Conversion Studio", description: "Websites with structure, character and a clear next action." },
   robots: { index: indexable, follow: indexable },
+  alternates: siteUrl ? { canonical: new URL("/", siteUrl).toString() } : undefined,
 };
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#F7F5F1" };
