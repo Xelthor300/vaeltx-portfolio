@@ -27,7 +27,7 @@ export function HomePage() {
       <article><span>01 / RESPONSIVE</span><h3>One task, re-authored for each viewport.</h3><p>Layout, order, controls and cropping adapt instead of shrinking in place.</p><b>1440 · 768 · 390</b></article>
       <article><span>02 / STATES</span><h3>Default, focus, empty, error and success.</h3><p>Interactive work shows the state a person actually needs, not only the ideal frame.</p><b>VISIBLE AND KEYBOARD-READY</b></article>
       <article><span>03 / ACCESSIBILITY</span><h3>Focus and semantics are part of design.</h3><p>Keyboard operation, visible focus and reduced-motion behavior are built into the interaction contract.</p><b>AA-ORIENTED CHECKLIST</b></article>
-      <article><span>04 / PERFORMANCE</span><h3>Measured before published.</h3><p>Production scores appear only with date, tool, profile and commit.</p><b>NOT MEASURED YET</b></article>
+      <article><span>04 / PERFORMANCE</span><h3>Measured in production.</h3><p>VAELTX Home · Lighthouse 13.5.0 · desktop and mobile · 2026-10-01.</p><b>100 DESKTOP · 99 MOBILE</b></article>
     </div><Link className="text-link" href="/standards">Inspect the standards <span aria-hidden="true">↗</span></Link></div></section>
 
     <section className="mapper-section"><div className="section-shell"><div className="section-kicker"><Eyebrow number="03">A USEFUL STARTING POINT</Eyebrow><span>PROBLEM → FOCUS → OUTPUT</span></div><div className="mapper-heading"><h2>Start with what is getting in the way.</h2><p>You do not need an agency vocabulary to explain a website problem.</p></div><ServiceMapper /></div></section>
