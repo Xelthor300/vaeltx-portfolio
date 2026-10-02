@@ -1,0 +1,331 @@
+{
+  "measuredCommit": "bfd3d9ef072f489e5771569ee44f4bc7bbb58d86",
+  "productionUrl": "https://vaeltx-portfolio.vercel.app",
+  "deploymentId": "dpl_84v9ophHWdJ7bTcdVMWM8gW4V46E",
+  "deploymentUrl": "https://vaeltx-portfolio-2s7xlth88-xelthor300s-projects.vercel.app",
+  "testedAtUtc": "2026-10-02",
+  "baselineCommit": "da798aa70499fdd601b386e073141b873f8bf410",
+  "routes": [
+    {
+      "path": "/",
+      "system": "VAELTX"
+    },
+    {
+      "path": "/work",
+      "system": "VAELTX"
+    },
+    {
+      "path": "/work/northstar-roofing",
+      "system": "VAELTX"
+    },
+    {
+      "path": "/work/mira-atelier",
+      "system": "VAELTX"
+    },
+    {
+      "path": "/work/axiom-strategy",
+      "system": "VAELTX"
+    },
+    {
+      "path": "/work/vault-tcg",
+      "system": "VAELTX"
+    },
+    {
+      "path": "/services",
+      "system": "VAELTX"
+    },
+    {
+      "path": "/process",
+      "system": "VAELTX"
+    },
+    {
+      "path": "/standards",
+      "system": "VAELTX"
+    },
+    {
+      "path": "/about",
+      "system": "VAELTX"
+    },
+    {
+      "path": "/contact",
+      "system": "VAELTX"
+    },
+    {
+      "path": "/privacy",
+      "system": "VAELTX"
+    },
+    {
+      "path": "/concepts/northstar-roofing",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/services",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/services/roof-repair",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/services/roof-replacement",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/services/storm-damage",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/services/roof-inspection",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/service-areas",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/service-areas/north-district",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/service-areas/central-district",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/service-areas/lakeside-district",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/service-areas/sample-city",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/about",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/reviews",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/warranty",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/request-an-inspection",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/request-a-quote",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/contact",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/northstar-roofing/faq",
+      "system": "Northstar Roofing"
+    },
+    {
+      "path": "/concepts/mira-atelier",
+      "system": "Mira Atelier"
+    },
+    {
+      "path": "/concepts/mira-atelier/work",
+      "system": "Mira Atelier"
+    },
+    {
+      "path": "/concepts/mira-atelier/work/midnight-garden",
+      "system": "Mira Atelier"
+    },
+    {
+      "path": "/concepts/mira-atelier/work/borrowed-light",
+      "system": "Mira Atelier"
+    },
+    {
+      "path": "/concepts/mira-atelier/work/quiet-orchard",
+      "system": "Mira Atelier"
+    },
+    {
+      "path": "/concepts/mira-atelier/commissions",
+      "system": "Mira Atelier"
+    },
+    {
+      "path": "/concepts/mira-atelier/commission-request",
+      "system": "Mira Atelier"
+    },
+    {
+      "path": "/concepts/mira-atelier/about",
+      "system": "Mira Atelier"
+    },
+    {
+      "path": "/concepts/mira-atelier/shop",
+      "system": "Mira Atelier"
+    },
+    {
+      "path": "/concepts/mira-atelier/shop/paper-study-01",
+      "system": "Mira Atelier"
+    },
+    {
+      "path": "/concepts/mira-atelier/contact",
+      "system": "Mira Atelier"
+    },
+    {
+      "path": "/concepts/axiom-strategy",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/services",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/services/growth-strategy",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/services/operating-model",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/services/market-prioritization",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/services/decision-architecture",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/industries",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/industries/professional-services",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/industries/consumer-products",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/industries/technology",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/case-studies",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/case-studies/portfolio-prioritization",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/case-studies/market-prioritization",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/case-studies/decision-field",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/insights",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/insights/evidence-before-opinion",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/insights/decision-models",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/about",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/axiom-strategy/contact",
+      "system": "Axiom Strategy"
+    },
+    {
+      "path": "/concepts/vault-tcg",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/collections",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/collections/ember-archive",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/collections/tidal-index",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/collections/verdant-atlas",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/search",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/cards",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/cards/ember-keeper",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/cards/tideglass-heron",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/cards/moss-oracle",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/cards/star-forager",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/cart",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/account",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/account/orders",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/account/wishlist",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/shipping",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/faq",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/contact",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/concepts/vault-tcg/checkout-demo",
+      "system": "Vault TCG"
+    },
+    {
+      "path": "/__qa_not_found__",
+      "system": "Custom 404 audit",
+      "expectedStatus": 404
+    }
+  ]
+}

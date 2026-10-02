@@ -1,0 +1,642 @@
+{
+  "measuredCommit": "bfd3d9ef072f489e5771569ee44f4bc7bbb58d86",
+  "productionUrl": "https://vaeltx-portfolio.vercel.app",
+  "deploymentId": "dpl_84v9ophHWdJ7bTcdVMWM8gW4V46E",
+  "deploymentUrl": "https://vaeltx-portfolio-2s7xlth88-xelthor300s-projects.vercel.app",
+  "testedAtUtc": "2026-10-02",
+  "baselineCommit": "da798aa70499fdd601b386e073141b873f8bf410",
+  "routeAudit": {
+    "routes": 80,
+    "issues": [],
+    "consoleErrors": [
+      {
+        "path": "/__qa_not_found__",
+        "message": "Failed to load resource: the server responded with a status of 404 ()"
+      }
+    ],
+    "response404": []
+  },
+  "linkAudit": {
+    "scannedPages": 79,
+    "uniqueInternalDestinations": 79,
+    "failures": [],
+    "pageErrors": []
+  },
+  "responsive": {
+    "routes": 80,
+    "widths": [
+      1440,
+      1280,
+      1200,
+      1024,
+      820,
+      768,
+      720,
+      430,
+      390,
+      375,
+      360
+    ],
+    "checked": 880,
+    "failures": [],
+    "badStatuses": []
+  },
+  "axe": {
+    "routes": 80,
+    "violationCount": 0,
+    "violations": [],
+    "reports": [
+      {
+        "route": "/",
+        "violations": []
+      },
+      {
+        "route": "/work",
+        "violations": []
+      },
+      {
+        "route": "/work/northstar-roofing",
+        "violations": []
+      },
+      {
+        "route": "/work/mira-atelier",
+        "violations": []
+      },
+      {
+        "route": "/work/axiom-strategy",
+        "violations": []
+      },
+      {
+        "route": "/work/vault-tcg",
+        "violations": []
+      },
+      {
+        "route": "/services",
+        "violations": []
+      },
+      {
+        "route": "/process",
+        "violations": []
+      },
+      {
+        "route": "/standards",
+        "violations": []
+      },
+      {
+        "route": "/about",
+        "violations": []
+      },
+      {
+        "route": "/contact",
+        "violations": []
+      },
+      {
+        "route": "/privacy",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/services",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/services/roof-repair",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/services/roof-replacement",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/services/storm-damage",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/services/roof-inspection",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/service-areas",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/service-areas/north-district",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/service-areas/central-district",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/service-areas/lakeside-district",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/service-areas/sample-city",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/about",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/reviews",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/warranty",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/request-an-inspection",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/request-a-quote",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/contact",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing/faq",
+        "violations": []
+      },
+      {
+        "route": "/concepts/mira-atelier",
+        "violations": []
+      },
+      {
+        "route": "/concepts/mira-atelier/work",
+        "violations": []
+      },
+      {
+        "route": "/concepts/mira-atelier/work/midnight-garden",
+        "violations": []
+      },
+      {
+        "route": "/concepts/mira-atelier/work/borrowed-light",
+        "violations": []
+      },
+      {
+        "route": "/concepts/mira-atelier/work/quiet-orchard",
+        "violations": []
+      },
+      {
+        "route": "/concepts/mira-atelier/commissions",
+        "violations": []
+      },
+      {
+        "route": "/concepts/mira-atelier/commission-request",
+        "violations": []
+      },
+      {
+        "route": "/concepts/mira-atelier/about",
+        "violations": []
+      },
+      {
+        "route": "/concepts/mira-atelier/shop",
+        "violations": []
+      },
+      {
+        "route": "/concepts/mira-atelier/shop/paper-study-01",
+        "violations": []
+      },
+      {
+        "route": "/concepts/mira-atelier/contact",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/services",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/services/growth-strategy",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/services/operating-model",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/services/market-prioritization",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/services/decision-architecture",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/industries",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/industries/professional-services",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/industries/consumer-products",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/industries/technology",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/case-studies",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/case-studies/portfolio-prioritization",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/case-studies/market-prioritization",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/case-studies/decision-field",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/insights",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/insights/evidence-before-opinion",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/insights/decision-models",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/about",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy/contact",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/collections",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/collections/ember-archive",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/collections/tidal-index",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/collections/verdant-atlas",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/search",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/cards",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/cards/ember-keeper",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/cards/tideglass-heron",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/cards/moss-oracle",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/cards/star-forager",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/cart",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/account",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/account/orders",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/account/wishlist",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/shipping",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/faq",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/contact",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/checkout-demo",
+        "violations": []
+      },
+      {
+        "route": "/__qa_not_found__",
+        "violations": []
+      }
+    ]
+  },
+  "mobile": {
+    "checks": [
+      {
+        "name": "skip link receives initial keyboard focus",
+        "ok": true
+      },
+      {
+        "name": "skip link targets main",
+        "ok": true
+      },
+      {
+        "name": "navigation traps focus",
+        "ok": true
+      },
+      {
+        "name": "navigation returns focus",
+        "ok": true
+      },
+      {
+        "name": "reduced motion disables aperture animation",
+        "ok": true
+      },
+      {
+        "name": "inspection validation focuses error summary",
+        "ok": true
+      },
+      {
+        "name": "inspection failure preserves input",
+        "ok": true
+      },
+      {
+        "name": "inspection local confirmation is visible",
+        "ok": true
+      },
+      {
+        "name": "commission validation focuses error summary",
+        "ok": true
+      },
+      {
+        "name": "commission failure preserves input",
+        "ok": true
+      },
+      {
+        "name": "commission local confirmation is visible",
+        "ok": true
+      },
+      {
+        "name": "card filters trap focus",
+        "ok": true
+      },
+      {
+        "name": "filter Escape returns focus",
+        "ok": true
+      }
+    ],
+    "axe": [
+      {
+        "route": "/",
+        "violations": []
+      },
+      {
+        "route": "/work",
+        "violations": []
+      },
+      {
+        "route": "/contact",
+        "violations": []
+      },
+      {
+        "route": "/work/mira-atelier",
+        "violations": []
+      },
+      {
+        "route": "/concepts/northstar-roofing",
+        "violations": []
+      },
+      {
+        "route": "/concepts/mira-atelier",
+        "violations": []
+      },
+      {
+        "route": "/concepts/axiom-strategy",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/cards",
+        "violations": []
+      },
+      {
+        "route": "/concepts/vault-tcg/cards/ember-keeper",
+        "violations": []
+      }
+    ],
+    "smallButtons": []
+  },
+  "interactions": {
+    "origin": "https://vaeltx-portfolio.vercel.app",
+    "checks": [
+      {
+        "name": "mobile nav opens",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "name": "mobile nav Escape closes",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "name": "mobile nav restores focus",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "name": "contact fields have persistent labels",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "name": "Northstar service fit updates",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "name": "Mira artwork dialog opens",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "name": "Mira artwork Escape closes",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "name": "Mira artwork restores focus",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "name": "Axiom framework stage updates",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "name": "Vault cart action acknowledges add",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "name": "Vault cart persists selected product",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "name": "Vault cart persists selected condition",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "name": "Vault checkout advances without payment",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "name": "no uncaught browser errors",
+        "ok": true,
+        "detail": "[]"
+      }
+    ],
+    "notFound": [],
+    "browserErrors": []
+  },
+  "search": {
+    "checks": [
+      {
+        "name": "Aperture selects Axiom",
+        "ok": true
+      },
+      {
+        "name": "Vault search returns matching cards",
+        "ok": true
+      },
+      {
+        "name": "Vault search shows useful empty state",
+        "ok": true
+      },
+      {
+        "name": "Vault mobile filter opens",
+        "ok": true
+      },
+      {
+        "name": "Vault set filter narrows catalog",
+        "ok": true
+      },
+      {
+        "name": "Vault filter returns focus",
+        "ok": true
+      },
+      {
+        "name": "Vault wishlist toggle responds",
+        "ok": true
+      },
+      {
+        "name": "Vault wishlist persists",
+        "ok": true
+      },
+      {
+        "name": "no browser errors",
+        "ok": true
+      },
+      {
+        "name": "no missing responses",
+        "ok": true
+      }
+    ],
+    "errors": [],
+    "missing": []
+  },
+  "products": {
+    "results": [
+      {
+        "slug": "ember-keeper",
+        "status": 200,
+        "titleMatches": true,
+        "conditionSelectable": true,
+        "addAcknowledged": true
+      },
+      {
+        "slug": "tideglass-heron",
+        "status": 200,
+        "titleMatches": true,
+        "conditionSelectable": true,
+        "addAcknowledged": true
+      },
+      {
+        "slug": "moss-oracle",
+        "status": 200,
+        "titleMatches": true,
+        "conditionSelectable": true,
+        "addAcknowledged": true
+      },
+      {
+        "slug": "star-forager",
+        "status": 200,
+        "titleMatches": true,
+        "conditionSelectable": true,
+        "addAcknowledged": true
+      }
+    ],
+    "failures": [],
+    "errors": [],
+    "missing": []
+  },
+  "contact": {
+    "status": 503,
+    "message": "Email delivery is not configured yet. No message was sent; your answers are still here. You can email vaeltxn@gmail.com directly.\n\nNothing was cleared. Correct any field if needed, then retry, or email vaeltxn@gmail.com.",
+    "alertVisible": true,
+    "namePreserved": true,
+    "emailPreserved": true,
+    "pageErrors": []
+  },
+  "notes": [
+    "The only route-audit console entry is the expected custom-404 response.",
+    "Axe checks are automated WCAG A/AA checks, not accessibility certification.",
+    "Native screen-reader and OS browser zoom conformance have not been certified.",
+    "720 CSS px reflow is included in the width sweep; it is not a native browser zoom test."
+  ]
+}

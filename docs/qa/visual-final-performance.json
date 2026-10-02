@@ -1,0 +1,193 @@
+{
+  "measuredCommit": "bfd3d9ef072f489e5771569ee44f4bc7bbb58d86",
+  "productionUrl": "https://vaeltx-portfolio.vercel.app",
+  "deploymentId": "dpl_84v9ophHWdJ7bTcdVMWM8gW4V46E",
+  "deploymentUrl": "https://vaeltx-portfolio-2s7xlth88-xelthor300s-projects.vercel.app",
+  "testedAtUtc": "2026-10-02",
+  "baselineCommit": "da798aa70499fdd601b386e073141b873f8bf410",
+  "tool": "Lighthouse 13.5.0",
+  "profile": "Desktop preset; mobile simulated throttling, 390 x 844, device scale factor 1",
+  "caveat": "Laboratory snapshots, not field Core Web Vitals or a performance guarantee. Historical initial and repeat measurements remain separately recorded.",
+  "measurements": [
+    {
+      "name": "vaeltx-home",
+      "factor": "desktop",
+      "url": "https://vaeltx-portfolio.vercel.app/",
+      "fetchTime": "2026-10-02T02:05:49.678Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 69,
+        "agentic-browsing": 100
+      },
+      "lcp": 502.79999999999995,
+      "cls": 0,
+      "tbt": 0,
+      "bytes": 510714
+    },
+    {
+      "name": "vaeltx-home",
+      "factor": "mobile",
+      "url": "https://vaeltx-portfolio.vercel.app/",
+      "fetchTime": "2026-10-02T02:06:04.858Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 69,
+        "agentic-browsing": 100
+      },
+      "lcp": 2134.2625,
+      "cls": 0,
+      "tbt": 100.5,
+      "bytes": 489050
+    },
+    {
+      "name": "northstar",
+      "factor": "desktop",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/northstar-roofing",
+      "fetchTime": "2026-10-02T02:06:20.282Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 69,
+        "agentic-browsing": 100
+      },
+      "lcp": 526.739,
+      "cls": 0,
+      "tbt": 0,
+      "bytes": 307417
+    },
+    {
+      "name": "northstar",
+      "factor": "mobile",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/northstar-roofing",
+      "fetchTime": "2026-10-02T02:06:35.070Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 69,
+        "agentic-browsing": 100
+      },
+      "lcp": 2237.554,
+      "cls": 0,
+      "tbt": 36,
+      "bytes": 294070
+    },
+    {
+      "name": "mira",
+      "factor": "desktop",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/mira-atelier",
+      "fetchTime": "2026-10-02T02:06:49.909Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 69,
+        "agentic-browsing": 100
+      },
+      "lcp": 539.9175,
+      "cls": 0,
+      "tbt": 0,
+      "bytes": 451693
+    },
+    {
+      "name": "mira",
+      "factor": "mobile",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/mira-atelier",
+      "fetchTime": "2026-10-02T02:07:04.485Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 69,
+        "agentic-browsing": 100
+      },
+      "lcp": 2309.4755,
+      "cls": 0,
+      "tbt": 99,
+      "bytes": 447811
+    },
+    {
+      "name": "axiom",
+      "factor": "desktop",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/axiom-strategy",
+      "fetchTime": "2026-10-02T02:07:19.371Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 66,
+        "agentic-browsing": 100
+      },
+      "lcp": 505.2495,
+      "cls": 0,
+      "tbt": 0,
+      "bytes": 265245
+    },
+    {
+      "name": "axiom",
+      "factor": "mobile",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/axiom-strategy",
+      "fetchTime": "2026-10-02T02:07:33.905Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 66,
+        "agentic-browsing": 100
+      },
+      "lcp": 2147.759,
+      "cls": 0,
+      "tbt": 94,
+      "bytes": 259403
+    },
+    {
+      "name": "vault",
+      "factor": "desktop",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/vault-tcg",
+      "fetchTime": "2026-10-02T02:07:48.375Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 66,
+        "agentic-browsing": 100
+      },
+      "lcp": 585.8054999999999,
+      "cls": 0,
+      "tbt": 0,
+      "bytes": 375197
+    },
+    {
+      "name": "vault",
+      "factor": "mobile",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/vault-tcg",
+      "fetchTime": "2026-10-02T02:08:03.254Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 96,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 66,
+        "agentic-browsing": 100
+      },
+      "lcp": 2645.6795,
+      "cls": 0,
+      "tbt": 98,
+      "bytes": 369429
+    }
+  ]
+}

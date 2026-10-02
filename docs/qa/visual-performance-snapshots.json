@@ -1,0 +1,242 @@
+{
+  "measuredCommit": "dcacfd352a3e5cd3e3f4204cdf561080fbe34bfe",
+  "origin": "https://vaeltx-portfolio.vercel.app",
+  "tool": "Lighthouse 13.5.0",
+  "profile": "Desktop preset; mobile simulated throttling, 390 x 844, device scale factor 1",
+  "initial": [
+    {
+      "name": "vaeltx-home",
+      "factor": "desktop",
+      "url": "https://vaeltx-portfolio.vercel.app/",
+      "fetchTime": "2026-10-02T01:43:50.088Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 69,
+        "agentic-browsing": 100
+      },
+      "lcp": 558.756,
+      "cls": 0,
+      "tbt": 0,
+      "bytes": 509294
+    },
+    {
+      "name": "vaeltx-home",
+      "factor": "mobile",
+      "url": "https://vaeltx-portfolio.vercel.app/",
+      "fetchTime": "2026-10-02T01:44:05.079Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 99,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 69,
+        "agentic-browsing": 100
+      },
+      "lcp": 2149.4055,
+      "cls": 0,
+      "tbt": 42.5,
+      "bytes": 488798
+    },
+    {
+      "name": "northstar",
+      "factor": "desktop",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/northstar-roofing",
+      "fetchTime": "2026-10-02T01:44:24.158Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 69,
+        "agentic-browsing": 100
+      },
+      "lcp": 557.779,
+      "cls": 0,
+      "tbt": 12,
+      "bytes": 307289
+    },
+    {
+      "name": "northstar",
+      "factor": "mobile",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/northstar-roofing",
+      "fetchTime": "2026-10-02T01:44:44.036Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 92,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 69,
+        "agentic-browsing": 100
+      },
+      "lcp": 2503.2780000000002,
+      "cls": 0,
+      "tbt": 267.5,
+      "bytes": 293942
+    },
+    {
+      "name": "mira",
+      "factor": "desktop",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/mira-atelier",
+      "fetchTime": "2026-10-02T01:45:05.625Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 69,
+        "agentic-browsing": 100
+      },
+      "lcp": 520.9195,
+      "cls": 0,
+      "tbt": 19,
+      "bytes": 451364
+    },
+    {
+      "name": "mira",
+      "factor": "mobile",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/mira-atelier",
+      "fetchTime": "2026-10-02T01:45:27.801Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 87,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 69,
+        "agentic-browsing": 100
+      },
+      "lcp": 2378.1035,
+      "cls": 0,
+      "tbt": 426.5000000000002,
+      "bytes": 447547
+    },
+    {
+      "name": "axiom",
+      "factor": "desktop",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/axiom-strategy",
+      "fetchTime": "2026-10-02T01:45:50.504Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 99,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 66,
+        "agentic-browsing": 100
+      },
+      "lcp": 614.511,
+      "cls": 0,
+      "tbt": 75,
+      "bytes": 265150
+    },
+    {
+      "name": "axiom",
+      "factor": "mobile",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/axiom-strategy",
+      "fetchTime": "2026-10-02T01:46:11.252Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 86,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 66,
+        "agentic-browsing": 100
+      },
+      "lcp": 2403.5299999999997,
+      "cls": 0,
+      "tbt": 453.5,
+      "bytes": 259354
+    },
+    {
+      "name": "vault",
+      "factor": "desktop",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/vault-tcg",
+      "fetchTime": "2026-10-02T01:46:33.798Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 100,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 66,
+        "agentic-browsing": 100
+      },
+      "lcp": 659.918,
+      "cls": 0,
+      "tbt": 2.5,
+      "bytes": 375159
+    },
+    {
+      "name": "vault",
+      "factor": "mobile",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/vault-tcg",
+      "fetchTime": "2026-10-02T01:46:51.788Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 96,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 66,
+        "agentic-browsing": 100
+      },
+      "lcp": 2762.8255,
+      "cls": 0,
+      "tbt": 69,
+      "bytes": 369290
+    }
+  ],
+  "repeats": [
+    {
+      "name": "northstar",
+      "factor": "mobile",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/northstar-roofing",
+      "fetchTime": "2026-10-02T01:50:50.046Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 69,
+        "agentic-browsing": 100
+      },
+      "lcp": 2315.509,
+      "cls": 0,
+      "tbt": 100
+    },
+    {
+      "name": "mira",
+      "factor": "mobile",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/mira-atelier",
+      "fetchTime": "2026-10-02T01:51:05.066Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 69,
+        "agentic-browsing": 100
+      },
+      "lcp": 2306.0425,
+      "cls": 0,
+      "tbt": 98
+    },
+    {
+      "name": "axiom",
+      "factor": "mobile",
+      "url": "https://vaeltx-portfolio.vercel.app/concepts/axiom-strategy",
+      "fetchTime": "2026-10-02T01:51:19.965Z",
+      "version": "13.5.0",
+      "scores": {
+        "performance": 98,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 66,
+        "agentic-browsing": 100
+      },
+      "lcp": 2172.806,
+      "cls": 0,
+      "tbt": 89
+    }
+  ],
+  "note": "Repeat variation was observed on the same code. Neither pass is a field measurement or a permanent guarantee."
+}
