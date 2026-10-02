@@ -32,7 +32,7 @@ export function ViewportRelay({ project = "Northstar Roofing" }: { project?: str
   return <div className="relay" aria-label={`Responsive specimen for ${project}`}>
     <div className="relay-toolbar"><span>ONE INTERFACE · THREE VIEWPORTS</span><div role="group" aria-label="Choose specimen viewport">{(["1440", "768", "390"] as const).map(width => <button type="button" key={width} aria-pressed={size === width} onClick={() => setSize(width)}>{width}</button>)}</div></div>
     <div className={`relay-stage relay-${size}`}><div className="relay-screen" style={{ width: widths[size] }}><div className="relay-screen-bar"><span>○</span><span>○</span><span>○</span><small>{project.toLowerCase().replaceAll(" ", "-")}.concept</small></div><div className="relay-screen-content"><span className="relay-label">{project.toUpperCase()} / SAMPLE PAGE</span><strong>{size === "390" ? specimen.compact : specimen.title}</strong><p>{specimen.context}</p><b>{specimen.action} ↗</b><div className="relay-screen-rule"/><span className="relay-proof">Responsive hierarchy · persistent labels · useful states</span></div></div></div>
-    <p className="relay-caption" aria-live="polite">The same content reflows at {size}px. This specimen shows layout behavior; it is not a field performance measurement.</p>
+    <p className="relay-caption" aria-live="polite">Selected layout pattern: {size}px. This specimen is scaled to fit; it is not an actual viewport or a field performance measurement.</p>
   </div>;
 }
 
