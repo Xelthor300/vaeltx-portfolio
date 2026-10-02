@@ -12,7 +12,7 @@ const faq = [
 ];
 
 export function HomePage() {
-  return <SiteShell mode="canvas"><main id="main">
+  return <SiteShell mode="canvas"><main tabIndex={-1} id="main">
     <section className="home-hero"><div className="home-hero-copy"><Eyebrow>INDEPENDENT WEB &amp; CONVERSION STUDIO</Eyebrow><h1>Websites with structure, character and a clear next action.</h1><p>VAELTX connects strategy, UX/UI and build-ready systems for businesses that need clarity without looking generic.</p><div className="hero-actions"><Link className="button button-primary" href="/work">View selected work <span aria-hidden="true">↗</span></Link><Link className="button button-secondary" href="/contact">Start a project</Link></div><p className="hero-disclosure">Four independent concept projects demonstrate the work below. No fictional client claims.</p></div><ProjectTabs /></section>
 
     <section className="work-stage" id="work"><div className="section-shell"><div className="section-kicker"><Eyebrow number="01">SELECTED WORK</Eyebrow><span>FOUR SYSTEMS / FOUR DIFFERENT JOBS</span></div><div className="stage-heading"><h2>Four projects. Four distinct systems.</h2><Link className="text-link" href="/work">View all work <span aria-hidden="true">↗</span></Link></div>

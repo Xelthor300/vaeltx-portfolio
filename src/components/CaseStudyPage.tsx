@@ -18,7 +18,7 @@ export function CaseStudyPage({ slug }: { slug: string }) {
   const next = projects[(index + 1) % projects.length];
   const performance = performanceSnapshots[slug];
   const mode = "canvas";
-  return <SiteShell mode={mode} className={`case-study case-${slug}`}><main id="main">
+  return <SiteShell mode={mode} className={`case-study case-${slug}`}><main tabIndex={-1} id="main">
     <section className="case-hero" style={{ "--project-color": project.palette, "--project-signal": project.signal } as React.CSSProperties}>
       <div className="case-hero-top"><Eyebrow>INDEPENDENT CONCEPT / {project.name.toUpperCase()}</Eyebrow><span>VAELTX / CASE STUDY 0{index + 1}</span></div>
       <div className="case-hero-title"><h1>{project.caseTitle}</h1><p>{project.caseSummary}</p></div>

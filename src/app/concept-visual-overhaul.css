@@ -4,6 +4,7 @@
   .project-nav { min-height:72px; padding-inline:max(var(--gutter),calc((100% - 1280px)/2)); }
   .project-nav-axiom-strategy { min-height:76px; }
   .project-nav-links a { font-size:12px; }
+  .project-nav-action { min-height:44px; }
   .project-page-hero, .project-site-axiom-strategy .project-page-hero, .project-site-vault-tcg .project-page-hero { min-height:0; padding:42px max(var(--gutter),calc((100% - 1280px)/2)) 38px; }
   .project-page-hero::after { display:none; }
   .project-page-breadcrumb { margin-bottom:22px; font-size:10px; }
@@ -33,6 +34,8 @@
   .north-hero-visual { min-height:440px; border-radius:7px; overflow:hidden; border:1px solid #ced6d4; }
   .north-quote-starter { max-width:330px; gap:8px; padding:17px; border-radius:5px; box-shadow:0 8px 24px #10223615; }
   .north-quote-starter h2 { font-size:23px; }
+  .north-quote-starter button { min-height:46px; }
+  .north-report-photo button { min-width:44px; min-height:44px; }
   .north-visual-label { padding:8px 10px; border-radius:3px; background:#f7f5f1e8; }
   .north-section-head, .north-fit { width:min(calc(100% - var(--gutter)*2),1280px); }
   .north-section-head { margin-bottom:28px; }
@@ -122,7 +125,7 @@
   .vault-product-meta > a { font-size:16px; }
   .vault-product-meta > span, .vault-product-meta small { font-size:10px; }
   .vault-quick-add { min-height:44px; font-size:12px; border-radius:3px; }
-  .vault-save { min-height:44px; background:#101116; }
+  .vault-save { min-width:44px; min-height:44px; background:#101116; }
   .vault-product-main-art .vault-card-art { width:min(100%,330px); min-height:0; aspect-ratio:2.5/3.5; border-radius:9px; box-shadow:0 22px 50px #0005; }
   .vault-card-art { padding:9px; border:1px solid #d0b67e; border-radius:7px; }
   .card-art-scene { inset:16% 8% 22%; border:0; border-radius:4px; background-image:url('/images/vault-worlds.webp'); background-size:200% 200%; background-position:0 0; }
