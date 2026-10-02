@@ -17,7 +17,7 @@ export function CaseStudyPage({ slug }: { slug: string }) {
   const index = projects.findIndex(item => item.slug === slug);
   const next = projects[(index + 1) % projects.length];
   const performance = performanceSnapshots[slug];
-  const mode = slug === "mira-atelier" ? "canvas" : "stage";
+  const mode = "canvas";
   return <SiteShell mode={mode} className={`case-study case-${slug}`}><main id="main">
     <section className="case-hero" style={{ "--project-color": project.palette, "--project-signal": project.signal } as React.CSSProperties}>
       <div className="case-hero-top"><Eyebrow>INDEPENDENT CONCEPT / {project.sector.toUpperCase()}</Eyebrow><span>VAELTX / CASE STUDY 0{index + 1}</span></div>
@@ -27,6 +27,7 @@ export function CaseStudyPage({ slug }: { slug: string }) {
       <p className="case-disclosure">Independent concept by VAELTX. Created to demonstrate strategy, UX, visual design, responsive behavior and implementation intent. Not commissioned client work.</p>
     </section>
 
+    <div className="case-evidence-grid">
     <ContentSection number="01" label="EXECUTIVE BRIEF" title="A clear task before an elaborate screen." className="case-brief"><div className="case-brief-grid"><div><span className="case-subhead">THE AUDIENCE</span><p>{project.audience}</p></div><div><span className="case-subhead">THE DESIGN RESPONSE</span><p>{project.objective}</p></div></div></ContentSection>
 
     <ContentSection number="02" label="AUDIENCE / TASK" title="Make the next useful action visible." className="case-task"><div className="task-sequence">{["Arrive", "Orient", "Inspect", "Decide", "Act"].map((task, i) => <div key={task}><span>0{i + 1}</span><h3>{task}</h3><p>{["What is this system for?", "Does it fit my situation?", "What evidence can I examine?", "What remains uncertain?", "What can I do next?"][i]}</p></div>)}</div></ContentSection>
@@ -47,6 +48,7 @@ export function CaseStudyPage({ slug }: { slug: string }) {
 
     <section className="case-conclusion"><div className="section-shell"><Eyebrow number="10">WHAT THIS CONCEPT DEMONSTRATES</Eyebrow><h2>{project.objective}</h2><p>{project.tradeoff}</p><div className="case-conclusion-actions"><Link className="button button-primary" href={project.route}>Explore the concept <span aria-hidden="true">↗</span></Link><Link className="button button-secondary" href="/contact">Start a project</Link></div></div></section>
 
+    </div>
     <section className="next-project"><Link href={`/work/${next.slug}`} className="next-project-link" style={{ "--project-color": next.palette } as React.CSSProperties}><span><Eyebrow>01 / NEXT PROJECT · {next.sector.toUpperCase()}</Eyebrow><strong>{next.name}</strong><span className="next-project-title">{next.caseTitle}</span><span className="next-arrow" aria-hidden="true">↗</span></span><Image unoptimized width={230} height={150} src={next.visual} alt="" loading="lazy"/></Link></section>
   </main></SiteShell>;
 }

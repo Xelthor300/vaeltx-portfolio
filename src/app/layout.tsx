@@ -1,9 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "./visual-system.css";
+import "./case-studies.css";
+import "./concept-visual-overhaul.css";
+import localFont from "next/font/local";
 import { getSiteOrigin, isIndexableDeployment } from "@/lib/site";
 
 const siteUrl = getSiteOrigin();
 const indexable = isIndexableDeployment();
+const display = localFont({ src: "./fonts/instrument-sans-600.ttf", variable: "--font-studio", weight: "600", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
@@ -18,5 +23,5 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#F7F5F1" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body>{children}</body></html>;
+  return <html lang="en" className={display.variable}><body>{children}</body></html>;
 }
