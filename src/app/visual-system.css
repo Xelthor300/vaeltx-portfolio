@@ -25,6 +25,9 @@
   .home-hero-copy > p:not(.hero-disclosure) { max-width: 49ch; font-size: 17px; }
   .hero-actions { gap: 14px; margin-top: 28px; }
   .hero-disclosure { max-width: 55ch; margin-top: 20px; font-size: 11px; }
+  .aperture-frame::after { background:linear-gradient(180deg,transparent 42%,#111820c9 100%); }
+  .aperture-frame > img { object-fit:cover; object-position:50% 0; }
+  .aperture-meta { padding:7px 9px; color:#fff; background:#111820cc; border-radius:3px; }
   .project-aperture { border-radius: 9px; overflow: hidden; box-shadow: 0 18px 55px #24201a12; border: 1px solid var(--line-0); }
   .aperture-frame { min-height: 420px; padding: 20px; }
   .aperture-frame > strong { left: 22px; bottom: 72px; font-size: 32px; }
@@ -43,6 +46,7 @@
   .project-row:nth-child(even) .project-image, .project-row:nth-child(even) .project-copy { order: initial; }
   .project-image, .project-row-3 .project-image, .project-row-4 .project-image { min-height: 0; height: auto; aspect-ratio: 16/10; border-radius: 7px; border: 1px solid #d8d5cf; }
   .project-image img { min-height: 0; height: 100%; object-fit: cover; transition: transform 450ms var(--ease-out); }
+  .project-image img, .work-index-media img { object-position:top center; }
   .project-image:is(:hover,:focus-visible) img { transform: scale(1.025); }
   .project-copy .eyebrow { color: var(--ink-2); }
   .project-copy h3 { margin-block: 10px 9px; color: var(--ink-0); font-size: 29px; }
@@ -90,6 +94,10 @@
   .faq-grid h2 { max-width: 20ch; font-size: 36px; margin-block: 18px; }
   .faq-grid > div > p { font-size: 15px; }
   .faq-item summary { font-size: 15px; min-height: 68px; }
+  .studio-note { margin-top:30px; padding-top:24px; border-top:1px solid var(--line-0); }
+  .studio-note h3 { font-size:24px; max-width:27ch; margin-bottom:14px; }
+  .studio-note p { font-size:14px; margin-bottom:18px; max-width:55ch; }
+  .home-hero + .work-stage .section-kicker { border-top:0; }
   .site-footer { padding-inline: max(var(--gutter), calc((100% - var(--container)) / 2)); }
   .footer-call { align-items: center; padding-block: 46px; gap: 36px; }
   .footer-call h2 { max-width: 25ch; font-size: 42px; }

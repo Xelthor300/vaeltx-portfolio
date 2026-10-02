@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 const config: NextConfig = {
   poweredByHeader: false,
+  agentRules: false,
   turbopack: { root: process.cwd() },
   async headers() {
     return [{ source: "/:path*", headers: [
