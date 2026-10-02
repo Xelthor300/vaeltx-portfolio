@@ -33,7 +33,7 @@ export function HomePage() {
       <article><span>01 / RESPONSIVE</span><h3>Responsive by design.</h3><p>Layout, order, controls and cropping adapt to the task.</p><b>1440 · 768 · 390</b></article>
       <article><span>02 / STATES</span><h3>Every useful state.</h3><p>Default, focus, empty, error and success states are part of the work.</p><b>VISIBLE AND KEYBOARD-READY</b></article>
       <article><span>03 / ACCESSIBILITY</span><h3>Access is part of design.</h3><p>Keyboard operation, visible focus and reduced motion are considered together.</p><b>AA-ORIENTED CHECKLIST</b></article>
-      <article><span>04 / PERFORMANCE</span><h3>Measured in production.</h3><p>VAELTX Home · Lighthouse 13.5.0 · desktop and mobile · 2026-10-01.</p><b>100 DESKTOP · 99 MOBILE</b></article>
+      <article><span>04 / PERFORMANCE</span><h3>Measured in production.</h3><p>VAELTX Home · Lighthouse 13.5.0 · desktop and mobile · 2026-10-02 UTC · dcacfd3.</p><b>100 DESKTOP · 99 MOBILE</b></article>
     </div><Link className="text-link" href="/standards">Inspect the standards <span aria-hidden="true">↗</span></Link></div></section>
 
     <ContentSection number="05" label="DESIGN / BUILD CONTINUITY" title="Designed for the browser." className="continuity-section"><div className="continuity-copy"><p>Responsive behavior, focus states, error handling and component rules belong in the design — not in a last-minute interpretation.</p><Link className="text-link" href="/standards">See how the work is checked <span aria-hidden="true">→</span></Link></div><ViewportRelay /></ContentSection>
