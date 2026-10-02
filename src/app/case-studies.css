@@ -108,7 +108,8 @@
     .case-evidence-grid .task-sequence { grid-template-columns:1fr; }
     .case-evidence-grid .task-sequence > div, .case-evidence-grid .task-sequence > div + div { display:grid; grid-template-columns:25px 70px minmax(0,1fr); align-items:baseline; gap:12px; min-height:0; padding:14px 0; border:0; border-bottom:1px solid var(--line-0); }
     .case-evidence-grid .task-sequence h3 { font-size:18px; margin:0; }
-    .case-evidence-grid .task-sequence p { font-size:12px; }
+    .case-evidence-grid .task-sequence p { grid-column:3; font-size:12px; }
+    .case-evidence-grid .task-sequence span { grid-row:auto; }
     .case-architecture { padding-block:40px; } .case-architecture .section-shell { grid-template-columns:1fr; gap:24px; } .case-architecture .section-kicker { grid-column:1; } .case-architecture h2 { max-width:27ch; font-size:29px; } .case-architecture li p { font-size:14px; }
     .conversion-frames { grid-template-columns:1fr; } .conversion-frames article, .conversion-frames article + article { min-height:0; padding:18px 0; gap:12px; border-right:0; border-bottom:1px solid var(--line-0); } .conversion-connector { display:none; }
     .case-visual-system { padding-block:40px; } .case-visual-system h2 { font-size:29px; max-width:26ch; margin-block:18px 24px; } .visual-system-grid { grid-template-columns:1fr 1fr; min-height:0; } .visual-swatch { min-height:110px; } .visual-rules { grid-column:1/-1; padding:8px 0 0; }
