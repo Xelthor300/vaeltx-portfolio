@@ -11,10 +11,9 @@ export function ProjectTabs() {
   const project = projects[active];
   return <div className="project-aperture" aria-label="Explore concept projects">
     <div className="aperture-frame" data-project={project.slug} style={{ "--project-color": project.palette, "--project-signal": project.signal } as React.CSSProperties}>
-      <Image unoptimized width={1400} height={1000} key={project.slug} src={`/images/preview-${project.slug}.webp`} alt={`${project.name} concept interface: ${project.objective}`} />
       <div className="aperture-meta"><span>{String(active + 1).padStart(2, "0")} / 04</span><span>{project.sector}</span></div>
-      <strong>{project.name}</strong><span className="aperture-disclosure">{project.status}</span>
-      <Link href={`/work/${project.slug}`} aria-label={`Open ${project.name} case study`}>↗</Link>
+      <div className="aperture-media"><Image unoptimized width={1200} height={750} key={project.slug} src={`/images/preview-${project.slug}.webp`} alt={`${project.name} concept interface: ${project.objective}`} /></div>
+      <div className="aperture-caption"><div><strong>{project.name}</strong><span className="aperture-disclosure">{project.status}</span></div><Link href={`/work/${project.slug}`} aria-label={`Open ${project.name} case study`}>↗</Link></div>
     </div>
     <div className="aperture-tabs" role="group" aria-label="Choose a project preview">{projects.map((item, index) => <button type="button" key={item.slug} aria-pressed={active === index} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => setActive(index)}><span>0{index + 1}</span>{item.sector}</button>)}</div>
   </div>;
@@ -23,9 +22,16 @@ export function ProjectTabs() {
 export function ViewportRelay({ project = "Northstar Roofing" }: { project?: string }) {
   const [size, setSize] = useState<"1440" | "768" | "390">("1440");
   const widths = { "1440": "100%", "768": "74%", "390": "42%" };
+  const specimens: Record<string, { title: string; compact: string; context: string; action: string }> = {
+    "Northstar Roofing": { title: "Know what your roof needs before you commit.", compact: "A clearer next step.", context: "Service fit · inspection context · clear action", action: "Request an inspection" },
+    "Mira Atelier": { title: "Illustration for stories worth remembering.", compact: "Stories, rendered with care.", context: "Original studies · artwork detail · commissions", action: "View the work" },
+    "Axiom Strategy": { title: "Give a complex decision a clear structure.", compact: "A clear decision model.", context: "Evidence · criteria · options · decision", action: "Explore the scenarios" },
+    "Vault TCG": { title: "Inspect the detail before you collect.", compact: "Collector detail, made clear.", context: "Set · condition · availability · demo cart", action: "Browse cards" },
+  };
+  const specimen = specimens[project] ?? specimens["Northstar Roofing"];
   return <div className="relay" aria-label={`Responsive specimen for ${project}`}>
     <div className="relay-toolbar"><span>ONE INTERFACE · THREE VIEWPORTS</span><div role="group" aria-label="Choose specimen viewport">{(["1440", "768", "390"] as const).map(width => <button type="button" key={width} aria-pressed={size === width} onClick={() => setSize(width)}>{width}</button>)}</div></div>
-    <div className={`relay-stage relay-${size}`}><div className="relay-screen" style={{ width: widths[size] }}><div className="relay-screen-bar"><span>○</span><span>○</span><span>○</span><small>{project.toLowerCase().replaceAll(" ", "-")}.concept</small></div><div className="relay-screen-content"><span className="relay-label">{project.toUpperCase()} / SAMPLE PAGE</span><strong>{size === "390" ? "A clearer next step." : "Know what your roof needs before you commit."}</strong><p>Service fit · inspection context · clear action</p><b>Request an inspection ↗</b><div className="relay-screen-rule"/><span className="relay-proof">Responsive hierarchy · persistent labels · useful states</span></div></div></div>
+    <div className={`relay-stage relay-${size}`}><div className="relay-screen" style={{ width: widths[size] }}><div className="relay-screen-bar"><span>○</span><span>○</span><span>○</span><small>{project.toLowerCase().replaceAll(" ", "-")}.concept</small></div><div className="relay-screen-content"><span className="relay-label">{project.toUpperCase()} / SAMPLE PAGE</span><strong>{size === "390" ? specimen.compact : specimen.title}</strong><p>{specimen.context}</p><b>{specimen.action} ↗</b><div className="relay-screen-rule"/><span className="relay-proof">Responsive hierarchy · persistent labels · useful states</span></div></div></div>
     <p className="relay-caption" aria-live="polite">The same content reflows at {size}px. This specimen shows layout behavior; it is not a field performance measurement.</p>
   </div>;
 }
