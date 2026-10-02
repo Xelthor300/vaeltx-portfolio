@@ -1,0 +1,33 @@
+{
+  "sourceCommit": "3e4dc26b90870ca01501df6f44862215638d5f28",
+  "origin": "https://vaeltx-portfolio.vercel.app",
+  "production": {
+    "submittedAt": "2026-10-02T07:08:00.995Z",
+    "status": 200,
+    "receiptId": "01a0fb70-fc45-7c3a-ac97-bb5ac024202e",
+    "successUI": "✓\nMESSAGE DELIVERED\nBrief received.\n\nYour project context was delivered to VAELTX. You can expect a direct reply if the project looks like a potential fit.\n\nBack to work\n→",
+    "focusOnSuccess": true,
+    "browserErrors": [],
+    "duplicateRetry": {
+      "status": 200,
+      "sameReceipt": true
+    }
+  },
+  "gmail": {
+    "verifiedAt": "2026-10-02T07:09:00.889Z",
+    "sourceCommit": "3e4dc26b90870ca01501df6f44862215638d5f28",
+    "verification": "Production browser submit, Resend provider receipt, then Gmail connector read of the exact test inquiry",
+    "subject": "New VAELTX project inquiry / VAELTX Production QA 2026-10-02 07:08",
+    "gmailInbox": true,
+    "gmailSpam": false,
+    "matchedMessages": 1,
+    "to": "vaeltxn@gmail.com",
+    "from": "VAELTX <onboarding@resend.dev>",
+    "replyTo": "vaeltxn@gmail.com",
+    "bodyFieldsPresent": true,
+    "authenticationPassed": true,
+    "senderLimitation": "Initial Resend onboarding sender; no VAELTX domain verification is claimed."
+  },
+  "credentialsInspected": "RESEND_API_KEY presence only; Production Hidden Secret",
+  "providerFailureTesting": "Controlled SDK transport; UI responses mocked; production provider configuration was not deliberately broken"
+}

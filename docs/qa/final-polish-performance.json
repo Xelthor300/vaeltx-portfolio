@@ -1,0 +1,242 @@
+[
+  {
+    "name": "vaeltx-home",
+    "factor": "desktop",
+    "url": "https://vaeltx-portfolio.vercel.app/",
+    "fetchTime": "2026-10-02T07:16:11.819Z",
+    "version": "13.5.0",
+    "sourceCommit": "3e4dc26b90870ca01501df6f44862215638d5f28",
+    "labMeasurement": true,
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 69,
+      "agentic-browsing": 100
+    },
+    "lcp": 494.31999999999994,
+    "cls": 0,
+    "tbt": 0,
+    "bytes": 512584
+  },
+  {
+    "name": "vaeltx-home",
+    "factor": "mobile",
+    "url": "https://vaeltx-portfolio.vercel.app/",
+    "fetchTime": "2026-10-02T07:16:27.009Z",
+    "version": "13.5.0",
+    "sourceCommit": "3e4dc26b90870ca01501df6f44862215638d5f28",
+    "labMeasurement": true,
+    "scores": {
+      "performance": 98,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 69,
+      "agentic-browsing": 100
+    },
+    "lcp": 2135.206,
+    "cls": 0,
+    "tbt": 113.5,
+    "bytes": 491436
+  },
+  {
+    "name": "northstar",
+    "factor": "desktop",
+    "url": "https://vaeltx-portfolio.vercel.app/concepts/northstar-roofing",
+    "fetchTime": "2026-10-02T07:16:42.584Z",
+    "version": "13.5.0",
+    "sourceCommit": "3e4dc26b90870ca01501df6f44862215638d5f28",
+    "labMeasurement": true,
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 69,
+      "agentic-browsing": 100
+    },
+    "lcp": 518.8589999999999,
+    "cls": 0,
+    "tbt": 0,
+    "bytes": 309482
+  },
+  {
+    "name": "northstar",
+    "factor": "mobile",
+    "url": "https://vaeltx-portfolio.vercel.app/concepts/northstar-roofing",
+    "fetchTime": "2026-10-02T07:16:57.452Z",
+    "version": "13.5.0",
+    "sourceCommit": "3e4dc26b90870ca01501df6f44862215638d5f28",
+    "labMeasurement": true,
+    "scores": {
+      "performance": 97,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 69,
+      "agentic-browsing": 100
+    },
+    "lcp": 2355.582,
+    "cls": 0,
+    "tbt": 132,
+    "bytes": 296230
+  },
+  {
+    "name": "mira",
+    "factor": "desktop",
+    "url": "https://vaeltx-portfolio.vercel.app/concepts/mira-atelier",
+    "fetchTime": "2026-10-02T07:17:12.938Z",
+    "version": "13.5.0",
+    "sourceCommit": "3e4dc26b90870ca01501df6f44862215638d5f28",
+    "labMeasurement": true,
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 69,
+      "agentic-browsing": 100
+    },
+    "lcp": 551.1765,
+    "cls": 0,
+    "tbt": 3,
+    "bytes": 453871
+  },
+  {
+    "name": "mira",
+    "factor": "mobile",
+    "url": "https://vaeltx-portfolio.vercel.app/concepts/mira-atelier",
+    "fetchTime": "2026-10-02T07:17:28.157Z",
+    "version": "13.5.0",
+    "sourceCommit": "3e4dc26b90870ca01501df6f44862215638d5f28",
+    "labMeasurement": true,
+    "scores": {
+      "performance": 96,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 69,
+      "agentic-browsing": 100
+    },
+    "lcp": 2351.433,
+    "cls": 0,
+    "tbt": 147,
+    "bytes": 449994
+  },
+  {
+    "name": "axiom",
+    "factor": "desktop",
+    "url": "https://vaeltx-portfolio.vercel.app/concepts/axiom-strategy",
+    "fetchTime": "2026-10-02T07:17:43.872Z",
+    "version": "13.5.0",
+    "sourceCommit": "3e4dc26b90870ca01501df6f44862215638d5f28",
+    "labMeasurement": true,
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 66,
+      "agentic-browsing": 100
+    },
+    "lcp": 503.76800000000003,
+    "cls": 0,
+    "tbt": 0,
+    "bytes": 267481
+  },
+  {
+    "name": "axiom",
+    "factor": "mobile",
+    "url": "https://vaeltx-portfolio.vercel.app/concepts/axiom-strategy",
+    "fetchTime": "2026-10-02T07:17:59.140Z",
+    "version": "13.5.0",
+    "sourceCommit": "3e4dc26b90870ca01501df6f44862215638d5f28",
+    "labMeasurement": true,
+    "scores": {
+      "performance": 99,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 66,
+      "agentic-browsing": 100
+    },
+    "lcp": 2039.7845,
+    "cls": 0,
+    "tbt": 73.49999999999989,
+    "bytes": 261671
+  },
+  {
+    "name": "vault",
+    "factor": "desktop",
+    "url": "https://vaeltx-portfolio.vercel.app/concepts/vault-tcg",
+    "fetchTime": "2026-10-02T07:18:14.445Z",
+    "version": "13.5.0",
+    "sourceCommit": "3e4dc26b90870ca01501df6f44862215638d5f28",
+    "labMeasurement": true,
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 66,
+      "agentic-browsing": 100
+    },
+    "lcp": 578.614,
+    "cls": 0,
+    "tbt": 0,
+    "bytes": 377350
+  },
+  {
+    "name": "vault",
+    "factor": "mobile",
+    "url": "https://vaeltx-portfolio.vercel.app/concepts/vault-tcg",
+    "fetchTime": "2026-10-02T07:18:31.116Z",
+    "version": "13.5.0",
+    "sourceCommit": "3e4dc26b90870ca01501df6f44862215638d5f28",
+    "labMeasurement": true,
+    "scores": {
+      "performance": 95,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 66,
+      "agentic-browsing": 100
+    },
+    "lcp": 2746.572,
+    "cls": 0,
+    "tbt": 122,
+    "bytes": 371619
+  },
+  {
+    "name": "contact",
+    "factor": "desktop",
+    "url": "https://vaeltx-portfolio.vercel.app/contact",
+    "fetchTime": "2026-10-02T07:18:47.320Z",
+    "version": "13.5.0",
+    "sourceCommit": "3e4dc26b90870ca01501df6f44862215638d5f28",
+    "labMeasurement": true,
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 66,
+      "agentic-browsing": 100
+    },
+    "lcp": 479.356,
+    "cls": 0,
+    "tbt": 0,
+    "bytes": 265218
+  },
+  {
+    "name": "contact",
+    "factor": "mobile",
+    "url": "https://vaeltx-portfolio.vercel.app/contact",
+    "fetchTime": "2026-10-02T07:19:02.822Z",
+    "version": "13.5.0",
+    "sourceCommit": "3e4dc26b90870ca01501df6f44862215638d5f28",
+    "labMeasurement": true,
+    "scores": {
+      "performance": 98,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 66,
+      "agentic-browsing": 100
+    },
+    "lcp": 2151.3035,
+    "cls": 0,
+    "tbt": 105,
+    "bytes": 245798
+  }
+]

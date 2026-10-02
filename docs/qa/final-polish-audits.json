@@ -1,0 +1,206 @@
+{
+  "origin": "https://vaeltx-portfolio.vercel.app",
+  "sourceCommit": "3e4dc26b90870ca01501df6f44862215638d5f28",
+  "recordedAt": "2026-10-02T07:20:07.934Z",
+  "testedDeployment": "dpl_2zBD8UKRyNsmaE7fpGQ7JEv3hjmg",
+  "githubCI": {
+    "mainRun": 36976872053,
+    "branchRun": 36976423942,
+    "conclusion": "success",
+    "gates": [
+      "npm ci",
+      "typecheck",
+      "lint",
+      "12 unit checks",
+      "production build"
+    ]
+  },
+  "routeAudit": {
+    "routes": 80,
+    "issues": 0,
+    "unexpected404": 0,
+    "consoleErrors": [
+      {
+        "path": "/__qa_not_found__",
+        "message": "Failed to load resource: the server responded with a status of 404 ()"
+      }
+    ],
+    "expectedConsoleNote": "Single Failed to load resource 404 on deliberately missing /__qa_not_found__ route"
+  },
+  "internalLinks": {
+    "scannedPages": 79,
+    "uniqueInternalDestinations": 79,
+    "failures": [],
+    "pageErrors": []
+  },
+  "ctaAudit": {
+    "pages": 79,
+    "visibleControls": 1704,
+    "classification": {
+      "realNavigationAnchors": 1402,
+      "enabledRealUIButtons": 203,
+      "disabledStateButtons": 2,
+      "nativeDetailsActions": 25,
+      "inputsAndSelectors": 72,
+      "deliberateStaticSpecimens": [
+        "Architecture and conversion diagram arrows",
+        "Method labels and sequence captions",
+        "Original fictional product/card visuals"
+      ]
+    },
+    "misleadingDeadControls": 0,
+    "badLinks": 0,
+    "pageErrors": 0
+  },
+  "ctaBehavior": {
+    "checks": 28,
+    "failed": 0,
+    "inspect": "All four semantic links navigate on Enter to specified existing destinations",
+    "relay": "All four case relay links navigate on click; Home relay is real concept navigation",
+    "miraZoom": "cursor:auto in zoomed state; explicit Fit image button works",
+    "disabledPurchase": "Explicit Purchase unavailable in this concept remains disabled and truthful",
+    "browserPageErrors": 0
+  },
+  "contactSelector": {
+    "checks": 57,
+    "failed": 0,
+    "deliveryResponses": "mocked",
+    "widths": [
+      1440,
+      1280,
+      1024,
+      768,
+      430,
+      390,
+      360
+    ]
+  },
+  "actualProductionAPIRejections": {
+    "checks": 10,
+    "failed": 0,
+    "cases": [
+      {
+        "name": "Missing service selection",
+        "status": 400,
+        "pass": true
+      },
+      {
+        "name": "Invalid email",
+        "status": 400,
+        "pass": true
+      },
+      {
+        "name": "Too short detail",
+        "status": 400,
+        "pass": true
+      },
+      {
+        "name": "Invalid website URL",
+        "status": 400,
+        "pass": true
+      },
+      {
+        "name": "Filled honeypot",
+        "status": 400,
+        "pass": true
+      },
+      {
+        "name": "Missing Origin",
+        "status": 403,
+        "pass": true
+      },
+      {
+        "name": "Foreign Origin",
+        "status": 403,
+        "pass": true
+      },
+      {
+        "name": "Invalid idempotency key",
+        "status": 400,
+        "pass": true
+      },
+      {
+        "name": "Oversized JSON",
+        "status": 413,
+        "pass": true
+      },
+      {
+        "name": "Malformed JSON",
+        "status": 400,
+        "pass": true
+      }
+    ],
+    "validEmailSubmissions": 0
+  },
+  "navigation": {
+    "checks": 206,
+    "failed": 0,
+    "consoleErrors": [],
+    "pageErrors": [],
+    "failedResponses": [],
+    "screenshots": 21
+  },
+  "responsive": {
+    "routes": 80,
+    "widths": [
+      1440,
+      1280,
+      1200,
+      1024,
+      820,
+      768,
+      720,
+      430,
+      390,
+      375,
+      360
+    ],
+    "checked": 880,
+    "failures": [],
+    "badStatuses": []
+  },
+  "desktopAxe": {
+    "routes": 80,
+    "violations": 0
+  },
+  "navigationAxe": {
+    "contexts": 10,
+    "violations": 0
+  },
+  "mobile": {
+    "checks": 13,
+    "failed": 0,
+    "axeRoutes": 10,
+    "violations": 0,
+    "smallButtons": []
+  },
+  "interactions": {
+    "checks": 14,
+    "failed": 0,
+    "notFound": [],
+    "browserErrors": []
+  },
+  "vaultSearch": {
+    "checks": 10,
+    "failed": 0,
+    "errors": [],
+    "missing": []
+  },
+  "vaultProducts": {
+    "flows": 4,
+    "failures": [],
+    "errors": [],
+    "missing": []
+  },
+  "indexing": "Noindex remains enabled; explicit owner approval is required to enable indexing",
+  "runtimeContactErrors": {
+    "since": "2026-10-02T07:08:00Z",
+    "provider": "Vercel runtime error clusters",
+    "found": 0
+  },
+  "limits": [
+    "Per-instance rate limiting",
+    "Initial account-owner-only onboarding sender",
+    "Automated accessibility checks and sampled keyboard/visual reviews are not absolute conformance certification"
+  ]
+}
