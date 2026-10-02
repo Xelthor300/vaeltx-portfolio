@@ -11,6 +11,13 @@ const performanceSnapshots: Record<string, { desktop: number; desktopLcp: string
   "vault-tcg": { desktop: 100, desktopLcp: "0.7", mobile: 96, mobileLcp: "2.8" },
 };
 
+const inspectionPaths: Record<string, string> = {
+  "northstar-roofing": "/concepts/northstar-roofing/request-an-inspection",
+  "mira-atelier": "/concepts/mira-atelier/commission-request",
+  "axiom-strategy": "/concepts/axiom-strategy/case-studies/decision-field",
+  "vault-tcg": "/concepts/vault-tcg/cards",
+};
+
 export function CaseStudyPage({ slug }: { slug: string }) {
   const project = projectBySlug[slug];
   if (!project) return null;
@@ -38,7 +45,7 @@ export function CaseStudyPage({ slug }: { slug: string }) {
 
     <section className="case-visual-system"><div className="section-shell"><div className="section-kicker"><Eyebrow number="05">VISUAL DIRECTION</Eyebrow><span>THE SYSTEM IN USE</span></div><h2>A distinct visual system.</h2><div className="visual-system-grid"><div className="visual-swatch" style={{ background: project.palette }}><span>PRIMARY FIELD</span><b>{project.palette}</b></div><div className="visual-swatch visual-swatch-signal" style={{ background: project.signal }}><span>SELECTED SIGNAL</span><b>{project.signal}</b></div><div className="visual-rules"><span className="case-subhead">COMPOSITION / TYPE / IMAGE</span><p>{project.system}</p><p>Project color, density, typography and image behavior stay specific to this concept; the VAELTX parent shell does not overwrite their visual language.</p></div></div></div></section>
 
-    <ContentSection number="06" label="SIGNATURE INTERACTION" title="Decision, interaction, trade-off." className="case-interaction"><div className="interaction-proof"><span className="case-subhead">THE DECISION</span><p>{project.decision}</p><span className="case-subhead">WHY</span><p>{project.interaction}</p><span className="case-subhead">TRADE-OFF</span><p>{project.tradeoff}</p></div><div className="interaction-specimen"><span className="specimen-label">INTERFACE SPECIMEN / DEFAULT → FOCUS → CONFIRMATION</span><div className="specimen-screen"><div className="specimen-screen-head"><span>{project.name.toUpperCase()}</span><span>CONCEPT / INTERACTION</span></div><strong>{project.objective}</strong><button type="button" aria-label="Sample action shown as a non-submitting interface specimen">Inspect this path <span aria-hidden="true">↗</span></button><small>No external action is performed by this specimen.</small></div></div></ContentSection>
+    <ContentSection number="06" label="SIGNATURE INTERACTION" title="Decision, interaction, trade-off." className="case-interaction"><div className="interaction-proof"><span className="case-subhead">THE DECISION</span><p>{project.decision}</p><span className="case-subhead">WHY</span><p>{project.interaction}</p><span className="case-subhead">TRADE-OFF</span><p>{project.tradeoff}</p></div><div className="interaction-specimen"><span className="specimen-label">INTERFACE SPECIMEN / EXPLORE THE CONCEPT PATH</span><div className="specimen-screen"><div className="specimen-screen-head"><span>{project.name.toUpperCase()}</span><span>CONCEPT / INTERACTION</span></div><strong>{project.objective}</strong><Link className="specimen-action" href={inspectionPaths[slug]} aria-label={`Inspect the ${project.name} concept path`}>Inspect this path <span aria-hidden="true">↗</span></Link><small>Opens the working concept path. No real booking, commission or purchase is made.</small></div></div></ContentSection>
 
     <ContentSection number="07" label="RESPONSIVE PROOF" title="Responsive by intent." className="case-responsive"><p className="responsive-explanation">{project.responsive}</p><ViewportRelay project={project.name}/></ContentSection>
 

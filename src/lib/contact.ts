@@ -1,9 +1,10 @@
 import { z } from "zod";
+import { contactNeeds } from "./contact-options";
 
 export const contactSchema = z.object({
   name: z.string().trim().min(2).max(100),
   email: z.string().trim().email().max(254),
-  need: z.enum(["New website", "Redesign", "Landing page", "UX/UI system", "Ecommerce", "Implementation support", "Not sure yet"]),
+  need: z.enum(contactNeeds),
   detail: z.string().trim().min(12).max(4000),
   site: z.union([z.literal(""), z.string().url().max(2048)]).optional().default(""),
   timing: z.string().trim().max(240).optional().default(""),

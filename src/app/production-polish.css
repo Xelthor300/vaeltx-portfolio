@@ -1,0 +1,8 @@
+@layer refinement {
+  .direct-contact { display: grid; gap: 16px; margin: 18px 0 0; }
+  .direct-contact dt { font: 500 10px/1.4 var(--font-mono); color: var(--ink-2); letter-spacing: .08em; }
+  .direct-contact dd { margin: 3px 0 0; }
+  .contact-context .direct-contact a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin: 0; font-size: 14px; }
+  .contact-context .direct-contact-number { display: block; font: 400 13px/1.5 var(--font-body); color: var(--ink-2); letter-spacing: 0; }
+  .mira-lightbox > img.is-zoomed { cursor: auto; }
+}

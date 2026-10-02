@@ -3,6 +3,9 @@ import "./globals.css";
 import "./visual-system.css";
 import "./case-studies.css";
 import "./concept-visual-overhaul.css";
+import "./navigation-polish.css";
+import "./contact-polish.css";
+import "./production-polish.css";
 import localFont from "next/font/local";
 import { getSiteOrigin, isIndexableDeployment } from "@/lib/site";
 

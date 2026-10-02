@@ -10,9 +10,11 @@ cp .env.example .env.local
 npm run dev
 ```
 
-The portfolio renders without environment variables. The parent contact form validates on the client and server, but delivery remains disabled until an owner configures a compatible HTTPS email-delivery endpoint, its server-only bearer token, and a verified sender address. `CONTACT_TO_EMAIL` defaults to `vaeltxn@gmail.com`. Never put delivery credentials in a `NEXT_PUBLIC_` variable or commit `.env.local`.
+The portfolio renders without environment variables. Contact uses the official Resend SDK in the server API route. Save `RESEND_API_KEY` as a Secret in Vercel Production. Never put it in a `NEXT_PUBLIC_` variable or commit `.env.local`; environment inspection should list names and presence only.
 
-The endpoint receives a JSON object with `to`, `from`, `replyTo`, `subject`, and `text`, plus `Authorization: Bearer <token>` and an `Idempotency-Key` header. It must return a successful 2xx response only after accepting the email for delivery. Configure the provider’s data processing and retention details before enabling the form in production.
+The fixed recipient is `vaeltxn@gmail.com`; the visitor's email is Reply-To. The initial sender is `VAELTX <onboarding@resend.dev>`, which Resend permits only for the account owner's email. No verified VAELTX domain is assumed. If this recipient is not the account email, a verified sender domain is required. Without a key, the route truthfully returns 503. Provider failure returns 502 and preserves the visitor's fields. API acceptance is distinct from confirmed inbox receipt.
+
+The route validates same-origin requests and Zod fields, rejects the honeypot and oversized payloads, and uses a bounded per-instance rate limiter. Successful receipt metadata and in-flight keys prevent local duplicates; Resend's idempotency key protects retries across server instances for its documented 24-hour window. No inquiry database, full-brief logs or durable content store is added. Per-instance rate limiting is not a global distributed rate-limit guarantee.
 
 The four `/concepts/*` worlds are interface demonstrations. Northstar and Mira forms are local-only demos; Vault cart and wishlist stay in browser storage; checkout, account and order states do not accept payment, credentials or real orders. Axiom scenarios and every project are explicitly illustrative.
 
@@ -27,4 +29,4 @@ npm run build
 
 ## Deployment settings
 
-Vercel builds with the `build` script. Set `NEXT_PUBLIC_SITE_URL` to the production origin. Keep `SITE_INDEXABLE=false` until the owner confirms inquiry delivery and production content. Preview deployments are always excluded from the sitemap and indexing. The contact provider contract and required values are documented in `.env.example`; no provider has been selected in this repository.
+Vercel builds with the `build` script. Set `NEXT_PUBLIC_SITE_URL` to the production origin. Keep `SITE_INDEXABLE=false` until real receipt is confirmed, final production QA passes and the owner explicitly approves indexation. Preview deployments remain noindex. `.env.example` lists the server-only Resend setting. Resend credentials need not be copied into Preview; UI and failure states can be verified there without sending email.
