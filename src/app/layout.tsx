@@ -8,6 +8,9 @@ import "./contact-polish.css";
 import "./production-polish.css";
 import localFont from "next/font/local";
 import { getSiteOrigin, isIndexableDeployment } from "@/lib/site";
+import { Suspense } from "react";
+import { MetaPixel } from "@/components/MetaPixel";
+import { MarketingConsentBanner } from "@/components/MarketingConsent";
 
 const siteUrl = getSiteOrigin();
 const indexable = isIndexableDeployment();
@@ -26,5 +29,13 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#F7F5F1" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" className={display.variable}><body>{children}</body></html>;
+  return <html lang="en" className={display.variable}><body>{children}
+    <Suspense fallback={null}><MetaPixel /></Suspense>
+    <MarketingConsentBanner />
+    <noscript>
+      {/* A direct Meta URL here would bypass consent when JavaScript is off. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img height="1" width="1" src="/api/meta-pixel" alt="" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clipPath: "inset(50%)" }} />
+    </noscript>
+  </body></html>;
 }
