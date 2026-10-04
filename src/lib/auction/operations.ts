@@ -1,6 +1,7 @@
 import "server-only";
-import { Resend } from "resend";
 import { auction, db, ensure, siteURL, AuctionError } from "./server";
+import { emailTransport } from "./mail";
+import { dispatchDelivery } from "./delivery-policy";
 import { processEvent, verifiedStripe } from "./payments";
 import { money } from "./model";
 import type Stripe from "stripe";
@@ -137,28 +138,18 @@ const subjects: Record<string, string> = {
   late_payment_review: "Website payment needs owner review",
 };
 export async function deliverNotifications() {
-  if (
-    !process.env.AUCTION_RESEND_API_KEY ||
-    !process.env.AUCTION_EMAIL_FROM ||
-    !process.env.AUCTION_ADMIN_EMAIL
-  )
-    throw new AuctionError("Email delivery is not configured.", 503);
-  const resend = new Resend(process.env.AUCTION_RESEND_API_KEY);
-  const result = await db().rpc("va_lease_notifications", { p_limit: 10 });
+  const transport = emailTransport();
+  // Verify SMTP before claiming rows; an unavailable server must not burn attempts.
+  try {
+    await transport.verify();
+  } catch {
+    throw new AuctionError("SMTP authentication or connectivity failed.", 503);
+  }
+  const result = await db().rpc("va_lease_notifications", {
+    p_limit: transport.kind === "smtp" ? 2 : 10,
+  });
   const messages = ensure(result.data, result.error);
   for (const item of messages || []) {
-    // Resend idempotency lasts 24 hours. Uncertain delivery beyond that window needs human reconciliation.
-    if (Date.now() - Date.parse(item.first_attempt_at) > 23 * 3600_000) {
-      await db()
-        .from("va_outbox")
-        .update({
-          status: "review",
-          last_error:
-            "Provider idempotency window elapsed; reconcile before resending.",
-        })
-        .eq("id", item.id);
-      continue;
-    }
     const { data: p } = item.participant_id
       ? await db()
           .from("va_participants")
@@ -225,7 +216,10 @@ export async function deliverNotifications() {
           (
             await db()
               .from("va_outbox")
-              .update({ delivery_message: content })
+              .update({
+                delivery_message: content,
+                delivery_transport: transport.kind,
+              })
               .eq("id", item.id)
               .is("delivery_message", null)
           ).error,
@@ -237,36 +231,75 @@ export async function deliverNotifications() {
           .single();
         message = ensure(saved.data, saved.error).delivery_message;
       }
-      const sent = await resend.emails.send(message, {
-        idempotencyKey: `va-outbox:${item.id}`,
-      });
-      if (sent.error || !sent.data?.id) throw new Error("provider_rejected");
-      ensure(
-        true,
-        (
-          await db()
+      await dispatchDelivery(item, transport.kind, {
+        now: Date.now(),
+        beginSMTP: async () => {
+          const r = await db()
+            .from("va_outbox")
+            .update({
+              smtp_attempt_started_at: new Date().toISOString(),
+              delivery_transport: "smtp",
+            })
+            .eq("id", item.id)
+            .eq("status", "leased")
+            .eq("attempts", item.attempts)
+            .is("smtp_attempt_started_at", null)
+            .select("id")
+            .single();
+          ensure(r.data, r.error);
+        },
+        send: () => transport.send(message, item.id),
+        sent: async (receipt) => {
+          const r = await db()
             .from("va_outbox")
             .update({
               status: "sent",
               sent_at: new Date().toISOString(),
-              provider_id: sent.data.id,
+              provider_id: receipt,
               lease_until: null,
               last_error: null,
             })
             .eq("id", item.id)
-        ).error,
-      );
+            .eq("attempts", item.attempts)
+            .select("id")
+            .single();
+          ensure(r.data, r.error);
+        },
+        failed: async (review, reason) => {
+          const r = await db()
+            .from("va_outbox")
+            .update({
+              status: review || item.attempts >= 8 ? "review" : "pending",
+              lease_until: null,
+              ...(transport.kind === "smtp" && !review
+                ? { smtp_attempt_started_at: null }
+                : {}),
+              next_attempt_at: new Date(
+                Date.now() + Math.min(3600, 30 * 2 ** item.attempts) * 1000,
+              ).toISOString(),
+              last_error: reason,
+            })
+            .eq("id", item.id)
+            .eq("attempts", item.attempts);
+          ensure(true, r.error);
+        },
+      });
     } catch {
       await db()
         .from("va_outbox")
         .update({
-          status: item.attempts >= 8 ? "review" : "pending",
+          status:
+            transport.kind === "smtp" || item.attempts >= 8
+              ? "review"
+              : "pending",
           lease_until: null,
           next_attempt_at: new Date(
             Date.now() + Math.min(3600, 30 * 2 ** item.attempts) * 1000,
           ).toISOString(),
           last_error:
-            "Delivery or receipt persistence failed; retry with same idempotency key.",
+            transport.kind === "smtp"
+              ? "SMTP processing or receipt is uncertain; reconcile before resending."
+              : "Delivery or receipt persistence failed; retry with same idempotency key.",
         })
         .eq("id", item.id);
     }

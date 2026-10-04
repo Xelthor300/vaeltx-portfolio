@@ -136,9 +136,11 @@ function Notice({
 function SecurityCheck({
   siteKey,
   onToken,
+  action,
 }: {
   siteKey: string | null;
   onToken: (value: string) => void;
+  action: "signin" | "setup" | "bid";
 }) {
   const box = useRef<HTMLDivElement>(null);
   const id = useRef<string | null>(null);
@@ -146,13 +148,14 @@ function SecurityCheck({
     if (box.current && siteKey && window.turnstile && !id.current)
       id.current = window.turnstile.render(box.current, {
         sitekey: siteKey,
+        action,
         theme: "dark",
         size: "flexible",
         callback: onToken,
         "expired-callback": () => onToken(""),
         "error-callback": () => onToken(""),
       });
-  }, [siteKey, onToken]);
+  }, [siteKey, onToken, action]);
   useEffect(() => {
     render();
     return () => {
@@ -225,6 +228,7 @@ function SignIn({ config }: { config: Config | null }) {
           key={challenge}
           siteKey={config?.turnstileSiteKey || null}
           onToken={setToken}
+          action="signin"
         />
         <button className="au-primary" disabled={busy || !token}>
           {busy ? "Sending link…" : "Send sign-in link ↗"}
@@ -383,10 +387,12 @@ function BidForm({
   state,
   account,
   refresh,
+  config,
 }: {
   state: PublicState;
   account: Account | null;
   refresh: () => Promise<void>;
+  config: Config | null;
 }) {
   const [value, setValue] = useState(String(state.next_minimum / 100));
   const [review, setReview] = useState<number | null>(null);
@@ -394,6 +400,8 @@ function BidForm({
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
+  const [token, setToken] = useState("");
+  const [challenge, setChallenge] = useState(0);
   const modal = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const requestId = useRef<string | null>(null);
@@ -418,7 +426,7 @@ function BidForm({
     }
   }
   async function commit() {
-    if (!review || !confirmation || !requestId.current) return;
+    if (!review || !confirmation || !requestId.current || !token) return;
     setBusy(true);
     setMessage("");
     try {
@@ -426,6 +434,7 @@ function BidForm({
         amount: review,
         requestId: requestId.current,
         confirmed: true,
+        captchaToken: token,
       });
       if (result.ok) {
         setMessage(
@@ -439,6 +448,8 @@ function BidForm({
       await refresh();
     } finally {
       setBusy(false);
+      setToken("");
+      setChallenge((n) => n + 1);
     }
   }
   return (
@@ -519,6 +530,8 @@ function BidForm({
         }}
         onClose={() => {
           setOpen(false);
+          setToken("");
+          setChallenge((n) => n + 1);
           trigger.current?.focus();
         }}
       >
@@ -535,10 +548,18 @@ function BidForm({
         >
           I understand and confirm this bid.
         </Checkbox>
+        {open && (
+          <SecurityCheck
+            key={challenge}
+            siteKey={config?.turnstileSiteKey || null}
+            onToken={setToken}
+            action="bid"
+          />
+        )}
         <div className="au-actions">
           <button
             className="au-primary"
-            disabled={!confirmation || busy}
+            disabled={!confirmation || busy || !token}
             onClick={commit}
           >
             {busy ? "Submitting…" : "Confirm and place bid"}
@@ -1580,7 +1601,12 @@ export default function AuctionExperience({
             {state && (
               <>
                 <Countdown state={state} offset={offset} />
-                <BidForm state={state} account={account} refresh={refresh} />
+                <BidForm
+                  state={state}
+                  account={account}
+                  refresh={refresh}
+                  config={config}
+                />
               </>
             )}
             {!account && accountReady && <SignIn config={config} />}
@@ -1711,6 +1737,7 @@ function CardVerification({
             key={challenge}
             siteKey={config?.turnstileSiteKey || null}
             onToken={setToken}
+            action="setup"
           />
           <button
             className="au-primary"

@@ -30,6 +30,8 @@ import {
   verifiedStripe,
 } from "@/lib/auction/payments";
 import { reconcile, deliverNotifications } from "@/lib/auction/operations";
+import { emailTransport } from "@/lib/auction/mail";
+import { captchaTokenSchema } from "@/lib/auction/turnstile";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -270,12 +272,15 @@ export async function POST(request: Request, ctx: Context) {
       const v = z
         .object({
           email: z.email().max(254),
-          captchaToken: z.string().max(4096),
+          captchaToken: captchaTokenSchema,
         })
         .strict()
         .parse(input);
       await rate(request, "signin");
-      await captcha(v.captchaToken);
+      // Supabase must validate this single-use token itself, including requests
+      // made directly to Auth. Never redeem it here first and then replay it.
+      if (process.env.AUCTION_AUTH_CAPTCHA_PROVIDER !== "supabase")
+        throw new AuctionError("Secure sign-in is being configured.", 503);
       const r = await (
         await auth()
       ).auth.signInWithOtp({
@@ -283,6 +288,7 @@ export async function POST(request: Request, ctx: Context) {
         options: {
           emailRedirectTo: siteURL("/website-auction/auth/callback"),
           shouldCreateUser: true,
+          captchaToken: v.captchaToken,
         },
       });
       if (r.error)
@@ -341,6 +347,7 @@ export async function POST(request: Request, ctx: Context) {
     if (action === "bid") {
       await rate(request, "bid", u.id);
       const v = bidSchema.parse(input);
+      await captcha(v.captchaToken, "bid");
       const a = await auction();
       const r = await db().rpc("va_place_bid", {
         p_auction: a.id,
@@ -360,11 +367,11 @@ export async function POST(request: Request, ctx: Context) {
     }
     if (action === "setup") {
       const v = z
-        .object({ captchaToken: z.string().max(4096) })
+        .object({ captchaToken: captchaTokenSchema })
         .strict()
         .parse(input);
       await rate(request, "setup", u.id);
-      await captcha(v.captchaToken);
+      await captcha(v.captchaToken, "setup");
       return reply(await setupCard(u.id));
     }
     if (action === "checkout") {
@@ -392,14 +399,12 @@ export async function POST(request: Request, ctx: Context) {
       ensure(
         true,
         (
-          await db()
-            .from("va_onboarding")
-            .upsert({
-              winner_id: w.id,
-              participant_id: u.id,
-              responses,
-              updated_at: new Date().toISOString(),
-            })
+          await db().from("va_onboarding").upsert({
+            winner_id: w.id,
+            participant_id: u.id,
+            responses,
+            updated_at: new Date().toISOString(),
+          })
         ).error,
       );
       ensure(
@@ -451,7 +456,6 @@ export async function POST(request: Request, ctx: Context) {
             "AUCTION_STRIPE_WEBHOOK_SECRET",
             "AUCTION_TURNSTILE_SECRET",
             "AUCTION_TURNSTILE_SITE_KEY",
-            "AUCTION_RESEND_API_KEY",
             "AUCTION_EMAIL_FROM",
             "AUCTION_ADMIN_EMAIL",
           ].some((key) => !process.env[key])
@@ -461,6 +465,7 @@ export async function POST(request: Request, ctx: Context) {
             409,
           );
         await verifiedStripe();
+        await emailTransport().verify();
       }
       const r = await db().rpc("va_admin_action", {
         p_auction: a.id,

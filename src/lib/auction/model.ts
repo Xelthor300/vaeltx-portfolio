@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { captchaTokenSchema } from "./turnstile";
 
 export const AUCTION_SLUG = "website-auction";
 export const TERMS_VERSION = "auction-v1";
@@ -54,6 +55,7 @@ export const bidSchema = z
     amount: z.number().int().min(10000).max(99999999),
     requestId: z.uuid(),
     confirmed: z.literal(true),
+    captchaToken: captchaTokenSchema,
   })
   .strict();
 export const onboardingSchema = z

@@ -128,6 +128,15 @@ test("auction PostgreSQL transaction, deadline, payments, permissions and notifi
       "utf8",
     ),
   );
+  await pg.exec(
+    await readFile(
+      new URL(
+        "../supabase/migrations/20261004214013_website_auction_smtp_delivery.sql",
+        import.meta.url,
+      ),
+      "utf8",
+    ),
+  );
   const users = [randomUUID(), randomUUID(), randomUUID()];
   for (let i = 0; i < users.length; i++)
     await pg.query(`insert into auth.users(id) values($1);`, [users[i]]);

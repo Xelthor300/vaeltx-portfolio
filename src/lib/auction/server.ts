@@ -4,6 +4,11 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { AUCTION_SLUG, stateColumns, type PublicState } from "./model";
+import {
+  captchaTokenSchema,
+  validChallengeResult,
+  type ChallengeAction,
+} from "./turnstile";
 
 export class AuctionError extends Error {
   constructor(
@@ -156,24 +161,27 @@ export async function rate(
       );
   }
 }
-export async function captcha(token: unknown) {
-  if (typeof token !== "string" || token.length < 10 || token.length > 4096)
-    throw new AuctionError("Complete the security check.");
+export async function captcha(token: unknown, action: ChallengeAction) {
+  const parsed = captchaTokenSchema.safeParse(token);
+  if (!parsed.success) throw new AuctionError("Complete the security check.");
   const result = await fetch(
     "https://challenges.cloudflare.com/turnstile/v0/siteverify",
     {
       method: "POST",
       body: new URLSearchParams({
         secret: required("AUCTION_TURNSTILE_SECRET"),
-        response: token,
+        response: parsed.data,
       }),
       signal: AbortSignal.timeout(10000),
     },
   );
   const checked = await result.json();
   if (
-    !checked.success ||
-    checked.hostname !== new URL(required("AUCTION_SITE_URL")).hostname
+    !validChallengeResult(
+      checked,
+      new URL(required("AUCTION_SITE_URL")).hostname,
+      action,
+    )
   )
     throw new AuctionError("Security check failed. Please try again.");
 }
