@@ -1,0 +1,25 @@
+.banner {
+  position: fixed;
+  inset: auto 16px 16px;
+  z-index: 1100;
+  max-width: 720px;
+  padding: 20px;
+  color: var(--ink-0);
+  background: var(--paper-0);
+  border: 1px solid var(--line-1);
+  box-shadow: 0 4px 24px #0002;
+}
+.banner p, .settings p { font: inherit; font-size: 16px; margin: 0 0 12px; }
+.banner a { text-decoration: underline; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.actions button {
+  min-height: 44px;
+  padding: 10px 16px;
+  color: var(--ink-0);
+  background: var(--paper-0);
+  border: 1px solid var(--ink-0);
+  font: inherit;
+  font-size: 16px;
+}
+.actions button:hover { color: var(--paper-0); background: var(--ink-0); }
+.settings { margin-top: 24px; }
