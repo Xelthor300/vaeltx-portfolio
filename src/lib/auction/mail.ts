@@ -11,9 +11,16 @@ export type MailMessage = {
   text: string;
 };
 export function emailTransport() {
-  const kind = process.env.AUCTION_EMAIL_TRANSPORT || "resend";
-  if (!process.env.AUCTION_EMAIL_FROM || !process.env.AUCTION_ADMIN_EMAIL)
-    throw new AuctionError("Email delivery is not configured.", 503);
+  const kind = (process.env.AUCTION_EMAIL_TRANSPORT || "resend").trim();
+  const missing = ["AUCTION_EMAIL_FROM", "AUCTION_ADMIN_EMAIL"].filter(
+    (key) => !process.env[key]?.trim(),
+  );
+  if (missing.length)
+    throw new AuctionError(
+      `Email configuration missing: ${missing.join(", ")}.`,
+      503,
+      "configuration_pending",
+    );
   if (kind === "smtp") {
     const {
       AUCTION_SMTP_HOST: host,
@@ -65,7 +72,11 @@ export function emailTransport() {
     };
   }
   if (kind !== "resend" || !process.env.AUCTION_RESEND_API_KEY)
-    throw new AuctionError("Email delivery is not configured.", 503);
+    throw new AuctionError(
+      "Email transport or provider credential is not configured.",
+      503,
+      "configuration_pending",
+    );
   const resend = new Resend(process.env.AUCTION_RESEND_API_KEY);
   return {
     kind: "resend" as MailTransport,
