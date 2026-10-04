@@ -9,7 +9,10 @@ const config: NextConfig = {
       { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
       { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
       { key: "X-Frame-Options", value: "SAMEORIGIN" }
-    ] }, { source: "/concepts/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }];
+    ] }, { source: "/concepts/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+      { source: "/website-grant/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }, { key: "Cache-Control", value: "private, no-store" }] },
+      { source: "/api/website-grant/:path*", headers: [{ key: "Cache-Control", value: "private, no-store" }, { key: "X-Robots-Tag", value: "noindex, nofollow" }] }
+    ];
   }
 };
 export default config;

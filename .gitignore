@@ -10,3 +10,4 @@ docs/qa/private/
 assets-source/
 .playwright-cli/
 output/
+supabase/.temp/
