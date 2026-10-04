@@ -5,6 +5,7 @@ import { dispatchDelivery } from "./delivery-policy";
 import { processEvent, verifiedStripe } from "./payments";
 import { money } from "./model";
 import type Stripe from "stripe";
+import { auctionRuntime } from "./runtime";
 
 export async function reconcile() {
   const a = await auction();
@@ -104,7 +105,7 @@ export async function reconcile() {
       );
     else if (
       Date.parse(offer.deadline) - Date.now() < 6 * 3600_000 &&
-      a.environment === "production"
+      (a.environment === "production" || auctionRuntime().qa)
     ) {
       for (const audience of ["owner", "participant"])
         ensure(
@@ -115,7 +116,11 @@ export async function reconcile() {
               p_kind: "payment_reminder",
               p_audience: audience,
               p_user: offer.participant_id,
-              p_payload: { amount: offer.amount, deadline: offer.deadline },
+              p_payload: {
+                amount: offer.amount,
+                deadline: offer.deadline,
+                auctionId: a.id,
+              },
             })
           ).error,
         );
@@ -168,17 +173,21 @@ export async function deliverNotifications() {
     }
     const payload = item.payload;
     const title =
-      item.kind === "bid_accepted"
+      (payload.qa ? "[QA — Stripe TEST] " : "") +
+      (item.kind === "bid_accepted"
         ? `VAELTX Auction — New Bid: ${money(payload.amount)} USD`
-        : subjects[item.kind] || "Website auction update";
+        : subjects[item.kind] || "Website auction update");
     const isOwner = item.audience === "owner";
-    const url = siteURL(
-      isOwner
-        ? "/admin/website-auction"
-        : item.kind === "payment_received" || item.kind === "onboarding"
-          ? "/website-auction/onboarding"
-          : "/website-auction/account",
-    );
+    const path = isOwner
+      ? "/admin/website-auction"
+      : item.kind === "payment_received" || item.kind === "onboarding"
+        ? "/website-auction/onboarding"
+        : "/website-auction/account";
+    const url =
+      payload.qa &&
+      /^https:\/\/[a-z0-9-]+\.vercel\.app$/.test(payload.qaURL || "")
+        ? new URL(path, payload.qaURL).toString()
+        : siteURL(path);
     const text = [
       title,
       payload.amount ? `Amount: ${money(payload.amount)} USD` : "",

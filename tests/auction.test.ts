@@ -77,6 +77,7 @@ test("auction PostgreSQL transaction, deadline, payments, permissions and notifi
   const pg = new PGlite();
   await pg.exec(`create role anon; create role authenticated; create role service_role bypassrls;
     create schema auth; create table auth.users(id uuid primary key,email text,email_confirmed_at timestamptz);
+    create function auth.uid() returns uuid language sql stable as 'select nullif(current_setting(''request.jwt.claim.sub'',true),'''')::uuid';
     create table public.wg_campaigns(slug text,status text,paid_entries_enabled boolean,services_enabled boolean);
     insert into public.wg_campaigns values('website-launch-grant','draft',false,false);`);
   let sql = await readFile(
@@ -138,6 +139,15 @@ test("auction PostgreSQL transaction, deadline, payments, permissions and notifi
     ),
   );
   const users = [randomUUID(), randomUUID(), randomUUID()];
+  await pg.exec(
+    await readFile(
+      new URL(
+        "../supabase/migrations/20261004220126_website_auction_isolated_qa.sql",
+        import.meta.url,
+      ),
+      "utf8",
+    ),
+  );
   for (let i = 0; i < users.length; i++)
     await pg.query(`insert into auth.users(id) values($1);`, [users[i]]);
   for (let i = 0; i < users.length; i++)
@@ -541,6 +551,85 @@ test("auction PostgreSQL transaction, deadline, payments, permissions and notifi
       assert.ok(owner.payload.fullName);
       assert.ok(owner.payload.phone);
       assert.equal(owner.payload.reserveAmount, 35000);
+    },
+  );
+  await t.test(
+    "QA access is private, test-only, and opts notifications in without publishing fixtures to anonymous users",
+    async () => {
+      for (const id of users.slice(0, 2))
+        await pg.query(
+          "update va_participants set verified_mode='test' where id=$1",
+          [id],
+        );
+      const a = await fixture();
+      await pg.query("update va_auctions set slug=$2 where id=$1", [
+        a,
+        `qa-ui-${a}`,
+      ]);
+      await pg.query(
+        "insert into va_qa_runs values($1,true,'https://qa-vaeltx.vercel.app')",
+        [a],
+      );
+      await pg.query("insert into va_qa_access values($1,$2)", [a, users[0]]);
+      const req = randomUUID();
+      assert.equal((await bid(a, users[0], 35000, req)).ok, true);
+      assert.equal((await bid(a, users[0], 35000, req)).duplicate, true);
+      const messages = (
+        await pg.query<{ payload: { qa: boolean } }>(
+          "select payload from va_outbox where payload->>'auctionId'=$1",
+          [a],
+        )
+      ).rows;
+      assert.equal(messages.length, 3);
+      assert.ok(messages.every((m) => m.payload.qa === true));
+      await assert.rejects(
+        pg.query(
+          "insert into va_qa_runs values((select id from va_auctions where slug='website-auction'),true,'https://qa-vaeltx.vercel.app')",
+        ),
+        /qa_requires_test_auction/,
+      );
+      await pg.exec(
+        `grant usage on schema auth to authenticated; set role authenticated; set request.jwt.claim.sub='${users[0]}'`,
+      );
+      assert.equal(
+        (
+          await pg.query("select * from va_public_state where auction_id=$1", [
+            a,
+          ])
+        ).rows.length,
+        1,
+      );
+      await assert.rejects(
+        pg.query("insert into va_qa_access values($1,$2)", [a, users[1]]),
+        /permission denied/,
+      );
+      await pg.exec(`set request.jwt.claim.sub='${users[1]}'`);
+      assert.equal(
+        (
+          await pg.query("select * from va_public_state where auction_id=$1", [
+            a,
+          ])
+        ).rows.length,
+        0,
+      );
+      await pg.exec("set role anon");
+      assert.equal(
+        (
+          await pg.query("select * from va_public_state where auction_id=$1", [
+            a,
+          ])
+        ).rows.length,
+        0,
+      );
+      await pg.exec("reset role");
+      assert.equal(
+        (
+          await pg.query<{ status: string }>(
+            "select status from va_auctions where slug='website-auction'",
+          )
+        ).rows[0].status,
+        "ready_for_activation",
+      );
     },
   );
   await pg.close();

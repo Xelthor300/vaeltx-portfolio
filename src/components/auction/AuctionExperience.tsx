@@ -29,6 +29,7 @@ type Config = {
   url: string;
   publishableKey: string;
   turnstileSiteKey: string | null;
+  qa: boolean;
 };
 type Account = {
   email: string;
@@ -407,7 +408,7 @@ function BidForm({
   const requestId = useRef<string | null>(null);
   const active = isActive(state);
   const verified =
-    account?.profile?.verified_mode === "live" &&
+    account?.profile?.verified_mode === (config?.qa ? "test" : "live") &&
     !!account?.profile?.verified_at;
   function begin(e: FormEvent) {
     e.preventDefault();
@@ -1404,6 +1405,7 @@ export default function AuctionExperience({
     const client = createClient(config.url, config.publishableKey, {
       auth: { persistSession: false, autoRefreshToken: false },
     });
+    let disposed = false;
     const channel = client
       .channel("website-auction-public", {
         config: { postgres_changes_options: { wait: true } },
@@ -1417,12 +1419,23 @@ export default function AuctionExperience({
           filter: `auction_id=eq.${state.auction_id}`,
         },
         () => void refresh(),
-      )
-      .subscribe();
+      );
+    void (async () => {
+      if (config.qa) {
+        try {
+          const session = await api("qa-session");
+          await client.realtime.setAuth(session.accessToken);
+        } catch {
+          return;
+        }
+      }
+      if (!disposed) channel.subscribe();
+    })();
     return () => {
+      disposed = true;
       void client.removeChannel(channel);
     };
-  }, [config, state?.auction_id, refresh]);
+  }, [config, state?.auction_id, refresh, account?.email]);
   async function signout() {
     await api("signout", {});
     setAccount(null);
@@ -1458,6 +1471,12 @@ export default function AuctionExperience({
           {announcement}
         </div>
         {error && <Notice error>{error}</Notice>}
+        {config?.qa && (
+          <Notice>
+            ISOLATED QA · Stripe TEST payments only. All businesses and bids
+            here are QA fixtures. The production auction has not started.
+          </Notice>
+        )}
         {page === "admin" ? (
           <Admin state={state} />
         ) : page === "home" ? (
@@ -1504,7 +1523,11 @@ export default function AuctionExperience({
                     <span className="au-status-badge">
                       {statusLabel[state.status] || state.status}
                     </span>
-                    <span>USD · REAL ACCEPTED BIDS ONLY</span>
+                    <span>
+                      {config?.qa
+                        ? "ISOLATED QA · STRIPE TEST · PRODUCTION NOT STARTED"
+                        : "USD · REAL ACCEPTED BIDS ONLY"}
+                    </span>
                   </div>
                   <div className="au-stat-grid">
                     <div>
@@ -1722,7 +1745,9 @@ function CardVerification({
       setChallenge((n) => n + 1);
     }
   }
-  const verified = profile.verified_mode === "live" && profile.verified_at;
+  const verified =
+    profile.verified_mode === (config?.qa ? "test" : "live") &&
+    profile.verified_at;
   return (
     <section className="au-panel">
       <h2>Card verification</h2>

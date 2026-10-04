@@ -1,6 +1,7 @@
 import "server-only";
 import Stripe from "stripe";
 import { auction, AuctionError, db, ensure, siteURL } from "./server";
+import { auctionRuntime } from "./runtime";
 
 export function stripe() {
   const key = process.env.STRIPE_SECRET_KEY;
@@ -26,10 +27,12 @@ export async function verifiedStripe() {
 }
 export async function setupCard(userId: string) {
   const a = await auction();
+  const qa = auctionRuntime().qa;
+  const mode = qa ? "test" : "live";
   if (
     a.status !== "active" ||
-    a.environment !== "production" ||
-    process.env.AUCTION_STRIPE_MODE !== "live"
+    a.environment !== (qa ? "test" : "production") ||
+    process.env.AUCTION_STRIPE_MODE !== mode
   )
     throw new AuctionError(
       "Card verification opens when the auction starts.",
@@ -66,6 +69,7 @@ export async function setupCard(userId: string) {
     .select("*")
     .eq("participant_id", userId)
     .eq("status", "pending")
+    .eq("mode", mode)
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
@@ -86,7 +90,7 @@ export async function setupCard(userId: string) {
     ...asResult(
       await db()
         .from("va_payment_setups")
-        .insert({ participant_id: userId, customer_id: customer, mode: "live" })
+        .insert({ participant_id: userId, customer_id: customer, mode })
         .select()
         .single(),
     ),
@@ -125,6 +129,18 @@ function asResult<T>(result: { data: T; error: unknown }): [T, unknown] {
   return [result.data, result.error];
 }
 export async function checkoutWinner(userId: string, winnerId: string) {
+  const current = await auction();
+  const offer = await db()
+    .from("va_winners")
+    .select("auction_id,participant_id")
+    .eq("id", winnerId)
+    .single();
+  if (
+    offer.error ||
+    offer.data.auction_id !== current.id ||
+    offer.data.participant_id !== userId
+  )
+    throw new AuctionError("This payment offer is unavailable.", 404);
   const s = await verifiedStripe();
   const result = await db().rpc("va_reserve_checkout", {
     p_winner: winnerId,

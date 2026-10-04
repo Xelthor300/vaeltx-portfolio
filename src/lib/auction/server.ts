@@ -3,7 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { AUCTION_SLUG, stateColumns, type PublicState } from "./model";
+import { stateColumns, type PublicState } from "./model";
+import { auctionRuntime, qaEmailAllowed } from "./runtime";
 import {
   captchaTokenSchema,
   validChallengeResult,
@@ -71,6 +72,15 @@ export async function user() {
       401,
       "sign_in_required",
     );
+  if (!qaEmailAllowed(data.user.email))
+    throw new AuctionError("Not found.", 404);
+  if (auctionRuntime().qa) {
+    const a = await auction();
+    const result = await db()
+      .from("va_qa_access")
+      .upsert({ auction_id: a.id, user_id: data.user.id });
+    ensure(true, result.error);
+  }
   return data.user;
 }
 export async function admin() {
@@ -93,20 +103,23 @@ export async function admin() {
   return u;
 }
 export async function auction() {
+  const context = auctionRuntime();
   const { data, error } = await db()
     .from("va_auctions")
     .select("*")
-    .eq("slug", AUCTION_SLUG)
+    .eq("slug", context.slug)
+    .eq("environment", context.environment)
     .single();
   if (error || !data) throw new AuctionError("Auction unavailable.", 503);
   return data;
 }
 export async function publicState(): Promise<PublicState> {
+  const context = auctionRuntime();
   const { data, error } = await db()
     .from("va_public_state")
     .select(stateColumns)
-    .eq("slug", AUCTION_SLUG)
-    .eq("environment", "production")
+    .eq("slug", context.slug)
+    .eq("environment", context.environment)
     .single();
   if (error || !data) throw new AuctionError("Auction unavailable.", 503);
   return data as PublicState;

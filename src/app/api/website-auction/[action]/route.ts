@@ -32,6 +32,7 @@ import {
 import { reconcile, deliverNotifications } from "@/lib/auction/operations";
 import { emailTransport } from "@/lib/auction/mail";
 import { captchaTokenSchema } from "@/lib/auction/turnstile";
+import { auctionRuntime, qaEmailAllowed } from "@/lib/auction/runtime";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -57,7 +58,16 @@ export async function GET(request: Request, ctx: Context) {
         url: process.env.SUPABASE_URL,
         publishableKey: process.env.SUPABASE_PUBLISHABLE_KEY,
         turnstileSiteKey: process.env.AUCTION_TURNSTILE_SITE_KEY || null,
+        qa: auctionRuntime().qa,
       });
+    if (action === "qa-session") {
+      if (!auctionRuntime().qa) return reply({ error: "Not found." }, 404);
+      await user();
+      const session = await (await auth()).auth.getSession();
+      if (!session.data.session)
+        throw new AuctionError("Sign in required.", 401);
+      return reply({ accessToken: session.data.session.access_token });
+    }
     if (action === "history") {
       const a = await auction();
       const { data, error } = await db()
@@ -277,6 +287,8 @@ export async function POST(request: Request, ctx: Context) {
         .strict()
         .parse(input);
       await rate(request, "signin");
+      if (!qaEmailAllowed(v.email))
+        throw new AuctionError("This QA preview is private.", 403);
       // Supabase must validate this single-use token itself, including requests
       // made directly to Auth. Never redeem it here first and then replay it.
       if (process.env.AUCTION_AUTH_CAPTCHA_PROVIDER !== "supabase")
@@ -311,8 +323,7 @@ export async function POST(request: Request, ctx: Context) {
       const v = profileSchema.parse(input);
       const a = await auction();
       const eligible = a.commercial_terms.eligible_countries as
-        | string[]
-        | undefined;
+        string[] | undefined;
       if (!eligible?.length || !eligible.includes(v.country))
         throw new AuctionError(
           "Country eligibility is still being finalized, or this country is not eligible.",
@@ -415,7 +426,7 @@ export async function POST(request: Request, ctx: Context) {
             p_kind: "onboarding",
             p_audience: "owner",
             p_user: u.id,
-            p_payload: { winnerId: w.id, amount: w.amount },
+            p_payload: { winnerId: w.id, amount: w.amount, auctionId: a.id },
           })
         ).error,
       );
