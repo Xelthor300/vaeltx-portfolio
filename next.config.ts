@@ -3,6 +3,9 @@ const config: NextConfig = {
   poweredByHeader: false,
   agentRules: false,
   turbopack: { root: process.cwd() },
+  async redirects() {
+    return [{ source: '/website-grant/:path*', destination: '/website-auction', permanent: true }];
+  },
   async headers() {
     return [{ source: "/:path*", headers: [
       { key: "X-Content-Type-Options", value: "nosniff" },
