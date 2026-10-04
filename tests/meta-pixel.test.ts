@@ -22,6 +22,7 @@ test("initial / repeated effects / SPA routes / back navigation initialize once 
   assert.deepEqual(commands[0], ["set", "autoConfig", false, META_PIXEL_ID]);
   assert.equal(host._fbq, host.fbq);
   assert.equal(host.fbq!.push, host.fbq);
+  assert.equal(host.fbq!.disablePushState, true);
   // After the external library attaches, commands dispatch directly.
   const delivered: unknown[] = [];
   host.fbq!.callMethod = (...args) => { delivered.push(args); };
