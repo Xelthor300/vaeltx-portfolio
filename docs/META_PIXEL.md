@@ -16,6 +16,8 @@ The optional, nonmodal banner has equal accept/reject controls. No Meta script, 
 
 Meta's library inherently receives URL/browser/network information. Keep personal information out of page URLs. Current contact form data stays in the POST body and is not passed to the Pixel.
 
+Meta's served [fbevents.js](https://connect.facebook.net/en_US/fbevents.js) has two independent navigation behaviors: a History API listener and suppression of repeated explicit PageViews within one document. The queue sets `disablePushState=true` to stop the former and `allowDuplicatePageViews=true` to allow explicit PageViews for distinct routes in the same document. The application pathname guard then owns deduplication. Dispatch preserves the queue as the call receiver, matching Meta's supplied snippet. These external-library behaviors were checked against the served source and actual browser traffic; future changes to Meta's library should be checked with the same route/hash network QA.
+
 ## Noscript
 
 The global invisible 1×1 image requests `/api/meta-pixel`. With prior granted consent this uncached endpoint redirects to exactly `https://www.facebook.com/tr?id=1716784306059756&ev=PageView&noscript=1`; otherwise it returns a local transparent GIF without contacting Meta. This deliberate same-origin indirection reconciles the requested fallback with consent and preserves static page generation. With JavaScript off and no prior acceptance, tracking stays disabled. No JavaScript-disabled consent capture is added.
