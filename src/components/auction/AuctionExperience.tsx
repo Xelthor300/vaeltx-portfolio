@@ -456,7 +456,7 @@ function BidForm({
   return (
     <section className="au-panel au-bid-panel">
       <span className="au-eyebrow">YOUR NEXT MOVE</span>
-      <h2>Place a real bid.</h2>
+      <h2>{config?.qa ? "Place a test bid." : "Place a real bid."}</h2>
       <p>
         Minimum now: <strong>{money(state.next_minimum)} USD</strong>. There is
         no bidding fee.

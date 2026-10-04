@@ -265,7 +265,12 @@ export async function GET(request: Request, ctx: Context) {
     if (action === "operations") {
       operations(request);
       await reconcile();
-      return reply(await deliverNotifications());
+      return reply({
+        ...(await deliverNotifications()),
+        activationAllowed: process.env.AUCTION_ALLOW_ACTIVATION === "true",
+        stripeMode: process.env.AUCTION_STRIPE_MODE || "test",
+        emailTransport: process.env.AUCTION_EMAIL_TRANSPORT || "resend",
+      });
     }
     return reply({ error: "Not found." }, 404);
   } catch (error) {

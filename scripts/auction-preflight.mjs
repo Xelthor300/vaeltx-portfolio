@@ -1,7 +1,8 @@
 // Read-only configuration/evidence check. Does not send email, bid or activate.
 import { createClient } from "@supabase/supabase-js";
 import { writeFile, mkdir } from "node:fs/promises";
-const base = process.env.AUCTION_SITE_URL;
+const base =
+  process.env.AUCTION_PRODUCTION_URL || "https://vaeltx-portfolio.vercel.app";
 const db = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY,
@@ -36,6 +37,7 @@ const direct = await fetch(process.env.SUPABASE_URL + "/auth/v1/otp", {
 const rejected = await direct.json();
 const report = {
   at: new Date().toISOString(),
+  checkedURL: base,
   production: a.data,
   publicState: publicState.state,
   activationAllowed: process.env.AUCTION_ALLOW_ACTIVATION === "true",
@@ -48,7 +50,7 @@ const report = {
     passwordConfigured: /^[A-Za-z0-9]{16}$/.test(
       (process.env.AUCTION_SMTP_PASSWORD || "").replace(/\s/g, ""),
     ),
-    mailboxReceiptVerified: false,
+    mailboxReceiptVerified: "not_checked_by_preflight",
   },
   auth: {
     httpStatus: settings.status,
