@@ -12,9 +12,11 @@ The optional, nonmodal banner has equal accept/reject controls. No Meta script, 
 
 ## App Router behavior
 
-`MetaPixel` is mounted once in the root layout under Suspense. `next/script` loads the external library once after consent. The typed controller installs the standard queue, disables automatic event detection (`autoConfig=false`), initializes once, and queues the first PageView. `usePathname` sends one event per pathname transition, including browser back/forward. Query-only and hash-only changes are not distinct portfolio page navigations. Repeated effects/rerenders do not send events. Acceptance after browsing counts only the current page; declined page history is not backfilled. No advanced matching data, form values, extra events, new environment variables or secrets are supplied.
+`MetaPixel` is mounted once in the root layout under Suspense. `next/script` loads the external library once after consent. The typed controller installs the standard queue, disables Meta's built-in history PageViews (`disablePushState=true`) and automatic event detection (`autoConfig=false`), initializes once, and queues the first PageView. `usePathname` is the sole owner of navigation counting and sends one event per pathname transition, including browser back/forward. Query-only and hash-only changes are not distinct portfolio page navigations. Repeated effects/rerenders do not send events. Acceptance after browsing counts only the current page; declined page history is not backfilled. No advanced matching data, form values, extra events, new environment variables or secrets are supplied.
 
 Meta's library inherently receives URL/browser/network information. Keep personal information out of page URLs. Current contact form data stays in the POST body and is not passed to the Pixel.
+
+Meta's served [fbevents.js](https://connect.facebook.net/en_US/fbevents.js) has two independent navigation behaviors: a History API listener and suppression of repeated explicit PageViews within one document. The queue sets `disablePushState=true` to stop the former and `allowDuplicatePageViews=true` to allow explicit PageViews for distinct routes in the same document. The application pathname guard then owns deduplication. Dispatch preserves the queue as the call receiver, matching Meta's supplied snippet. These external-library behaviors were checked against the served source and actual browser traffic; future changes to Meta's library should be checked with the same route/hash network QA.
 
 ## Noscript
 

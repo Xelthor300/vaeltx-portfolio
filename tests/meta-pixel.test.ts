@@ -22,9 +22,15 @@ test("initial / repeated effects / SPA routes / back navigation initialize once 
   assert.deepEqual(commands[0], ["set", "autoConfig", false, META_PIXEL_ID]);
   assert.equal(host._fbq, host.fbq);
   assert.equal(host.fbq!.push, host.fbq);
+  assert.equal(host.fbq!.disablePushState, true);
+  assert.equal(host.fbq!.allowDuplicatePageViews, true);
   // After the external library attaches, commands dispatch directly.
   const delivered: unknown[] = [];
-  host.fbq!.callMethod = (...args) => { delivered.push(args); };
+  host.fbq!.callMethod = function (...args) {
+    assert.equal(this, host.fbq);
+    assert.equal(this.allowDuplicatePageViews, true);
+    delivered.push(args);
+  };
   pixel.pageView("/work", "granted");
   assert.deepEqual(delivered, [["track", "PageView"]]);
 });

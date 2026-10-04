@@ -22,6 +22,8 @@ type PixelQueue = {
   push: PixelQueue;
   loaded: boolean;
   version: string;
+  disablePushState: boolean;
+  allowDuplicatePageViews: boolean;
 };
 
 // Encapsulate Meta's globals here; application components never access them.
@@ -37,12 +39,18 @@ export function createMetaPixelController(host: PixelHost) {
       const fbq = Object.assign((...args: PixelCommand) => {
         if (fbq.callMethod) fbq.callMethod(...args);
         else fbq.queue.push(args);
-      }, { queue: [] as PixelCommand[], loaded: true, version: "2.0" }) as PixelQueue;
+      }, { queue: [] as PixelCommand[], loaded: true, version: "2.0", disablePushState: true, allowDuplicatePageViews: true }) as PixelQueue;
       fbq.push = fbq;
       host.fbq = fbq;
       host._fbq ??= fbq;
     }
     if (!initialized) {
+      // Meta otherwise emits its own PageViews for History API/hash changes.
+      // App Router is the sole owner of navigation event counting.
+      host.fbq.disablePushState = true;
+      // Meta otherwise suppresses subsequent explicit PageViews within the
+      // same document. Our pathname guard owns deduplication instead.
+      host.fbq.allowDuplicatePageViews = true;
       // Only explicit PageViews: disable automatic events / form detection.
       host.fbq("set", "autoConfig", false, META_PIXEL_ID);
       host.fbq("init", META_PIXEL_ID);
