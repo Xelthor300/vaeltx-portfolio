@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRef } from "react";
 
-const links = [{ label: "Work", href: "/work" }, { label: "Services", href: "/services" }, { label: "Process", href: "/process" }, { label: "Standards", href: "/standards" }, { label: "About", href: "/about" }, { label: "Auction", href: "/website-auction" }];
+const links = [{ label: "Work", href: "/work" }, { label: "Services", href: "/services" }, { label: "Process", href: "/process" }, { label: "Standards", href: "/standards" }, { label: "About", href: "/about" }];
 
 export function SiteNav() {
   const pathname = usePathname();
