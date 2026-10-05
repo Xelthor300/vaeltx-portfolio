@@ -163,3 +163,18 @@ Production preflight at **01:53:08.101Z**: actual stable production URL, ready_f
 Observed recovery limitations: one production verification callback and one Node fetch encountered transient connection/PKCE failures during QA. A fresh verification link was requested and successfully verified; the subsequent authenticated production onboarding-isolation check passed. Later read-only preflight succeeded. No success is inferred from the failed attempts.
 
 STOPPED BEFORE ACTIVATION. Production remains unstarted. PR #4 remains draft/open and the feature branch is retained.
+
+## Final launch request — 2026-10-05T07:32Z
+
+The owner now conditionally authorizes real launch, only after all hard blockers pass. Initial hosted SQL and actual production preflight confirmed ready_for_activation, activation=false, all three dates NULL, zero production bids, Stripe TEST. No discrepancy and no activation mutation occurred.
+
+The Stripe connector now exposes LIVE context for the existing VAELTX account (`acct_1ULYYw4efgtFxxrt`). This is access availability, not proof of this website auction's business-model approval or deployed LIVE configuration. The existing server credential is TEST. A read-only account API check using that credential returned country MX/business_type sole_prop and enabled flags, but no usable seller legal name, business address or business profile. TEST enabled flags were not used as evidence of LIVE approval. Private raw account evidence is Git-ignored; no personal identity or credential was published.
+
+Hard blockers only:
+
+1. Production commercial_terms is empty. Required approved fields remain missing: seller_identity (legal seller name/address), eligible_countries, tax_policy (tax/invoicing/full payable-price treatment), governing_law, refund_policy, ownership_policy (handoff/licenses), privacy_policy (retention/rights/transfers) and delivery_timeline. Account country is not an eligible-country policy or governing-law agreement. These cannot be inferred or invented.
+2. This exact business model's LIVE acceptance has not been verified; the deployed integration still uses TEST credentials/mode and its TEST webhook secret. A secure matching LIVE credential/webhook configuration is required after the commercial blocker is resolved. No LIVE endpoint/key mutation, mode switch, partial activation or first bid was performed.
+
+Known client compatibility observations and Auth HTML-only MIME are non-critical under the owner's new launch instructions and are not launch blockers by themselves. Completed TEST/SMTP/countdown/admin evidence was preserved and not rerun. Remaining security/payment checks were not expanded into redundant QA after the commercial hard stop.
+
+Result: VAELTX_WEBSITE_AUCTION_NOT_ACTIVATED. Production remains ready_for_activation, activation=false, timestamps NULL, bids0. Conditional launch authorization does not satisfy missing commercial policies or LIVE evidence.
