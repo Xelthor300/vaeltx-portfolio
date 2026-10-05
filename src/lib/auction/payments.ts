@@ -30,9 +30,10 @@ export async function setupCard(userId: string) {
   const qa = auctionRuntime().qa;
   const mode = qa ? "test" : "live";
   if (
-    a.status !== "active" ||
+    !["active","waiting_for_first_bid"].includes(a.status) ||
     a.environment !== (qa ? "test" : "production") ||
-    process.env.AUCTION_STRIPE_MODE !== mode
+    process.env.AUCTION_STRIPE_MODE !== mode ||
+    (!qa && process.env.AUCTION_ALLOW_ACTIVATION !== "true")
   )
     throw new AuctionError(
       "Card verification opens when the auction starts.",

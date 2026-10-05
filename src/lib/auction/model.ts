@@ -99,6 +99,7 @@ export type PublicState = {
 export const stateColumns =
   "auction_id,slug,status,current_amount,next_minimum,reserve_amount,reserve_met,bid_count,participant_count,starts_at,ends_at,extension_count,updated_at";
 export function isActive(state: PublicState, now = Date.now()) {
+  if(state.status === "waiting_for_first_bid") return state.starts_at === null && state.ends_at === null && state.bid_count === 0;
   return (
     state.status === "active" &&
     !!state.starts_at &&
@@ -109,6 +110,7 @@ export function isActive(state: PublicState, now = Date.now()) {
 }
 export const statusLabel: Record<string, string> = {
   ready_for_activation: "Preparing to open",
+  waiting_for_first_bid: "Auction ready · waiting for first bid",
   active: "Auction open",
   paused: "Auction paused",
   closed_no_sale: "Closed · reserve not met",

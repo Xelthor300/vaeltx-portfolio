@@ -163,7 +163,8 @@ test("auction PostgreSQL transaction, deadline, payments, permissions and notifi
       ],
     );
   await pg.query(`insert into va_admins values($1,'owner')`, [users[2]]);
-  await pg.exec(await readFile(new URL("../supabase/migrations/20261005011000_website_auction_email_transitions.sql",import.meta.url),"utf8"));
+  await pg.exec(await readFile(new URL("../supabase/migrations/20261005010405_website_auction_email_transitions.sql",import.meta.url),"utf8"));
+  await pg.exec(await readFile(new URL("../supabase/migrations/20261005011241_website_auction_first_bid_start.sql",import.meta.url),"utf8"));
   async function fixture() {
     const id = randomUUID();
     await pg.query(
@@ -645,6 +646,19 @@ test("auction PostgreSQL transaction, deadline, payments, permissions and notifi
     const first=rows.find(r=>r.dedupe_key===`outbid:${b.bidId}`)!; assert.deepEqual([first.payload.previousAmount,first.payload.currentHighest,first.payload.nextMinimum],[11000,20200,21200]);
     const repeat=rows.find(r=>r.dedupe_key===`outbid:${last.bidId}`)!;assert.ok(Date.parse(String(repeat.next_attempt_at))-Date.parse(String(first.next_attempt_at))>=600000);
     for(const r of rows)for(const key of ['email','phone','fullName','businessName','alias'])assert.ok(!(key in r.payload));
+  });
+  await t.test("owner approval waits with NULL dates; invalid first bid cannot start; concurrent requests start once for exactly 25 days",async()=>{
+    const a=randomUUID();
+    await pg.query("insert into va_auctions(id,slug,environment) values($1,$2,'test')",[a,`qa-start-${a}`]);
+    await pg.query(`update va_auctions set activation_checks='{"stripe_business_review":true,"live_payments":true,"tax_and_invoicing":true,"seller_identity":true,"eligibility":true,"delivery_terms":true,"email_delivery":true,"end_to_end_qa":true}',commercial_terms='{"seller_identity":"QA fixture only","eligible_countries":["US"],"delivery_timeline":"QA fixture only","tax_policy":"QA fixture only","governing_law":"QA fixture only","refund_policy":"QA fixture only"}' where id=$1`,[a]);
+    await pg.query("select va_admin_action($1,$2,'activate','Isolated TEST fixture approval',null)",[a,users[2]]);
+    assert.equal((await row('va_auctions',a)).status,'waiting_for_first_bid');assert.equal((await row('va_auctions',a)).starts_at,null);
+    assert.equal((await bid(a,users[0],9900)).ok,false);assert.equal((await row('va_auctions',a)).starts_at,null);
+    const request=randomUUID();const outcomes=await Promise.all([bid(a,users[0],10000,request),bid(a,users[1],10000)]);assert.equal(outcomes.filter(r=>r.ok).length,1);
+    const started=await row('va_auctions',a);assert.equal(started.status,'active');assert.equal(Date.parse(String(started.original_ends_at))-Date.parse(String(started.starts_at)),25*86400000);assert.equal(String(started.ends_at),String(started.original_ends_at));
+    assert.equal((await bid(a,users[0],10000,request)).duplicate,true);await bid(a,users[1],11000);assert.equal(String((await row('va_auctions',a)).starts_at),String(started.starts_at));
+    assert.equal((await pg.query<{n:number}>("select count(*)::int n from va_audit where auction_id=$1 and kind='auction_started_by_first_valid_bid'",[a])).rows[0].n,1);
+    await assert.rejects(pg.query("update va_auctions set starts_at=starts_at+interval '1 second' where id=$1",[a]),/auction_start_immutable/);
   });
   await pg.close();
 });

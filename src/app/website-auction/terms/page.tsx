@@ -85,8 +85,8 @@ export default async function Terms() {
         </p>
         <h2>4. Duration, server clock and extensions</h2>
         <p>
-          The auction starts only through deliberate final owner activation
-          after launch review. It then runs for 25 full days. The database clock
+          Final owner approval opens bidding without starting the timer. The first valid accepted bid atomically starts the auction.
+          It then runs for 25 full days. The database clock
           and recorded deadline govern acceptance; a browser countdown is
           informational. Each valid bid accepted with 120 seconds or less
           remaining adds 120 seconds to the existing deadline. Extensions can

@@ -11,6 +11,7 @@ import Image from "next/image";
 import Script from "next/script";
 import dynamic from "next/dynamic";
 import { maskEmail, verificationGuidance, VERIFICATION_COOLDOWN_SECONDS } from "@/lib/auction/verification";
+import { remainingSeconds,serverClockOffset,countdownCells } from "@/lib/auction/clock";
 import { createClient } from "@supabase/supabase-js";
 import {
   isActive,
@@ -226,11 +227,11 @@ function SignIn({ config }: { config: Config | null }) {
         can place as many valid bids as needed. Bidding is free.
       </p>
       <form onSubmit={submit}>
-        <label>
+        <label hidden={!!submitted}>
           Email
           <input
             name="email"
-            type="email"
+            type={submitted ? "hidden" : "email"}
             autoComplete="email"
             required
             maxLength={254}
@@ -244,6 +245,7 @@ function SignIn({ config }: { config: Config | null }) {
           onToken={setToken}
           action="signin"
         />
+        {submitted && <button type="button" className="au-secondary" onClick={()=>setSubmitted("")}>Use another email</button>}
         <button className="au-primary" disabled={busy || !token || cooldown > 0}>
           {busy ? "Sending link…" : submitted ? `RESEND VERIFICATION EMAIL${cooldown ? ` · ${cooldown}s` : ""}` : "Send sign-in link ↗"}
         </button>
@@ -357,21 +359,23 @@ function Profile({
     </section>
   );
 }
-function Countdown({ state, offset }: { state: PublicState; offset: number }) {
+function Countdown({ state, offset,refresh }: { state: PublicState; offset: number; refresh:()=>Promise<void> }) {
   const [now, setNow] = useState<number | null>(null);
   useEffect(() => {
-    const start = setTimeout(() => setNow(Date.now()), 0);
-    const id = setInterval(() => setNow(Date.now()), 1000);
+    const start = setTimeout(() => setNow(performance.now()), 0);
+    const id = setInterval(() => setNow(performance.now()), 1000);
     return () => {
       clearTimeout(start);
       clearInterval(id);
     };
   }, []);
+  const seconds=now===null || !offset || !state.ends_at ? null : remainingSeconds(state.ends_at,now,offset);
+  useEffect(()=>{if(seconds===0 && state.status === "active")void refresh();},[seconds,state.status,refresh]);
   if (!state.starts_at || !state.ends_at)
     return (
       <div className="au-clock">
         <strong>25 days</strong>
-        <span>Begins only after final activation</span>
+        <span>{state.status === "waiting_for_first_bid" ? "The countdown begins when the first valid bid is accepted." : "Owner approval is required. The clock then begins with the first valid bid."}</span>
       </div>
     );
   if (state.status === "paused")
@@ -388,20 +392,11 @@ function Countdown({ state, offset }: { state: PublicState; offset: number }) {
         <span>{statusLabel[state.status]}</span>
       </div>
     );
-  const seconds =
-    now === null
-      ? null
-      : Math.max(
-          0,
-          Math.floor((Date.parse(state.ends_at) - now - offset) / 1000),
-        );
   return (
     <div className="au-clock" aria-label="Time remaining">
-      <strong suppressHydrationWarning>
-        {seconds === null
-          ? "Syncing…"
-          : `${Math.floor(seconds / 86400)}d ${String(Math.floor((seconds % 86400) / 3600)).padStart(2, "0")}h ${String(Math.floor((seconds % 3600) / 60)).padStart(2, "0")}m ${String(seconds % 60).padStart(2, "0")}s`}
-      </strong>
+      <span className="au-eyebrow">TIME REMAINING</span>
+      {seconds===null ? <strong>Syncing…</strong> : seconds===0 ? <strong>CLOSING AUCTION…</strong> : <div className="au-countdown-cells" aria-hidden="true">{countdownCells(seconds).map((n,i)=><div key={i}><strong>{String(n).padStart(2,"0")}</strong><span>{["DAYS","HOURS","MINUTES","SECONDS"][i]}</span></div>)}</div>}
+      <span className="au-sr-only">{seconds===0 ? "Deadline reached. Waiting for authoritative server state." : "Live countdown. The authoritative deadline is shown below."}</span>
       <span>Server deadline · {new Date(state.ends_at).toUTCString()}</span>
     </div>
   );
@@ -428,7 +423,7 @@ function BidForm({
   const modal = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const requestId = useRef<string | null>(null);
-  const active = isActive(state);
+  const active = isActive(state,Date.parse(state.updated_at));
   const verified =
     account?.profile?.verified_mode === (config?.qa ? "test" : "live") &&
     !!account?.profile?.verified_at;
@@ -486,7 +481,7 @@ function BidForm({
       {!active ? (
         <Notice>
           Bidding has not opened or is currently closed. The auction timer
-          starts only after final activation.
+          begins with the first valid bid after final owner approval.
         </Notice>
       ) : !account ? (
         <Notice>
@@ -536,7 +531,7 @@ function BidForm({
           className="au-primary"
           disabled={!active || !verified}
         >
-          Review bid ↗
+          {state.status === "waiting_for_first_bid" ? "PLACE THE FIRST BID ↗" : "Review bid ↗"}
         </button>
         <p className="au-small">
           Any amount at or above the minimum is valid. Bids need not be
@@ -559,6 +554,9 @@ function BidForm({
         }}
       >
         <h2 id="au-confirm-title">Confirm {review ? money(review) : ""} USD</h2>
+        {state.status === "waiting_for_first_bid" && state.bid_count === 0 && <Notice>
+          YOU’RE ABOUT TO PLACE THE FIRST BID. If accepted, this bid starts the 25-day VAELTX Website Auction from the authoritative database acceptance timestamp, subject to the published anti-sniping rules.
+        </Notice>}
         <p>
           No payment is collected now. If this is the highest valid bid at
           closing and meets the $350 reserve, you must pay your own bid within
@@ -1387,11 +1385,12 @@ export default function AuctionExperience({
   }, []);
   const refresh = useCallback(async () => {
     try {
+      const requestStart=performance.now();
       const r = await api("state");
       const previous = stateRef.current;
       setState(r.state);
       stateRef.current = r.state;
-      setOffset(Date.parse(r.serverTime) - Date.now());
+      setOffset(serverClockOffset(r.serverTime,requestStart,performance.now()));
       setError("");
       if (
         previous &&
@@ -1419,9 +1418,13 @@ export default function AuctionExperience({
       if (document.visibilityState === "visible") void refresh();
     };
     document.addEventListener("visibilitychange", visible);
+    window.addEventListener("focus",visible);
+    window.addEventListener("online",visible);
     return () => {
       clearInterval(id);
       document.removeEventListener("visibilitychange", visible);
+      window.removeEventListener("focus",visible);
+      window.removeEventListener("online",visible);
     };
   }, [refresh]);
   useEffect(() => {
@@ -1528,7 +1531,7 @@ export default function AuctionExperience({
                 </p>
                 <div className="au-actions">
                   <Link className="au-primary" href="/website-auction/bid">
-                    {state?.status === "active"
+                    {state?.status === "waiting_for_first_bid" ? "PLACE THE FIRST BID ↗" : state?.status === "active"
                       ? "Review a bid ↗"
                       : "Explore the auction ↗"}
                   </Link>
@@ -1586,7 +1589,7 @@ export default function AuctionExperience({
                       </strong>
                     </div>
                   </div>
-                  <Countdown state={state} offset={offset} />
+                  <Countdown state={state} offset={offset} refresh={refresh} />
                   <p className="au-small">
                     {state.extension_count > 0
                       ? `${state.extension_count} deadline extensions. `
@@ -1653,7 +1656,7 @@ export default function AuctionExperience({
             </div>
             {state && (
               <>
-                <Countdown state={state} offset={offset} />
+                <Countdown state={state} offset={offset} refresh={refresh} />
                 <BidForm
                   state={state}
                   account={account}

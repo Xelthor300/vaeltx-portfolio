@@ -367,6 +367,8 @@ export async function POST(request: Request, ctx: Context) {
       const v = bidSchema.parse(input);
       await captcha(v.captchaToken, "bid");
       const a = await auction();
+      if(a.environment === "production" && (process.env.AUCTION_ALLOW_ACTIVATION !== "true" || process.env.AUCTION_STRIPE_MODE !== "live"))
+        throw new AuctionError("Production bidding remains locked.",409);
       const r = await db().rpc("va_place_bid", {
         p_auction: a.id,
         p_user: u.id,
