@@ -1,148 +1,165 @@
-# VAELTX website auction — implementation and evidence
+# VAELTX Website Auction — continuation evidence
 
-State: implementation deployed in preparation; production activation remains blocked. This report does not claim the complete `VAELTX_WEBSITE_AUCTION_READY` acceptance standard.
+Updated: 2026-10-05 UTC (2026-10-04 local). The interrupted authenticated Stripe TEST journey and implementation are complete. Production remains unstarted. Full commercial launch acceptance and unrestricted `VAELTX_WEBSITE_AUCTION_CONTINUATION_COMPLETE` are not claimed while the specific validation limitations below remain.
 
-Repository: https://github.com/Xelthor300/vaeltx-portfolio
+Repository: https://github.com/Xelthor300/vaeltx-portfolio · draft OPEN [PR #4](https://github.com/Xelthor300/vaeltx-portfolio/pull/4) · branch `feat/live-website-auction`. The approved portfolio/main, existing QA users, TEST payments, audit history and fixtures are preserved. No merge, PR closure or branch deletion.
 
-Branch: `feat/live-website-auction`
+## Production invariants
 
-Production route: https://vaeltx-portfolio.vercel.app/website-auction
+Published preparation: https://vaeltx-portfolio.vercel.app/website-auction
 
-## Deployment receipt — 2026-10-04
+Hosted production auction: `c5a29233-c51c-4032-bd5f-efcf9ca1b656`, slug `website-auction`.
 
-Production application commit: `8a345ba6226b54f8c5b35518cf6f627bcc211774`. The report-only commit after this revision does not change deployed application code.
-
-Production deployment: `dpl_un1JwwFAwE5eqEtVobuWTbT7csuq`, READY, target production. Vercel metadata independently confirms the branch, application SHA and stable production alias. [Deployment inspector](https://vercel.com/xelthor300s-projects/vaeltx-portfolio/un1JwwFAwE5eqEtVobuWTbT7csuq).
-
-Preview: https://vaeltx-portfolio-pwffpb1nz-xelthor300s-projects.vercel.app/website-auction — implementation revision `a244c5781c0c6ed633ef831351ba1ebc739ec698`, protected by Vercel authentication. Its state endpoint was verified using authenticated Vercel CLI access. Production additionally contains the subsequent Remotion text-color correction.
-
-Draft review: https://github.com/Xelthor300/vaeltx-portfolio/pull/4. The superseded grant PR is closed. `main` remains the approved portfolio branch; the published auction application is the explicitly deployed feature revision.
-
-GitHub CI: PASS on the production application SHA, [run 37235452614](https://github.com/Xelthor300/vaeltx-portfolio/actions/runs/37235452614) and [run 37235449856](https://github.com/Xelthor300/vaeltx-portfolio/actions/runs/37235449856). Typecheck, lint, 34 tests and build passed.
-
-Production HTTP evidence: 15 routes checked, expected 200/404/401/308/410 responses and no configured private administrator email, Supabase service credential, Stripe secret or operations secret in their responses. Unsigned webhook request returns 400. Authenticated operations access reaches the handler and returns 503, `Email delivery is not configured.` This is a verified remaining dependency, not a successful notification-worker acceptance test.
-
-An actual Stripe TEST Checkout setup session was created for a clearly labeled, blocked QA fixture and expired without collecting a card or charging a customer. Stripe event `evt_1UMwkc4efgtFxxrt3cMn6P3J` reached the production webhook, which changed setup `828a7d4e-46e2-4e5d-9ad5-89e9391d0f16` to expired. This verifies actual signed provider delivery for `checkout.session.expired`; it does not verify successful card setup or winner payment. Test webhook endpoint: `we_1UMwP24efgtFxxrtBS4y0x6L`.
-
-Hosted SQL final check: production auction `c5a29233-c51c-4032-bd5f-efcf9ca1b656` is `ready_for_activation`, all three dates NULL, all eight activation checks false, commercial policies empty, real bids 0, real verified bidders 0 and notification rows 0. The old campaign remains cancelled with both paid entries and services disabled. The minute Cron job exists and is enabled; it has no auction work to run in preparation.
-
-## Recorded auction configuration
-
-| Requirement | Configuration / evidence |
+| Property | Verified final state |
 | --- | --- |
-| Auction status | `ready_for_activation`; activation flag false; all launch checks false |
-| Start / original end / current end | NULL / NULL / NULL; NOT STARTED |
-| Duration | Exactly 25 days from explicit owner activation, enforced in PostgreSQL |
-| Starting bid / public reserve / increment | USD 100 / USD 350 / USD 10 |
-| Currency / bidding fee | USD only / no fee |
-| Bid limit | No lifetime count limit; temporary abuse throttles only |
-| Maximum bid | No commercial cap; integer minor units respect Stripe's 8-digit technical transaction limit |
-| Custom amounts | 125 after 110 accepted; next minimum becomes 135 |
-| Anti-sniping | Accepted bid with <=120 seconds remaining adds 120 seconds to the existing deadline |
-| Winner / reserve | Highest valid eligible bid; no sale and no winner below USD 350 |
-| Payment deadline | Immutable offer has 24 hours from server closing |
-| Backup | Eligible next bidder receives a new offer at that bidder's own highest valid bid, never the original winner's price |
-| Current real bid / valid bids / bidding participants | No accepted bid / 0 / 0 |
-| Reserve | Not met |
-| Prior campaign | Cancelled; paid entries and services disabled; all history retained |
+| status | ready_for_activation |
+| AUCTION_ALLOW_ACTIVATION | false |
+| Stripe mode | test; no LIVE switch |
+| starts_at / original_ends_at / ends_at | NULL / NULL / NULL |
+| Production bids / LIVE-verified participants | 0 / 0 |
+| Commercial policies / eight activation checks | {} / all false |
+| Previous grant | cancelled; paid entries and services disabled; records retained |
 
-The dedicated Supabase project remains `vaeltx-website-grant`, ref `yrkabjxmifiiseymystk`. Its existing project name is retained to avoid replacing the database. The new system uses separate `va_` tables. The four existing `wg_` migrations are retained, and source filenames match the actual hosted migration history.
+The user's timestamp names map to the actual database columns above. QA accounts have global profiles and explicit TEST access; bids/offers/payments/onboarding belong to TEST auctions, not the production auction. No real first bid or timer start occurred.
 
-## Implemented routes and behaviors
+## Deployment receipt
 
-- `/website-auction`: service scope, truthful state, public reserve, server clock and real counters, four disclosed independent concept projects, FAQ, and a three-second Remotion composition with a reduced-motion fallback.
-- `/website-auction/bid`: minimum and custom amounts, quick amount choices, separate review and explicit confirmation, idempotent submission, fresh state after rejection.
-- `/website-auction/account`: verified-email session, business profile, explicit age/terms/privacy/commitment acceptance, Stripe card verification, own bids and offers.
-- `/website-auction/history`: accepted database bids with anonymous aliases; no private contact or Stripe references.
-- `/website-auction/terms`: auction rules and service scope; missing seller policies are visibly pending and block activation.
-- `/website-auction/winner`, `/payment`, `/onboarding`: private winner offers, explicit fixed-amount Checkout, confirmed-payment project brief. Paid offers from test auctions cannot unlock production onboarding.
-- `/admin/website-auction`: verified owner email plus private administrator authorization; unauthorized page returns 404. The API requires authorization. Directory, bid timeline, leader, winner contact/payment state, extensions, notification receipts and audits are private; records support pagination.
-- Old grant pages redirect permanently to the auction; old campaign APIs return 410.
+Final application SHA: `44b044daa8af5dc2f3a80cdb55c98ce291c992eb`. Subsequent report-only commits do not change application behavior.
 
-Only sanitized production `va_public_state` is published to Realtime. Browser roles have SELECT on that snapshot and are denied every private table and mutation RPC. The backend validates the authenticated Supabase user; it never authorizes from editable user metadata. Sessions use secure HttpOnly cookies and are refreshed through the Next.js proxy. Mutations require the configured Origin and JSON; sensitive requests use persistent HMAC rate limits. Sign-in and card setup require a verified Turnstile challenge.
+Production: `dpl_FcFHvwPaqz79VpgFzcqafDNmrsZh`, https://vaeltx-portfolio-f9hytkv4y-xelthor300s-projects.vercel.app. [Inspector](https://vercel.com/xelthor300s-projects/vaeltx-portfolio/FcFHvwPaqz79VpgFzcqafDNmrsZh).
 
-## Payment and notification implementation
+Protected QA preview: `dpl_6npeQm148qJDigqyLwXUzpkkRfFf`, https://vaeltx-portfolio-a6glvqjyd-xelthor300s-projects.vercel.app. Existing exact branch alias: https://vaeltx-portfolio-git-feat-live-webs-7bb286-xelthor300s-projects.vercel.app. Runtime selects the isolated countdown fixture; Vercel authentication remains enabled. Provider readiness/CI receipts are appended after completion below.
 
-Stripe account ownership is checked against the configured VAELTX account. Hosted Checkout setup collects a reusable card reference; backend verification checks session ownership, succeeded SetupIntent, payment-method customer, card type, and test/live mode. No card number or CVC is stored. There are no automatic off-session charges.
+Local verification: **52 tests passed, zero failed/skipped**, TypeScript, ESLint and optimized Next.js build pass. Tests execute all 13 migrations and actual PostgreSQL functions in PGlite. These are fixture tests, not commercial buyer validation. Existing contact, Meta consent/event-counting, routes and concept-project regressions pass.
 
-Winner Checkout gets its amount, currency, customer and deadline from the immutable database offer. Raw-body webhook signature checks precede processing. A paid session, succeeded PaymentIntent and paid Charge must match the offer, customer, USD amount and environment. Event IDs are idempotent. The Charge timestamp controls deadline eligibility; a late paid receipt is held for owner review and cannot silently award a website. Open/uncertain checkouts must be reconciled or expired through Stripe before a replacement offer is created. Checkout expiry parameters are persisted so repeated creation requests reuse identical idempotency parameters, including payments initiated in the last 30 minutes.
+## Phase 1 — authenticated Stripe TEST E2E
 
-Transactional email uses a durable outbox. Each committed production bid has one unique owner notification key and one participant confirmation; reserve is announced once, outbid notifications are limited to one per bidder per ten-minute interval. Winner, no-sale, reminders, expiry, backup, payment and onboarding notifications are separate. Leases prevent concurrent workers from claiming the same pending row. Exact recipient and message content are persisted before sending; retries reuse the same Resend idempotency key. Provider receipts are recorded. Uncertain delivery after the provider's 24-hour idempotency window is held for manual reconciliation instead of risking a duplicate. This is implemented delivery protection, not evidence that real messages have arrived.
+Continued existing `qa-ui-20261004-email-e2e`, auction `5c8ef703-f829-4c46-85bb-825378ad0526`. A/B completed native signup, actual Gmail verification links, business profiles and successful hosted Stripe TEST card setup. Actual setup webhook events: `evt_1UMxjn4efgtFxxrtYAfqhe1w`, `evt_1UMxrO4efgtFxxrtpAapM6UC`. No real card or funds; no card/CVC stored.
 
-A Supabase Cron job runs each minute and uses `pg_net` with an encrypted Vault authorization secret to call the production operations endpoint only while work exists. It never starts an auction. Read-only preparation has no production bids or pending notifications. Live scheduler delivery and email receipts must be proved before activation.
+Native bids: A USD 100 (13), B USD 110 (14), B USD 350 (15). Two authenticated browsers observed leader change/reserve transition. The controlled TEST deadline was accelerated; bid 15 added 120 seconds. This is not a natural 25-day wait.
 
-## Verified evidence
+Authoritative close: **2026-10-04T22:32:24.939220Z**. Winner B, immutable offer `6dd77a70-7e85-4961-ad4a-4642fc9fce29`, **35000 USD minor units / USD 350**, server-created 24-hour deadline. Winner email actually received in Gmail (`1a1090d7dd59943f`, INBOX/SENT).
 
-- TypeScript, ESLint and production build pass locally.
-- 34 automated tests pass, including actual PostgreSQL functions in PGlite, amount parsing, concurrency minimum enforcement, duplicate requests, reserve/no-sale, immutable winner price, deadline extension, backup own-price, late paid receipts, permissions, activation gates, notification dedupe and Stripe signature tampering/staleness. These are automated fixture evidence, not real buyer validation.
-- Three hosted Supabase race trials used 20 concurrent HTTP RPC requests each: exactly one USD 200 bid was accepted after USD 190; the other 19 received the authoritative USD 210 minimum.
-- Hosted anonymous access to participants and bid RPCs was denied. Anonymous snapshots excluded every test auction.
-- Hosted Realtime delivered a sanitized timestamp refresh; the production status, zero activity and NULL dates remained unchanged. Subscription waits for PostgreSQL readiness, avoiding an early SUBSCRIBED acknowledgement.
-- Public and private route HTTP checks: public pages 200; unauthorized administrator page 404, admin API 401, operations API 404; old pages 308; old API 410; wrong-origin mutation 403.
-- Public HTML checks found neither the private administrator email nor the service credential in auction, account, payment, onboarding or approved portfolio pages. Private outbox message recipients are excluded even from dashboard responses.
-- Browser layout inspection at 320, 360, 375, 390, 430, 768 and 1440 pixels found no horizontal document overflow. The auction panel precedes decorative motion on mobile. Native screenshots are saved in ignored `output/auction-qa/`.
-- Existing Meta consent/event-counting and contact-delivery regression tests pass. Marketing automatic form detection remains disabled; no bid or identity advertising parameters were added. WhatsApp and existing contact routes remain intact.
-- Supabase Auth Site URL is saved as the production portfolio origin. Exact production and localhost:3100 callback paths are allowed; the initial localhost:3000 default and empty redirect list were corrected and verified in the owner dashboard.
-- Production dependencies: npm audit reports zero advisories. Development tooling still has five high transitive findings stemming from the current `braces` package used by Next ESLint; no fixed newer braces release was available. Do not use `npm audit fix --force` to downgrade the framework configuration.
-- Supabase RLS/privilege advisors show no exposed auction-table warning. A separate Auth warning remains for leaked-password protection; the public auction UI uses email links, and QA password accounts use random test-only credentials. [Supabase remediation](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection).
+Native Checkout: `cs_test_a1bG5LScBRDXFe31No0p6CbVJg50X7MIuwGoKm7Yvt2gf3YOcQD84NW7e2`. Actual Stripe: `livemode=false`, USD 350; PaymentIntent `pi_3UN0Ao4efgtFxxrt0hRLyAfI` succeeded with amount_received35000; Charge `ch_3UN0Ao4efgtFxxrt08QsHTKJ` paid **2026-10-05T00:54:35Z**.
 
-Raw local reports and screenshots: `output/auction-qa/hosted-check.json`, `responsive.json`, `routes.json`, `production-check.json`, `desktop-1440.png`, `mobile-320.png`. Hosted fixtures are clearly labeled QA, isolated under `environment=test`, cancelled after their run and blocked from participating. No fake activity was written to the production auction.
+Actual signed webhook `evt_1UN0Aq4efgtFxxrtXginLDHR` reached the production handler **00:54:38.560148Z** and changed only the TEST offer to paid/Checkout paid, TEST auction completed. Replay of the actual event, freshly signed with the configured TEST webhook secret, returned HTTP200 `{"received":true}`. Counts stayed one event, one payment-paid audit and two payment-confirmation messages (one per audience). No duplicate payment processing.
+
+Native B onboarding: denied before payment, unlocked after payment, fictional QA project brief saved. The same verified TEST-paid account was then authenticated on production: production onboarding remained denied, confirmed production payment required. Native owner signup/verification/dashboard showed private bidders, all three bids, winner USD 350, paid and email receipts. Personal owner address is server-only and redacted from saved public evidence.
+
+Participant payment confirmation: `1a1098e924f56a57`, INBOX/SENT,00:55:00Z. Private owner confirmation actually observed in native Gmail **Recibidos**. A previous owner new-bid email was received in **Spam**. Receipt is proved; universal Inbox/Primary placement is not.
+
+## Phase 2 — SMTP, premium email and verification UX
+
+Supabase custom SMTP and auction SMTP use **VAELTX <vaeltxn@gmail.com>**, smtp.gmail.com:465, validated TLS and privately supplied Google App Password. Password excluded from Git/client/report; Auth auto-confirm false. Real signup, resend and verification succeeded. Owner destination comes only from `AUCTION_ADMIN_EMAIL`. Resend remains available for future owned-domain migration; no custom domain is required for the tested Gmail transport. No domain/paid plan purchased.
+
+Reusable HTML/text templates cover confirmation/sign-in, accepted bid, outbid, reserve, closure/no-sale, winner/backup, payment reminder/expiry/confirmation, onboarding and private owner review. Neutral canvas, white card, charcoal/orange, escaped real text, tables/inline CSS, one CTA/fallback URL; no image/video dependency. QA badge and explicit TEST disclaimer remain prominent. Participant field whitelist excludes competing name/email/phone/business/account. Owner cards retain operational contacts/counts/bid references.
+
+Representative messages used separate `qa-design:20261005:*` keys: manual design samples, not extra bid events. Three outbox samples (outbid/payment/owner) sent once, attempts=1, persisted HTML+text. Actual received outbid MIME is multipart/alternative, text/plain + text/html. Native Gmail desktop inspected. Exact received HTML was inspected at 390px: no overflow, readable amounts/CTA/footer. This is responsive received-HTML browser evidence, **not native Gmail mobile-app validation**. Apple Mail/Outlook not observed.
+
+Supabase confirmation/sign-in HTML templates were saved in the owner dashboard and reread; redesigned Auth mail arrived and verified successfully. **Auth MIME limitation:** built-in Supabase authentication mail was observed as text/html only, without a separate plain-text MIME part. Auction outbox messages have both. Do not claim universal Auth multipart fallback.
+
+Verification UI: CHECK YOUR EMAIL, masked address, Spam/Junk/Promotions, unobtrusive Not spam guidance, optional public-sender contact and Promotions-to-Primary advice; explicit no guaranteed Inbox delivery. Important outbid/winner/reminder/payment/onboarding messages explained. Resend has60-second UI cooldown, fresh challenge, server per-email HMAC1 per minute plus network limits. Native resend/success EMAIL VERIFIED / CONTINUE TO ACCOUNT observed.360px guidance readable without document overflow. Narrow containers now choose compact Turnstile; [Cloudflare flexible widgets require at least 300px](https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/widget-configurations/).
+
+### Outbid semantics, throttling and safe delivery
+
+The database locks the auction, identifies the immediately prior eligible authoritative leader, and creates an outbid event only when another valid committed bid takes that lead. Rejected/duplicate/same-user bids and historical non-leaders do not receive extra events.
+
+Executed PostgreSQL sequence A110 → B202 → C250 → A270 → B300 notifies A/B/C/A respectively. First A event carries previous 110, current 202, next 212 USD. A is not re-notified for C250 merely because price increases. Later loss after regaining produces a new A event, deferred at least 10 minutes; it is retained, never discarded by the throttle. Rapid genuine transitions can queue; account/Realtime remains current. Amounts represent the authoritative committed transition, and time remaining is labeled at email preparation.
+
+Unique keys per committed bid, leased outbox, persisted exact recipient/HTML/text/transport before SMTP, stable Message-ID and pre-send marker prevent ordinary duplicate retries. Explicit SMTP rejection may retry; ambiguous DATA/disconnect or failed receipt persistence goes to manual review without automatic resend. SMTP does not provide guaranteed exactly-once delivery. Resend retains its safe-window idempotency behavior.
+
+Payment reminder: twice exercised existing reconcile() on separate TEST auction `da88458f-95cf-4abc-b56c-962162d87dca`, with manually prepared 19-hour-old pending offer/about 5 hours left. Original paid offer unchanged. One reminder per audience queued/sent, attempts=1. B received `1a109b41ce2f47e0` INBOX **01:36:01Z**; owner SMTP/SENT proved, owner Inbox not newly inspected. This is an accelerated isolated window, not an observed natural 18-hour wait. Tests cover strict final six-hour boundary, paid/expired exclusions.
+
+Minute Cron/pg_net produced actual authenticated HTTP200 responses (8 visible in final three-hour window). Private operations returns activation=false, Stripe TEST and SMTP; it never approves/starts production.
+
+## Phase 3 — first-valid-bid start
+
+Implemented: ready_for_activation → gated deliberate owner approval → waiting_for_first_bid/datesNULL → first valid committed bid → active. Tested only in TEST fixtures. Production did not enter waiting.
+
+Row lock validates participant/profile/card/mode/eligibility/request/minimum before setting dates. Invalid bids never start. First acceptance atomically writes clock_timestamp(), original/current end=start+exactly25days, bid, snapshot and one auction_started_by_first_valid_bid audit. Idempotent requests do not reset. Production commercial/launch gates still apply to waiting and first start.
+
+Hosted concurrency: **3×20 independent simultaneous HTTP RPC calls** on TEST auctions `66f34bef-b369-444f-bd6e-5a78471c11c8`, `7deec9f1-c175-4ad5-9d63-9bd3ed15f84b`, `10304d0e-9c49-413c-b9ae-e039a12ec270`. Each accepted one USD 100, rejected 19 at authoritative next minimum USD 110, one start audit, original=current end, **2160000 seconds**. Cancelled race fixtures after proof; records retained.
+
+Native fixture `1a4c41be-eb90-48ff-ae5d-4fb68a957008` / qa-ui-20261005-countdown: waiting displayed no fake countdown; first-bid confirmation explained 25 days. B100 accepted start **01:18:31.960343Z**, original/current end **2026-10-30T01:18:31.960343Z**, one audit. Later deliberate TEST-only deadline acceleration enabled close QA; start unchanged. This is fixture preparation, not normal production deadline mutation.
+
+## Phase 4 — live authoritative countdown
+
+Server time/end anchored to monotonic performance.now(), latency compensated; local one-second ticks, no per-second DB calls.15-second reconciliation plus visibility/focus/online/Realtime/subscription/reconnect and apparent zero. Zero shows closing and asks server, never selects a winner. Waiting/paused/closed have distinct non-running display. Four tabular cells, no flash/sound; changing digits hidden from assistive announcements, meaningful static deadline.
+
+Native samples at01:20:29.851 /01:20:31.120 /01:20:32.293Z: seconds **03→02→01**. Two browsers approximately synchronized; unit tests use differing clock anchors/wall-clock independence.
+
+Controlled TEST deadline01:22:36.539014Z; B350 accepted01:21:45.401Z extended to **01:24:36.539014Z**, exactly +120 seconds and reserve met. Both browsers adopted it. Actual incoming postgres_changes frames carried sanitized state and errors=null. Multiple-extension database tests add 120 seconds twice without resetting start/original end.
+
+Actual server close **01:24:40.458864Z** selected B350/payment pending; incoming Realtime close captured. Fresh subscription/reconnect plus subsequent state update also captured. An early empty trace used an incorrect buffer cursor; saved sequence-zero history recovered actual frames and supersedes it.
+
+320px DOM: document width 320,timer width 284,no overflow. Reduced-motion/accessibility implemented/inspected; full native assistive-technology audit not performed. Focus/foreground hooks implemented; dedicated native background-return timing test remains unobserved.
 
 ## Acceptance matrix
 
-PASS identifies the stated evidence level only. A fixture PASS is not live commercial acceptance. FAIL / BLOCKED means the full launch requirement is unproved or unavailable.
+PASS refers only to the stated evidence level. FAIL identifies an explicitly requested validation still unproved, not an invented malfunction.
 
-| Requested item | Result and evidence level |
+| Requested item | Result / evidence |
 | --- | --- |
-| Previous Grant/ticket system | DISABLED; hosted campaign flags and production routes verified |
-| Auction route | PASS; production HTTP and native browser |
-| Admin route / private dashboard | PASS unauthorized exclusion; BLOCKED authenticated owner browser journey |
-| Duration / start / end | 25 DAYS; NOT STARTED / NOT STARTED |
-| Starting bid / reserve / minimum increment | USD 100 / USD 350 / USD 10; database enforced |
-| Unlimited bidding / artificial maximum | PASS no lifetime limit; NONE commercial cap. Stripe's technical ceiling is 99,999,999 minor units |
-| Currency | USD, as required by the replacement auction brief |
-| Anti-sniping / winner payment deadline | 2 MIN + 2 MIN / 24 HOURS; PostgreSQL fixtures PASS |
-| Authentication / email verification | Secure implementation and hosted Auth configuration verified; FAIL launch acceptance pending actual email journey |
-| Payment-method verification / Stripe setup | FAIL launch acceptance; card verification code and test expiry delivery verified, successful hosted card setup pending |
-| Supabase / RLS / Realtime / concurrency | PASS hosted database, denied browser access, sanitized real subscription and 3 x 20 HTTP race trials |
-| Rate limiting / audit log | PASS automated database fixtures; production participation journey pending |
-| Private new-bid / winner admin email | FAIL; sender configuration and actual private receipts pending |
-| Admin email exposed publicly | NO; production response and local bundle scans |
-| Current real bid / valid bid count / verified bidders | USD 0, no accepted bid / 0 / 0 |
-| Reserve status | NOT MET |
-| Winner logic / below-reserve close / backup / backup own price | PASS PostgreSQL fixtures; actual buyer journey pending |
-| Stripe winner Checkout | FAIL launch acceptance; fixed-price implementation present, actual TEST payment pending |
-| Stripe webhook / webhook idempotency | PASS actual TEST expiry delivery and automated signature/idempotency fixtures; successful payment webhook acceptance pending |
-| Domain | PASS published USD 20 first-year service scope; no registration performed or falsely claimed |
-| Hosting | PASS deployed production site and published first-month service scope; no paid hosting plan purchased |
-| Scope / revision policy | PASS published 5 pages or one detailed landing page, two revision rounds, explicit exclusions |
-| Auction Terms / Privacy / Tax and invoicing | FAIL / BLOCKED; required owner commercial and retention policies missing |
-| Stripe business-model review | BLOCKED; no verified live approval |
-| Desktop / mobile | PASS native production checks at 1440 and 320; seven-width local layout checks |
-| Accessibility / performance / complete production QA | FAIL full acceptance pending measured audit and authenticated journeys; keyboard focus and reduced-motion implementation are not a complete audit |
-| Meta Pixel regression | PASS automated consent and event-counting tests; no buyer PII advertising parameters |
-| Resend regression | PASS existing contact regression tests; no claim of a new actual contact email or auction receipt |
-| WhatsApp regression | PASS retained contact destination and route checks; no message sent |
-| Typecheck / lint / tests / build / CI | PASS; production application revision |
+| Phase1 / authoritative close / winner | PASS native authenticated journey + hosted offer |
+| Winner admin visibility | PASS verified owner browser |
+| Winner TEST Checkout / successful payment | PASS native + actual Stripe USD 350 receipt |
+| Signed webhook / idempotency / payment confirmed | PASS provider event/replay, one event/audit |
+| Onboarding unlock / TEST isolation | PASS prepay denial, QA brief, production denial |
+| Owner payment notification | PASS actual Recibidos; earlier bid received Spam |
+| Supabase SMTP / sender / signup verification | PASS actual Gmail deliveries/links |
+| Real-hostname Turnstile | PASS native signup/setup/bid; direct Auth without CAPTCHA rejected |
+| Email design / desktop Gmail | PASS received HTML/MIME + native desktop |
+| Gmail mobile | FAIL complete native-app validation; received390px HTML PASS |
+| Plain-text fallback | PASS auction multipart; FAIL universal Auth fallback (HTML-only) |
+| Admin privacy / no competitor PII | PASS whitelist/escaping, actual participant mail, public checks |
+| Notification idempotency / rapid bidding | PASS transition keys/deferred events/tests/samples1attempt |
+| Verification panel / resend / cooldown / success | PASS native link/resend/success, masked guidance/server guards |
+| Immediate leader-only / regained lead / next minimum | PASS executed database sequence + native leader-loss receipt |
+| First-bid / waiting / concurrency | PASS PostgreSQL, native first bid, hosted3×20 |
+| Live countdown / server clock / one-second ticks | PASS native samples/two browsers + clock tests |
+| Realtime deadline / anti-sniping / server close | PASS incoming frames +120 and correct close |
+| Reconnect/focus | PASS reconnect/hooks; FAIL complete native foreground timing test |
+| Countdown mobile | PASS scoped320px DOM inspection |
+| Countdown accessibility | PASS implementation; FAIL complete native assistive audit |
+| Typecheck / lint / tests / build | PASS, 52 tests, final application |
+| CI | Provider receipts appended below |
+| Production status / flag / dates / real bids | PASS ready_for_activation /false /NULL /0 |
+| Full LIVE launch acceptance | BLOCKED; intentionally not executed |
 
-Remaining activation blockers are consolidated below. No activation request was executed.
+## Privacy and evidence preservation
 
-## OWNER ACTION REQUIRED — activation blockers
+QA is TEST/preview-only, allowlisted, private QA-run/access records. Anonymous snapshots exclude TEST auctions; production QA-session404. Public bid history uses anonymous aliases; contacts/Stripe/outbox/admin details stay server-side. Authorization validates Supabase user, not editable metadata. Origin/JSON/HMAC limits/challenge checks remain.
 
-1. Publish the real legal seller identity/address, eligible countries, governing law, tax/invoicing policy, refund policy, ownership/license terms, privacy/retention policy and delivery timeline. These values cannot be inferred or invented. Complete the database commercial-policy record and evidence-backed launch checks only after approval.
-2. Complete the Stripe business-model review for the actual website service auction and configure the live VAELTX secret plus matching live webhook. Current configuration is TEST only; test account readiness is not live review evidence.
-3. Configure production Turnstile site/secret keys for the real hostname. Do not bypass card-setup abuse protection.
-4. Verify a transactional email sender/domain and configure Supabase custom SMTP plus the auction Resend sender/key. The existing portfolio contact sender does not establish authorization to send bidder emails. Prove actual signup verification, owner new-bid receipt, outbid notification, winner/reminder/payment/onboarding receipt, dedupe and recovery.
-5. Complete the authenticated browser journey with real verified test accounts, hosted Stripe card setup and winner payment, multi-user realtime/anti-sniping, owner dashboard authorization, webhook delivery/replays and paid onboarding. Full end-to-end, authorized-owner browser QA and measured accessibility/performance acceptance remain pending; rendered pages and SQL fixtures do not replace them.
-6. Validate the minute scheduler's authenticated production response and payment reconciliation, then obtain deliberate final owner activation. Keep `AUCTION_ALLOW_ACTIVATION=false`, dates NULL and all unproved launch checks false until that review. A review or deployment must never start the 25-day clock.
+Public/private HTTP regression: expected200public, admin401/404, operations404, QA-session404, unsigned webhook400. No configured owner email, Supabase service key, Stripe secret or operations secret in inspected responses. This is scoped evidence, not a full penetration-test claim.
 
-Domain first-year standard registration up to USD 20, first hosting month, two revision rounds and the defined website scope are published as service terms. No domain was purchased and no paid plan was enabled. Future renewals and extras need separate agreement.
+Source migrations match hosted history, including20261004214013SMTP,20261004220126QA,20261005010405email transitions,20261005011241firstbid. Advisor INFO for service-only va_qa_runs/no browser policy is intentional deny-by-default. Existing leaked-password-protection warning remains; auction uses email links.
 
-## Official references used
+Local evidence under Git-ignored output/auction-qa/ may contain private QA detail; do not publish wholesale:
 
-- [Stripe hosted card setup](https://docs.stripe.com/payments/checkout/save-and-reuse?payment-ui=stripe-hosted)
-- [Stripe Checkout session API](https://docs.stripe.com/api/checkout/sessions/create)
-- [Supabase Realtime](https://supabase.com/docs/guides/realtime/postgres-changes)
-- [Supabase Cron](https://supabase.com/docs/guides/cron/install), [pg_net](https://supabase.com/docs/guides/database/extensions/pg_net), [Vault](https://supabase.com/docs/guides/database/vault)
-- [Supabase authentication redirects](https://supabase.com/docs/guides/auth/redirect-urls)
-- [Remotion Player](https://www.remotion.dev/docs/player/player)
+- payment-e2e-receipt.json, authenticated-admin-paid.txt, authenticated-onboarding-paid.txt, admin-payment-mailbox-receipt.txt, test-payment-production-onboarding-denied.txt.
+- premium-email-transport-evidence.json, premium-email-desktop.png, received-outbid.html, received-email-mobile-390.png, verification-success.txt, verification-guidance-mobile-360.png.
+- hosted-first-bid-races.json, native-first-bid-start.json, native-countdown-samples.json, countdown-realtime-history.json, countdown-realtime-reconnect.json.
+- preflight.json, final-production-privacy.json, final-tests.txt.
+
+Paid fixture/history preserved. Separate pending countdown/reminder offers remain clearly TEST; no real obligations. Preview currently points to countdown fixture, while the completed paid journey remains preserved in the database/evidence. No QA user/payment/audit deletion.
+
+## OWNER ACTION REQUIRED — future activation
+
+1. Approve actual seller identity/address, eligible jurisdictions, tax/invoicing, refund, ownership/license, privacy/retention, governing law and delivery timeline. Keep unresolved values pending. Never copy QA placeholders into production.
+2. Complete processor business-model review and intentionally configure matching LIVE credentials/webhook only in a separately approved task. TEST success is not live acceptance.
+3. Review deliverability evidence. Gmail SMTP works without custom domain, but native Gmail mobile/Apple Mail/Outlook, Auth plain-text MIME and the specific foreground/assistive/performance observations above remain unproved. Future owned-domain/Resend migration is optional, not a present sender blocker.
+4. After review, obtain explicit future owner approval. Approval would allow waiting_for_first_bid, not immediate timer start; only first valid REAL bid starts the 25-day clock. This task stops before approval/action.
+
+No live funds, paid plan, domain registration, real bid or production start performed.
+
+## Final provider completion — 2026-10-05T01:53Z
+
+Both final deployments are READY. Production alias points to `dpl_FcFHvwPaqz79VpgFzcqafDNmrsZh`; the protected branch alias points to `dpl_6npeQm148qJDigqyLwXUzpkkRfFf`, both application SHA `44b044daa8af5dc2f3a80cdb55c98ce291c992eb`.
+
+Final application CI: PASS [37252792967](https://github.com/Xelthor300/vaeltx-portfolio/actions/runs/37252792967), PASS [37252789205](https://github.com/Xelthor300/vaeltx-portfolio/actions/runs/37252789205). These verify the 52-test revision, not only an earlier build.
+
+Production preflight at **01:53:08.101Z**: actual stable production URL, ready_for_activation, all dates NULL, zero public bid/participant counters, activation false, Stripe TEST, SMTP configured, Auth auto-confirm false, direct Auth request without CAPTCHA rejected with HTTP 400 / captcha_failed. Final 11-route privacy scan passed; authenticated operations200 returned processed=0, activationAllowed=false, stripeMode test, emailTransport smtp. Compact Turnstile was actually observed on the final production account page at 360px, challenge successful and fully within its card; screenshot `turnstile-compact-mobile-360.png`.
+
+Observed recovery limitations: one production verification callback and one Node fetch encountered transient connection/PKCE failures during QA. A fresh verification link was requested and successfully verified; the subsequent authenticated production onboarding-isolation check passed. Later read-only preflight succeeded. No success is inferred from the failed attempts.
+
+STOPPED BEFORE ACTIVATION. Production remains unstarted. PR #4 remains draft/open and the feature branch is retained.
