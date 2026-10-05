@@ -155,7 +155,7 @@ export async function checkoutWinner(userId: string, winnerId: string) {
   const w = result.data;
   const { data: p } = await db()
     .from("va_participants")
-    .select("stripe_customer_id")
+    .select("stripe_customer_id,email,country")
     .eq("id", userId)
     .single();
   if (!p?.stripe_customer_id)
@@ -179,6 +179,17 @@ export async function checkoutWinner(userId: string, winnerId: string) {
       mode: "payment",
       customer: p.stripe_customer_id,
       allowed_payment_method_types: ["card"],
+      adaptive_pricing: { enabled: true },
+      billing_address_collection: "required",
+      customer_update: { address: "auto", name: "auto" },
+      tax_id_collection: { enabled: true, required: "never" },
+      invoice_creation: {
+        enabled: true,
+        invoice_data: {
+          description:
+            "VAELTX custom website service · website auction winning offer",
+        },
+      },
       line_items: [
         {
           quantity: 1,
@@ -194,7 +205,10 @@ export async function checkoutWinner(userId: string, winnerId: string) {
         },
       ],
       metadata: { auction_winner: w.id },
-      payment_intent_data: { metadata: { auction_winner: w.id } },
+      payment_intent_data: {
+        metadata: { auction_winner: w.id },
+        receipt_email: p.email,
+      },
       // Stripe requires at least 30 minutes. The service deadline remains immutable;
       // scheduler expiry and verified Charge.created enforce it even in the final minute.
       expires_at: Math.floor(Date.parse(w.checkout_expires_at) / 1000),
