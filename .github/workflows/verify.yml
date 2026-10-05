@@ -2,7 +2,7 @@ name: Verify portfolio
 
 on:
   push:
-    branches: [main, "codex/**"]
+    branches: [main, "codex/**", "feat/live-website-auction"]
   pull_request:
 
 jobs:
