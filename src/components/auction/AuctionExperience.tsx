@@ -981,8 +981,8 @@ function Admin({ state }: { state: PublicState | null }) {
       <h1>Website auction.</h1>
       <p>
         Participant identities and payment references are private. Test fixtures
-        are labeled and blocked. Auction records below are restricted to this
-        production auction.
+        are labeled and isolated from production bidding. Auction records below
+        belong to the current {a.environment === "test" ? "QA TEST" : "production"} auction.
       </p>
       <button className="au-secondary" onClick={load}>
         Refresh dashboard
@@ -1456,7 +1456,7 @@ export default function AuctionExperience({
           return;
         }
       }
-      if (!disposed) channel.subscribe();
+      if (!disposed) channel.subscribe(status=>{if(status === "SUBSCRIBED")void refresh();});
     })();
     return () => {
       disposed = true;

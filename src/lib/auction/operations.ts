@@ -159,7 +159,7 @@ export async function deliverNotifications() {
     const { data: p } = item.participant_id
       ? await db()
           .from("va_participants")
-          .select("email,full_name,business_name,phone")
+          .select("email,full_name,business_name,phone,country")
           .eq("id", item.participant_id)
           .single()
       : { data: null };
@@ -181,6 +181,7 @@ export async function deliverNotifications() {
     const isOwner = item.audience === "owner";
     const path = isOwner
       ? "/admin/website-auction"
+      : item.kind === "outbid" ? "/website-auction/bid"
       : item.kind === "payment_received" || item.kind === "onboarding"
         ? "/website-auction/onboarding"
         : "/website-auction/account";
@@ -196,7 +197,7 @@ export async function deliverNotifications() {
           from: process.env.AUCTION_EMAIL_FROM,
           to: recipient,
           subject: title,
-          ...renderAuctionEmail({ kind: item.kind, owner: isOwner, qa: !!payload.qa, payload, url, ownerDetails: p ? {fullName:p.full_name,businessName:p.business_name,email:p.email,phone:p.phone} : undefined }),
+          ...renderAuctionEmail({ kind: item.kind, owner: isOwner, qa: !!payload.qa, payload, url, ownerDetails: p ? {fullName:p.full_name,businessName:p.business_name,email:p.email,phone:p.phone,country:p.country} : undefined }),
         };
         ensure(
           true,
