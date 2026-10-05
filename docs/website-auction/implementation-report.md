@@ -178,3 +178,25 @@ Hard blockers only:
 Known client compatibility observations and Auth HTML-only MIME are non-critical under the owner's new launch instructions and are not launch blockers by themselves. Completed TEST/SMTP/countdown/admin evidence was preserved and not rerun. Remaining security/payment checks were not expanded into redundant QA after the commercial hard stop.
 
 Result: VAELTX_WEBSITE_AUCTION_NOT_ACTIVATED. Production remains ready_for_activation, activation=false, timestamps NULL, bids0. Conditional launch authorization does not satisfy missing commercial policies or LIVE evidence.
+
+
+## Post-Codex completion — 2026-10-05 final handoff
+
+The remaining technical launch work was continued after the Codex session limit.
+
+- PR #4 was marked ready and squash-merged to `main` as `65542e9ba104e9504664f1496c1212dd81ab6aa5`.
+- Vercel production deployment `dpl_7zgw4bqAWxRGbsqmV9LTuChFYE4f` is READY and serves the stable production alias.
+- Winner Checkout was hardened for LIVE use: Stripe Adaptive Pricing is enabled for eligible hosted Checkout sessions, billing address is required, customer name/address may be saved, optional tax ID collection is enabled, post-purchase invoice creation is enabled, and a LIVE receipt email is requested.
+- Stripe LIVE account `acct_1ULYYw4efgtFxxrt` reports card payments and payouts enabled, details submitted, and no currently-due/past-due verification requirements.
+- Stripe Tax settings are LIVE/active, but there are currently no tax registrations recorded in Stripe.
+- A fresh enabled LIVE webhook endpoint was created for `/api/website-auction/webhook` with only `checkout.session.completed`, `checkout.session.async_payment_succeeded`, and `checkout.session.expired`; its signing secret was stored only as a Vercel Production sensitive environment variable.
+- Production commercial terms now include the approved MX/US/CA eligibility, four-week delivery terms, refund/cancellation rules, ownership/reusable-IP rules, one-year operational retention, Mexico-based governing-law wording, seller/privacy wording, exact-winning-bid/no-hidden-Stripe-fee policy, Stripe receipt/post-purchase invoice process, and USD/local-presentment policy.
+- Launch checks now PASS internally for seller identity verification, eligibility, delivery terms, email delivery, end-to-end QA, and Stripe business-model policy review. The model has no bid fee, paid bid credits, random winner, or chance-based mechanism; Stripe's Mexico restricted-business list specifically prohibits penny/bid-fee auctions, which this implementation is not.
+- Production remains deliberately `ready_for_activation`, with zero real bids and no start/end timestamps.
+
+Remaining hard blockers:
+
+1. `tax_and_invoicing=false`: Stripe receipts/post-purchase invoices do not establish a Mexican SAT CFDI process. A compliant fiscal path must exist for any CFDI or other mandatory fiscal document that applicable law requires.
+2. `live_payments=false`: the application still needs its Vercel Production `STRIPE_SECRET_KEY` replaced with the dedicated LIVE server key created in Stripe, and `AUCTION_STRIPE_MODE=live`. The LIVE webhook secret is already configured. Do not activate until the deployed app can authenticate the LIVE account with its own server credential.
+
+No real bid was created and the 25-day clock remains unstarted.
