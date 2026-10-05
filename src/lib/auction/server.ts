@@ -174,6 +174,12 @@ export async function rate(
       );
   }
 }
+export async function verificationCooldown(email: string) {
+  const key = createHmac("sha256", required("AUCTION_ABUSE_HMAC_KEY")).update(email.trim().toLowerCase()).digest("hex");
+  const {data,error} = await db().rpc("va_rate_limit",{p_key:`verification:${key}`,p_limit:1,p_seconds:60});
+  if(error) throw new AuctionError("Please try again later.",503);
+  if(!data) throw new AuctionError("Wait 60 seconds before requesting another verification link.",429,"rate_limited");
+}
 export async function captcha(token: unknown, action: ChallengeAction) {
   const parsed = captchaTokenSchema.safeParse(token);
   if (!parsed.success) throw new AuctionError("Complete the security check.");

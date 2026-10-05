@@ -4,7 +4,7 @@ export async function GET(request: Request) {
   if (code) {
     const { error } = await (await auth()).auth.exchangeCodeForSession(code);
     if (!error)
-      return Response.redirect(siteURL("/website-auction/account"), 303);
+      return Response.redirect(siteURL("/website-auction/account?email=verified"), 303);
   }
   return Response.redirect(
     siteURL("/website-auction/account?signin=failed"),

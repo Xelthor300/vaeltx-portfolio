@@ -6,6 +6,7 @@ import { processEvent, verifiedStripe } from "./payments";
 import { money } from "./model";
 import type Stripe from "stripe";
 import { auctionRuntime } from "./runtime";
+import { renderAuctionEmail } from "./email-template";
 
 export async function reconcile() {
   const a = await auction();
@@ -188,29 +189,6 @@ export async function deliverNotifications() {
       /^https:\/\/[a-z0-9-]+\.vercel\.app$/.test(payload.qaURL || "")
         ? new URL(path, payload.qaURL).toString()
         : siteURL(path);
-    const text = [
-      title,
-      payload.amount ? `Amount: ${money(payload.amount)} USD` : "",
-      payload.bidId ? `Bid: ${payload.bidId}` : "",
-      payload.deadline ? `Payment deadline: ${payload.deadline}` : "",
-      payload.at ? `Accepted at: ${payload.at}` : "",
-      isOwner && p
-        ? `Bidder: ${payload.fullName || p.full_name}\nBusiness: ${payload.businessName || p.business_name}\nEmail: ${payload.email || p.email}\nPhone: ${payload.phone || p.phone}${payload.country ? `\nCountry: ${payload.country}` : ""}`
-        : "",
-      isOwner && item.kind === "bid_accepted"
-        ? `Current highest: ${money(payload.currentHighest)} USD\nNext minimum: ${money(payload.nextMinimum)} USD\nPublic reserve: ${money(payload.reserveAmount)} USD · ${payload.reserveMet ? "MET" : "NOT MET"}\nValid bids: ${payload.validBids}\nVerified bidders with valid bids: ${payload.verifiedBidders}\nServer deadline: ${payload.endsAt}`
-        : "",
-      item.kind === "backup_offer"
-        ? "This offer uses your own accepted bid. No automatic charge. Review and pay only if you accept."
-        : "",
-      item.kind === "payment_received"
-        ? "Your payment is confirmed. Continue with your website project brief."
-        : "",
-      url,
-      "Bidding is free. Card verification does not authorize an automatic winning payment. Review the auction terms for the agreed service scope.",
-    ]
-      .filter(Boolean)
-      .join("\n\n");
     try {
       let message = item.delivery_message;
       if (!message) {
@@ -218,7 +196,7 @@ export async function deliverNotifications() {
           from: process.env.AUCTION_EMAIL_FROM,
           to: recipient,
           subject: title,
-          text,
+          ...renderAuctionEmail({ kind: item.kind, owner: isOwner, qa: !!payload.qa, payload, url, ownerDetails: p ? {fullName:p.full_name,businessName:p.business_name,email:p.email,phone:p.phone} : undefined }),
         };
         ensure(
           true,

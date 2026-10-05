@@ -9,6 +9,7 @@ export type MailMessage = {
   to: string;
   subject: string;
   text: string;
+  html?: string;
 };
 export function emailTransport() {
   const kind = (process.env.AUCTION_EMAIL_TRANSPORT || "resend").trim();

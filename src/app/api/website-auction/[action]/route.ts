@@ -10,6 +10,7 @@ import {
   body,
   origin,
   rate,
+  verificationCooldown,
   captcha,
   reply,
   failure,
@@ -294,6 +295,7 @@ export async function POST(request: Request, ctx: Context) {
       await rate(request, "signin");
       if (!qaEmailAllowed(v.email))
         throw new AuctionError("This QA preview is private.", 403);
+      await verificationCooldown(v.email);
       // Supabase must validate this single-use token itself, including requests
       // made directly to Auth. Never redeem it here first and then replay it.
       if (process.env.AUCTION_AUTH_CAPTCHA_PROVIDER !== "supabase")

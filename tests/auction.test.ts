@@ -163,6 +163,7 @@ test("auction PostgreSQL transaction, deadline, payments, permissions and notifi
       ],
     );
   await pg.query(`insert into va_admins values($1,'owner')`, [users[2]]);
+  await pg.exec(await readFile(new URL("../supabase/migrations/20261005011000_website_auction_email_transitions.sql",import.meta.url),"utf8"));
   async function fixture() {
     const id = randomUUID();
     await pg.query(
@@ -632,5 +633,18 @@ test("auction PostgreSQL transaction, deadline, payments, permissions and notifi
       );
     },
   );
+  await t.test("outbid events notify only the prior leader, preserve regained-lead losses, sanitize PII and defer rapid events",async()=>{
+    for(const id of users) await pg.query("update va_participants set verified_mode='test' where id=$1",[id]);
+    const a=await fixture();
+    await pg.query("update va_auctions set slug=$2 where id=$1",[a,`qa-ui-${a}`]);
+    await pg.query("insert into va_qa_runs values($1,true,'https://qa-vaeltx.vercel.app')",[a]);
+    for(const id of users)await pg.query("insert into va_qa_access values($1,$2)",[a,id]);
+    await bid(a,users[0],11000);const b=await bid(a,users[1],20200);await bid(a,users[2],25000);await bid(a,users[0],27000);const request=randomUUID();const last=await bid(a,users[1],30000,request);await bid(a,users[1],30000,request);
+    const rows=(await pg.query<{participant_id:string;payload:{previousAmount:number;currentHighest:number;nextMinimum:number};dedupe_key:string;next_attempt_at:Date;created_at:Date}>("select * from va_outbox where kind='outbid' and payload->>'auctionId'=$1 order by created_at",[a])).rows;
+    assert.equal(rows.length,4);assert.equal(rows.filter(r=>r.participant_id===users[0]).length,2);
+    const first=rows.find(r=>r.dedupe_key===`outbid:${b.bidId}`)!; assert.deepEqual([first.payload.previousAmount,first.payload.currentHighest,first.payload.nextMinimum],[11000,20200,21200]);
+    const repeat=rows.find(r=>r.dedupe_key===`outbid:${last.bidId}`)!;assert.ok(Date.parse(String(repeat.next_attempt_at))-Date.parse(String(first.next_attempt_at))>=600000);
+    for(const r of rows)for(const key of ['email','phone','fullName','businessName','alias'])assert.ok(!(key in r.payload));
+  });
   await pg.close();
 });

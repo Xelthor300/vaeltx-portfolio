@@ -10,6 +10,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Script from "next/script";
 import dynamic from "next/dynamic";
+import { maskEmail, verificationGuidance, VERIFICATION_COOLDOWN_SECONDS } from "@/lib/auction/verification";
 import { createClient } from "@supabase/supabase-js";
 import {
   isActive,
@@ -181,6 +182,14 @@ function SecurityCheck({
   );
 }
 function SignIn({ config }: { config: Config | null }) {
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState("");
+  const [cooldown, setCooldown] = useState(0);
+  useEffect(() => {
+    if (!cooldown) return;
+    const id = setTimeout(() => setCooldown(n => Math.max(0,n-1)),1000);
+    return () => clearTimeout(id);
+  },[cooldown]);
   const [token, setToken] = useState("");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -197,6 +206,8 @@ function SignIn({ config }: { config: Config | null }) {
         captchaToken: token,
       });
       setMessage(r.message);
+      setSubmitted(String(values.get("email")).trim());
+      setCooldown(VERIFICATION_COOLDOWN_SECONDS);
     } catch (err) {
       setMessage((err as Error).message);
       setError(true);
@@ -223,6 +234,8 @@ function SignIn({ config }: { config: Config | null }) {
             autoComplete="email"
             required
             maxLength={254}
+            value={email}
+            onChange={e => {setEmail(e.target.value); setSubmitted("");}}
           />
         </label>
         <SecurityCheck
@@ -231,11 +244,20 @@ function SignIn({ config }: { config: Config | null }) {
           onToken={setToken}
           action="signin"
         />
-        <button className="au-primary" disabled={busy || !token}>
-          {busy ? "Sending link…" : "Send sign-in link ↗"}
+        <button className="au-primary" disabled={busy || !token || cooldown > 0}>
+          {busy ? "Sending link…" : submitted ? `RESEND VERIFICATION EMAIL${cooldown ? ` · ${cooldown}s` : ""}` : "Send sign-in link ↗"}
         </button>
       </form>
-      {message && <Notice error={error}>{message}</Notice>}
+      {error && message && <Notice error>{message}</Notice>}
+      {submitted && <section className="au-verification-panel" aria-labelledby="au-check-email">
+        <span className="au-eyebrow">VERIFICATION LINK REQUESTED</span>
+        <h3 id="au-check-email">{verificationGuidance.title}</h3>
+        <p>We sent a verification link to <strong>{maskEmail(submitted)}</strong>.</p>
+        <p>{verificationGuidance.folders}</p>
+        <h4>MAKE SURE YOU RECEIVE AUCTION ALERTS</h4>
+        <p>{verificationGuidance.delivery}</p><p>{verificationGuidance.types}</p>
+        <p className="au-small">{verificationGuidance.contacts}</p>
+      </section>}
       <p className="au-small">
         No marketing subscription. Read the{" "}
         <Link href="/website-auction/terms">
@@ -1351,6 +1373,8 @@ export default function AuctionExperience({
   const [bids, setBids] = useState<Bid[]>([]);
   const [error, setError] = useState("");
   const [announcement, setAnnouncement] = useState("");
+  const [emailVerified, setEmailVerified] = useState(false);
+  useEffect(() => {const id=setTimeout(()=>setEmailVerified(new URLSearchParams(window.location.search).get("email") === "verified"),0);return()=>clearTimeout(id);},[]);
   const stateRef = useRef(initialState);
   const refreshAccount = useCallback(async () => {
     try {
@@ -1471,6 +1495,12 @@ export default function AuctionExperience({
           {announcement}
         </div>
         {error && <Notice error>{error}</Notice>}
+        {emailVerified && account && <section className="au-verification-panel">
+          <h2>EMAIL VERIFIED</h2>
+          <p>You’re ready to continue setting up your auction account.</p>
+          <p>Keep VAELTX emails easy to find: if your verification email appeared in Spam, mark it as Not spam so you don’t miss future bidding and payment notifications.</p>
+          <Link className="au-primary" href="/website-auction/account">CONTINUE TO ACCOUNT</Link>
+        </section>}
         {config?.qa && (
           <Notice>
             ISOLATED QA · Stripe TEST payments only. All businesses and bids
