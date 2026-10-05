@@ -41,6 +41,11 @@ type Context = { params: Promise<{ action: string }> };
 export async function GET(request: Request, ctx: Context) {
   try {
     const { action } = await ctx.params;
+    if (
+      process.env.AUCTION_PUBLIC_ENABLED !== "true" &&
+      !["admin", "admin-bidder", "operations"].includes(action)
+    )
+      return reply({ error: "Not found." }, 404);
     if (action === "state") {
       const a = await auction();
       if (
@@ -282,6 +287,11 @@ export async function GET(request: Request, ctx: Context) {
 export async function POST(request: Request, ctx: Context) {
   try {
     const { action } = await ctx.params;
+    if (
+      process.env.AUCTION_PUBLIC_ENABLED !== "true" &&
+      action !== "admin"
+    )
+      return reply({ error: "Not found." }, 404);
     origin(request);
     const input = await body(request);
     if (action === "signin") {
