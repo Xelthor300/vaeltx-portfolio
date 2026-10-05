@@ -2,6 +2,11 @@ import {test} from "node:test";
 import assert from "node:assert/strict";
 import {renderAuctionEmail} from "../src/lib/auction/email-template";
 import {maskEmail,verificationGuidance,VERIFICATION_COOLDOWN_SECONDS} from "../src/lib/auction/verification";
+import {shouldRemindPayment} from "../src/lib/auction/reminders";
+test("payment reminders apply only inside the final six hours of an unpaid offer",()=>{
+ const now=Date.parse('2026-10-05T01:00:00Z');const offer={status:'pending',deadline:'2026-10-05T07:00:00Z'};
+ assert.ok(!shouldRemindPayment(offer,now));assert.ok(shouldRemindPayment(offer,now+1));assert.ok(!shouldRemindPayment({...offer,status:'paid'},now+1));assert.ok(!shouldRemindPayment(offer,now+6*3600_000));
+});
 test("participant outbid HTML and text show authoritative transition amounts without competing identity",()=>{
  const message=renderAuctionEmail({kind:"outbid",owner:false,qa:true,url:"https://qa.vercel.app/website-auction/bid",payload:{previousAmount:11000,currentHighest:20200,nextMinimum:21200,email:"secret@example.invalid",fullName:"Competing identity",phone:"123456789",businessName:"Private business",endsAt:"2026-10-05T01:00:00Z"},now:Date.parse("2026-10-05T00:00:00Z")});
  for(const body of [message.html,message.text]) {for(const v of ["$110","$202","$212","RETURN TO AUCTION","QA — STRIPE TEST"])assert.ok(body.includes(v));for(const v of ["secret@example.invalid","Competing identity","123456789","Private business"])assert.ok(!body.includes(v));}

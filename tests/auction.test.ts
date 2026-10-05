@@ -281,6 +281,14 @@ test("auction PostgreSQL transaction, deadline, payments, permissions and notifi
       assert.equal(after.extension_count, 1);
       await bid(a, users[0], 10000, req);
       assert.equal((await row("va_auctions", a)).extension_count, 1);
+      // Accelerate only this embedded TEST fixture to its final 80 seconds again.
+      await pg.query("update va_auctions set ends_at=clock_timestamp()+interval '80 seconds' where id=$1",[a]);
+      const again=await row("va_auctions",a);await bid(a,users[1],11000);
+      const twice=await row("va_auctions",a);
+      assert.equal(twice.extension_count,2);
+      assert.equal(Date.parse(String(twice.ends_at))-Date.parse(String(again.ends_at)),120000);
+      assert.equal(String(twice.starts_at),String(before.starts_at));
+      assert.equal(String(twice.original_ends_at),String(before.original_ends_at));
     },
   );
   await t.test(

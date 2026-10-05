@@ -153,7 +153,7 @@ function SecurityCheck({
         sitekey: siteKey,
         action,
         theme: "dark",
-        size: "flexible",
+        size: box.current.clientWidth < 300 ? "compact" : "flexible",
         callback: onToken,
         "expired-callback": () => onToken(""),
         "error-callback": () => onToken(""),

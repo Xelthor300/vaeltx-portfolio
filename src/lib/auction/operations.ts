@@ -7,6 +7,7 @@ import { money } from "./model";
 import type Stripe from "stripe";
 import { auctionRuntime } from "./runtime";
 import { renderAuctionEmail } from "./email-template";
+import { shouldRemindPayment } from "./reminders";
 
 export async function reconcile() {
   const a = await auction();
@@ -105,7 +106,7 @@ export async function reconcile() {
         (await db().rpc("va_expire_winner", { p_winner: offer.id })).error,
       );
     else if (
-      Date.parse(offer.deadline) - Date.now() < 6 * 3600_000 &&
+      shouldRemindPayment(offer,Date.now()) &&
       (a.environment === "production" || auctionRuntime().qa)
     ) {
       for (const audience of ["owner", "participant"])
