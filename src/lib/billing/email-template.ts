@@ -19,6 +19,7 @@ const titles: Record<string, string> = {
   billing_payment_failed: "HOSTING PAYMENT FAILED",
   billing_action_required: "HOSTING PAYMENT NEEDS CUSTOMER ACTION",
   billing_cancel_scheduled: "HOSTING CANCELLATION SCHEDULED",
+  billing_cancel_reversed: "HOSTING CANCELLATION REVERSED",
   billing_subscription_canceled: "HOSTING SUBSCRIPTION CANCELED",
   billing_subscription_paused: "HOSTING SUBSCRIPTION PAUSED",
   billing_subscription_resumed: "HOSTING SUBSCRIPTION RESUMED",
@@ -53,6 +54,9 @@ export function renderBillingEmail(input: {
   add("INVOICE", p.stripeInvoiceId);
   add("STATUS", p.stripeStatus || p.serviceState);
   add("CURRENT PERIOD ENDS", p.currentPeriodEnd);
+  add("CANCELLATION REASON", p.cancellationReason);
+  add("CANCELLATION FEEDBACK", p.cancellationFeedback);
+  add("CANCELLATION COMMENT", p.cancellationComment);
   add("NEXT PAYMENT ATTEMPT", p.nextPaymentAttempt);
 
   const copy =
@@ -72,7 +76,9 @@ export function renderBillingEmail(input: {
         ? "The recurring Managed Hosting & Care subscription has ended. Review the client account before making any service or hosting changes."
         : input.kind === "billing_cancel_scheduled"
           ? "The customer scheduled cancellation at the end of the current billing period. No immediate hosting action is required."
-          : input.kind === "billing_payment_paid"
+          : input.kind === "billing_cancel_reversed"
+            ? "The customer reversed a scheduled cancellation before the paid period ended. The Managed Hosting & Care subscription remains active."
+            : input.kind === "billing_payment_paid"
             ? "Stripe confirmed a recurring Managed Hosting & Care payment."
             : "Stripe reported a Managed Hosting & Care lifecycle update. Review the record if any operational action is needed.";
 
