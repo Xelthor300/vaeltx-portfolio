@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import Stripe from "stripe";
 import { billingDb } from "./server";
 import {
+  checkoutPaymentConfirmed,
   hostingPlans,
   invoicePriceIds,
   invoiceSubscriptionId,
@@ -151,10 +152,7 @@ async function normalize(event: Stripe.Event): Promise<Normalized> {
       objectId: session.id,
       customer,
       notification:
-        (event.type === "checkout.session.completed" &&
-          (session.payment_status === "paid" ||
-            session.payment_status === "no_payment_required")) ||
-        event.type === "checkout.session.async_payment_succeeded"
+        checkoutPaymentConfirmed(eventName, session.payment_status)
           ? {
               kind: "billing_subscription_started",
               ...baseNotification(plan, {
