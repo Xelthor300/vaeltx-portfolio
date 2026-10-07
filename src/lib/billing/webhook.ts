@@ -126,6 +126,10 @@ function subscriptionNormalized(subscription: Stripe.Subscription, event: Stripe
 }
 
 async function normalize(event: Stripe.Event): Promise<Normalized> {
+  // Stripe can add webhook event names before the installed SDK widens its
+  // TypeScript union. Keep routing forward-compatible while still casting each
+  // event payload to the documented object type below.
+  const eventName = String(event.type);
   if (
     event.type === "checkout.session.completed" ||
     event.type === "checkout.session.async_payment_succeeded" ||
@@ -206,7 +210,7 @@ async function normalize(event: Stripe.Event): Promise<Normalized> {
       };
     } else if (
       event.type === "customer.subscription.paused" ||
-      event.type === "customer.subscription.collection_paused"
+      eventName === "customer.subscription.collection_paused"
     ) {
       notification = {
         kind: "billing_subscription_paused",
@@ -217,7 +221,7 @@ async function normalize(event: Stripe.Event): Promise<Normalized> {
       };
     } else if (
       event.type === "customer.subscription.resumed" ||
-      event.type === "customer.subscription.collection_resumed"
+      eventName === "customer.subscription.collection_resumed"
     ) {
       notification = {
         kind: "billing_subscription_resumed",
