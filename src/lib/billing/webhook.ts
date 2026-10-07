@@ -185,6 +185,18 @@ async function normalize(event: Stripe.Event): Promise<Normalized> {
 
     const previous = (event.data as unknown as { previous_attributes?: Record<string, unknown> })
       .previous_attributes || {};
+    const cancellation = (subscription as unknown as {
+      cancellation_details?: {
+        reason?: string | null;
+        feedback?: string | null;
+        comment?: string | null;
+      } | null;
+    }).cancellation_details;
+    const cancellationContext = {
+      cancellationReason: cancellation?.reason || null,
+      cancellationFeedback: cancellation?.feedback || null,
+      cancellationComment: cancellation?.comment || null,
+    };
     let notification: Record<string, unknown> | null = null;
     if (event.type === "customer.subscription.deleted") {
       notification = {
@@ -194,6 +206,7 @@ async function normalize(event: Stripe.Event): Promise<Normalized> {
           stripeStatus: subscription.status,
           serviceState: serviceState(subscription.status),
           currentPeriodEnd: normalized.subscription.current_period_end,
+          ...cancellationContext,
         }),
       };
     } else if (
@@ -203,6 +216,20 @@ async function normalize(event: Stripe.Event): Promise<Normalized> {
     ) {
       notification = {
         kind: "billing_cancel_scheduled",
+        ...baseNotification(normalized.plan, {
+          stripeSubscriptionId: subscription.id,
+          stripeStatus: subscription.status,
+          currentPeriodEnd: normalized.subscription.current_period_end,
+          ...cancellationContext,
+        }),
+      };
+    } else if (
+      event.type === "customer.subscription.updated" &&
+      !subscription.cancel_at_period_end &&
+      previous.cancel_at_period_end === true
+    ) {
+      notification = {
+        kind: "billing_cancel_reversed",
         ...baseNotification(normalized.plan, {
           stripeSubscriptionId: subscription.id,
           stripeStatus: subscription.status,
