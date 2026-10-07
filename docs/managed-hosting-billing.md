@@ -198,3 +198,45 @@ Before changing the webhook or billing schema:
 - production deployment is READY before changing Stripe endpoint routing
 
 No real LIVE test purchase is required to validate code. Avoid creating fake live customer charges.
+
+
+## Private owner operations
+
+The billing ledger has a private owner dashboard at:
+
+`/admin/managed-hosting`
+
+It uses the existing VAELTX owner identity check and never exposes the configured owner email in the browser.
+
+If the owner session has expired, `/admin/managed-hosting/signin` requests a single-use Supabase email sign-in link:
+- the owner email is read only from `AUCTION_ADMIN_AUTH_EMAIL` on the server;
+- the page has no email input and never renders that address;
+- Cloudflare Turnstile is required;
+- requests are rate-limited to 3 per hour per network plus the existing email cooldown;
+- the callback is `/admin/auth/callback`, so owner access still works while the public auction and its callback remain hidden.
+
+The dashboard is operational visibility only. It cannot charge, cancel, suspend, delete, or transfer a client site.
+
+## Scheduled reconciliation
+
+Webhooks are the primary near-real-time path. In addition, VAELTX reconciles the internal subscription ledger against Stripe LIVE every six hours.
+
+Endpoint:
+
+`GET /api/vaeltx/billing/reconcile`
+
+Authentication uses the existing server-to-server operations bearer secret. It is never public and is supplied by Supabase Vault.
+
+The Supabase cron job `va-managed-hosting-reconcile` runs at minute 17 every six hours.
+
+Reconciliation:
+1. verifies the configured Stripe LIVE account;
+2. lists Stripe subscriptions across all statuses;
+3. keeps only the two approved Managed Hosting & Care Price IDs;
+4. derives the current VAELTX service state from Stripe;
+5. atomically upserts drift through the same hardened billing RPC;
+6. uses a deterministic state fingerprint so an unchanged subscription does not create repeated work;
+7. never creates charges or modifies Stripe;
+8. warns the owner if a locally tracked live subscription is unexpectedly absent from Stripe's reconciliation set.
+
+Do not remove webhook handling after adding reconciliation. The two mechanisms are complementary: webhooks provide low-latency updates, while reconciliation is the self-healing safety net.
