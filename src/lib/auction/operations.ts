@@ -8,6 +8,8 @@ import type Stripe from "stripe";
 import { auctionRuntime } from "./runtime";
 import { renderAuctionEmail } from "./email-template";
 import { shouldRemindPayment } from "./reminders";
+import { renderBillingEmail } from "@/lib/billing/email-template";
+import { dashboardURL } from "@/lib/billing/model";
 
 export async function reconcile() {
   const a = await auction();
@@ -143,6 +145,18 @@ const subjects: Record<string, string> = {
   payment_received: "Website payment confirmed",
   onboarding: "Website project brief received",
   late_payment_review: "Website payment needs owner review",
+  billing_subscription_started: "VAELTX Hosting & Care · new subscription",
+  billing_checkout_failed: "VAELTX Hosting & Care · checkout payment failed",
+  billing_payment_paid: "VAELTX Hosting & Care · payment received",
+  billing_payment_failed: "VAELTX Hosting & Care · payment failed",
+  billing_action_required: "VAELTX Hosting & Care · payment action required",
+  billing_cancel_scheduled: "VAELTX Hosting & Care · cancellation scheduled",
+  billing_subscription_canceled: "VAELTX Hosting & Care · subscription canceled",
+  billing_subscription_paused: "VAELTX Hosting & Care · subscription paused",
+  billing_subscription_resumed: "VAELTX Hosting & Care · subscription resumed",
+  billing_invoice_uncollectible: "VAELTX Hosting & Care · invoice uncollectible",
+  billing_invoice_finalization_failed: "VAELTX Hosting & Care · invoice finalization failed",
+  billing_invoice_voided: "VAELTX Hosting & Care · invoice voided",
 };
 export async function deliverNotifications() {
   const transport = emailTransport();
@@ -180,15 +194,17 @@ export async function deliverNotifications() {
         ? `VAELTX Auction — New Bid: ${money(payload.amount)} USD`
         : subjects[item.kind] || "Website auction update");
     const isOwner = item.audience === "owner";
+    const isBilling = String(item.kind).startsWith("billing_");
     const path = isOwner
       ? "/admin/website-auction"
       : item.kind === "outbid" ? "/website-auction/bid"
       : item.kind === "payment_received" || item.kind === "onboarding"
         ? "/website-auction/onboarding"
         : "/website-auction/account";
-    const url =
-      payload.qa &&
-      /^https:\/\/[a-z0-9-]+\.vercel\.app$/.test(payload.qaURL || "")
+    const url = isBilling
+      ? dashboardURL(payload.stripeSubscriptionId, payload.stripeInvoiceId)
+      : payload.qa &&
+          /^https:\/\/[a-z0-9-]+\.vercel\.app$/.test(payload.qaURL || "")
         ? new URL(path, payload.qaURL).toString()
         : siteURL(path);
     try {
@@ -198,7 +214,9 @@ export async function deliverNotifications() {
           from: process.env.AUCTION_EMAIL_FROM,
           to: recipient,
           subject: title,
-          ...renderAuctionEmail({ kind: item.kind, owner: isOwner, qa: !!payload.qa, payload, url, ownerDetails: p ? {fullName:p.full_name,businessName:p.business_name,email:p.email,phone:p.phone,country:p.country} : undefined }),
+          ...(isBilling
+            ? renderBillingEmail({ kind: item.kind, payload, url })
+            : renderAuctionEmail({ kind: item.kind, owner: isOwner, qa: !!payload.qa, payload, url, ownerDetails: p ? {fullName:p.full_name,businessName:p.business_name,email:p.email,phone:p.phone,country:p.country} : undefined })),
         };
         ensure(
           true,
