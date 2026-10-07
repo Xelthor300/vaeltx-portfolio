@@ -240,3 +240,25 @@ Reconciliation:
 8. warns the owner if a locally tracked live subscription is unexpectedly absent from Stripe's reconciliation set.
 
 Do not remove webhook handling after adding reconciliation. The two mechanisms are complementary: webhooks provide low-latency updates, while reconciliation is the self-healing safety net.
+
+
+## LIVE read key for scheduled reconciliation
+
+Stripe webhook delivery is the primary production mechanism and remains fully operational without a Stripe API secret.
+
+The six-hour reconciliation safety net additionally needs a server-side LIVE Stripe key. VAELTX looks for:
+
+`VAELTX_BILLING_STRIPE_SECRET_KEY`
+
+and falls back to `STRIPE_SECRET_KEY` only when that fallback is itself an `sk_live_` key.
+
+If no LIVE key is available:
+- the reconciliation endpoint returns HTTP 200 in `webhook_only` mode instead of failing;
+- no Stripe mutation or charge is attempted;
+- if there are no tracked live subscriptions, no warning is generated;
+- once tracked subscriptions exist, VAELTX queues one owner warning per day until LIVE read access is configured;
+- adding the LIVE key later automatically enables the existing six-hour reconciliation job after the next Vercel deployment.
+
+The current production `STRIPE_SECRET_KEY` is intentionally TEST-only for the hidden auction and must not be repurposed or overwritten just to satisfy billing reconciliation.
+
+A LIVE key must be created/managed in Stripe and stored only as a Vercel Sensitive production variable. Do not paste it into source code, GitHub, logs, email, or chat.
