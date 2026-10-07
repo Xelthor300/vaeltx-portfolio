@@ -181,3 +181,54 @@
   .hosting-header { align-items: flex-start; flex-direction: column; }
   .hosting-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+.owner-signin-shell {
+  display: grid;
+  place-items: center;
+  padding-top: 48px;
+}
+.owner-signin-card {
+  width: min(100%, 520px);
+  display: grid;
+  gap: 18px;
+  padding: clamp(24px, 5vw, 42px);
+  border: 1px solid #2d2d32;
+  border-radius: 18px;
+  background: #121214;
+}
+.owner-signin-card h1 {
+  margin: 0;
+  font-size: clamp(34px, 7vw, 52px);
+  letter-spacing: -0.04em;
+}
+.owner-signin-card p {
+  margin: 0;
+  color: #aaa49a;
+  line-height: 1.65;
+}
+.owner-signin-card button {
+  width: 100%;
+  border: 0;
+  border-radius: 8px;
+  padding: 14px 16px;
+  background: #f5f2eb;
+  color: #0b0b0c;
+  font-weight: 700;
+  cursor: pointer;
+}
+.owner-signin-card button:disabled {
+  cursor: not-allowed;
+  opacity: .45;
+}
+.owner-signin-captcha {
+  min-height: 65px;
+}
+.owner-signin-notice {
+  border: 1px solid #38383d;
+  background: #19191c;
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: #c9c3b8;
+  font-size: 12px;
+  line-height: 1.55;
+}
