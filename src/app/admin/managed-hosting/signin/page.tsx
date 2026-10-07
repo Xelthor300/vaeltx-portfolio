@@ -11,12 +11,14 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
+  let ownerSession = false;
   try {
     await admin();
-    redirect("/admin/managed-hosting");
+    ownerSession = true;
   } catch {
     // No active owner session: render the private owner sign-in surface.
   }
+  if (ownerSession) redirect("/admin/managed-hosting");
 
   return (
     <main className="hosting-admin owner-signin-shell">
