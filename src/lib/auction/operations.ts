@@ -158,6 +158,7 @@ const subjects: Record<string, string> = {
   billing_invoice_finalization_failed: "VAELTX Hosting & Care · invoice finalization failed",
   billing_invoice_voided: "VAELTX Hosting & Care · invoice voided",
   billing_reconciliation_warning: "VAELTX Hosting & Care · reconciliation warning",
+  billing_reconciliation_configuration_pending: "VAELTX Hosting & Care · LIVE reconciliation key needed",
 };
 export async function deliverNotifications() {
   const transport = emailTransport();
