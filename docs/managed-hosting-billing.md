@@ -213,7 +213,7 @@ If the owner session has expired, `/admin/managed-hosting/signin` requests a sin
 - the page has no email input and never renders that address;
 - Cloudflare Turnstile is required;
 - requests are rate-limited to 3 per hour per network plus the existing email cooldown;
-- the callback is `/admin/auth/callback`, so owner access still works while the public auction and its callback remain hidden.
+- the flow reuses `/website-auction/auth/callback?target=managed-hosting`, which is already an authorized Supabase redirect; that owner-only target remains available while the public auction stays hidden.
 
 The dashboard is operational visibility only. It cannot charge, cancel, suspend, delete, or transfer a client site.
 
