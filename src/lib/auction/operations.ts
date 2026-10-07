@@ -146,6 +146,7 @@ const subjects: Record<string, string> = {
   onboarding: "Website project brief received",
   late_payment_review: "Website payment needs owner review",
   billing_subscription_started: "VAELTX Hosting & Care · new subscription",
+  billing_checkout_failed: "VAELTX Hosting & Care · checkout payment failed",
   billing_payment_paid: "VAELTX Hosting & Care · payment received",
   billing_payment_failed: "VAELTX Hosting & Care · payment failed",
   billing_action_required: "VAELTX Hosting & Care · payment action required",
@@ -154,6 +155,8 @@ const subjects: Record<string, string> = {
   billing_subscription_paused: "VAELTX Hosting & Care · subscription paused",
   billing_subscription_resumed: "VAELTX Hosting & Care · subscription resumed",
   billing_invoice_uncollectible: "VAELTX Hosting & Care · invoice uncollectible",
+  billing_invoice_finalization_failed: "VAELTX Hosting & Care · invoice finalization failed",
+  billing_invoice_voided: "VAELTX Hosting & Care · invoice voided",
 };
 export async function deliverNotifications() {
   const transport = emailTransport();
