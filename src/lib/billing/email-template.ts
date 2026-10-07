@@ -14,6 +14,7 @@ function money(amount: unknown, currency: unknown) {
 
 const titles: Record<string, string> = {
   billing_subscription_started: "NEW MANAGED HOSTING SUBSCRIPTION",
+  billing_checkout_failed: "HOSTING CHECKOUT PAYMENT FAILED",
   billing_payment_paid: "HOSTING PAYMENT RECEIVED",
   billing_payment_failed: "HOSTING PAYMENT FAILED",
   billing_action_required: "HOSTING PAYMENT NEEDS CUSTOMER ACTION",
@@ -22,6 +23,8 @@ const titles: Record<string, string> = {
   billing_subscription_paused: "HOSTING SUBSCRIPTION PAUSED",
   billing_subscription_resumed: "HOSTING SUBSCRIPTION RESUMED",
   billing_invoice_uncollectible: "HOSTING INVOICE MARKED UNCOLLECTIBLE",
+  billing_invoice_finalization_failed: "HOSTING INVOICE FINALIZATION FAILED",
+  billing_invoice_voided: "HOSTING INVOICE VOIDED",
 };
 
 export function renderBillingEmail(input: {
@@ -53,6 +56,12 @@ export function renderBillingEmail(input: {
   const copy =
     input.kind === "billing_payment_failed"
       ? "Stripe reported a failed recurring payment. Keep the customer site online during the grace period while Stripe retries; review only if the subscription later becomes unpaid or canceled."
+      : input.kind === "billing_checkout_failed"
+        ? "Stripe reported that an asynchronous subscription checkout payment failed. Review the Checkout and subscription state before provisioning Managed Hosting & Care."
+      : input.kind === "billing_invoice_finalization_failed"
+        ? "Stripe could not finalize a Managed Hosting & Care invoice. Review the invoice configuration and Stripe billing state before taking any client-facing action."
+      : input.kind === "billing_invoice_voided"
+        ? "A Managed Hosting & Care invoice was voided. Review the subscription and client account before making any service changes."
       : input.kind === "billing_subscription_canceled"
         ? "The recurring Managed Hosting & Care subscription has ended. Review the client account before making any service or hosting changes."
         : input.kind === "billing_cancel_scheduled"
