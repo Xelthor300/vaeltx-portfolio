@@ -19,7 +19,10 @@ export async function POST(request: Request) {
     origin(request);
     await rate(request, "admin-signin");
     const input = z
-      .object({ captchaToken: captchaTokenSchema })
+      .object({
+        captchaToken: captchaTokenSchema,
+        target: z.enum(["managed-hosting", "client-ops"]).default("managed-hosting"),
+      })
       .strict()
       .parse(await body(request));
 
@@ -32,7 +35,7 @@ export async function POST(request: Request) {
     const result = await (await auth()).auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: siteURL("/website-auction/auth/callback?target=managed-hosting"),
+        emailRedirectTo: siteURL(`/website-auction/auth/callback?target=${encodeURIComponent(input.target)}`),
         shouldCreateUser: true,
         captchaToken: input.captchaToken,
       },
