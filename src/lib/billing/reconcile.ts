@@ -23,15 +23,7 @@ async function liveStripe() {
     ""
   ).trim();
   if (!key.startsWith("sk_live_")) return null;
-  const stripe = new Stripe(key, { maxNetworkRetries: 2 });
-  const account = await stripe.accounts.retrieve(null);
-  if (
-    account.id !== required("STRIPE_ACCOUNT_ID") ||
-    !account.charges_enabled ||
-    !account.details_submitted
-  )
-    throw new Error("Stripe account verification failed.");
-  return stripe;
+  return new Stripe(key, { maxNetworkRetries: 2 });
 }
 
 function interval(subscription: Stripe.Subscription) {
