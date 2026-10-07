@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { serviceState, stripeId, unixISO } from "../src/lib/billing/model";
+import { checkoutPaymentConfirmed, serviceState, stripeId, unixISO } from "../src/lib/billing/model";
 
 test("billing service state preserves a grace period for failed renewals", () => {
   assert.equal(serviceState("active"), "active");
@@ -20,4 +20,12 @@ test("stripeId accepts string ids and expanded resources", () => {
 test("unixISO converts Stripe seconds safely", () => {
   assert.equal(unixISO(0), "1970-01-01T00:00:00.000Z");
   assert.equal(unixISO(null), null);
+});
+
+test("hosting activation waits for confirmed checkout payment", () => {
+  assert.equal(checkoutPaymentConfirmed("checkout.session.completed", "unpaid"), false);
+  assert.equal(checkoutPaymentConfirmed("checkout.session.completed", "paid"), true);
+  assert.equal(checkoutPaymentConfirmed("checkout.session.completed", "no_payment_required"), true);
+  assert.equal(checkoutPaymentConfirmed("checkout.session.async_payment_succeeded", "unpaid"), true);
+  assert.equal(checkoutPaymentConfirmed("checkout.session.async_payment_failed", "unpaid"), false);
 });
