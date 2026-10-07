@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { admin } from "@/lib/auction/server";
@@ -74,7 +74,7 @@ export default async function Page() {
   try {
     await admin();
   } catch {
-    notFound();
+    redirect("/admin/managed-hosting/signin");
   }
 
   const db = billingDb();
