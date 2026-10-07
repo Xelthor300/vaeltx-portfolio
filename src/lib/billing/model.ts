@@ -147,3 +147,11 @@ export function dashboardURL(subscriptionId?: string | null, invoiceId?: string 
     return `https://dashboard.stripe.com/invoices/${invoiceId}`;
   return "https://dashboard.stripe.com/subscriptions";
 }
+
+export function checkoutPaymentConfirmed(eventName: string, paymentStatus: string | null | undefined) {
+  return (
+    eventName === "checkout.session.async_payment_succeeded" ||
+    (eventName === "checkout.session.completed" &&
+      (paymentStatus === "paid" || paymentStatus === "no_payment_required"))
+  );
+}
