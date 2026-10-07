@@ -22,7 +22,7 @@ async function liveStripe() {
     process.env.STRIPE_SECRET_KEY ||
     ""
   ).trim();
-  if (!key.startsWith("sk_live_")) return null;
+  if (!(key.startsWith("sk_live_") || key.startsWith("rk_live_"))) return null;
   return new Stripe(key, { maxNetworkRetries: 2 });
 }
 
