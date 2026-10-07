@@ -17,9 +17,12 @@ function required(name: string) {
 }
 
 async function liveStripe() {
-  const key = required("STRIPE_SECRET_KEY");
-  if (!key.startsWith("sk_live_"))
-    throw new Error("Managed billing reconciliation requires a LIVE Stripe key.");
+  const key = (
+    process.env.VAELTX_BILLING_STRIPE_SECRET_KEY ||
+    process.env.STRIPE_SECRET_KEY ||
+    ""
+  ).trim();
+  if (!key.startsWith("sk_live_")) return null;
   const stripe = new Stripe(key, { maxNetworkRetries: 2 });
   const account = await stripe.accounts.retrieve(null);
   if (
@@ -57,8 +60,48 @@ function reconciliationKey(subscription: Stripe.Subscription) {
 }
 
 export async function reconcileManagedBilling() {
-  const stripe = await liveStripe();
   const db = billingDb();
+  const stripe = await liveStripe();
+
+  if (!stripe) {
+    const { count, error } = await db
+      .from("va_billing_subscriptions")
+      .select("stripe_subscription_id", { count: "exact", head: true })
+      .in("service_state", ["active", "grace", "pending", "suspended", "review"]);
+    if (error) throw new Error("Could not inspect tracked subscription count.");
+
+    const tracked = count || 0;
+    if (tracked > 0) {
+      const dateKey = new Date().toISOString().slice(0, 10);
+      const { error: warningError } = await db.from("va_outbox").upsert(
+        {
+          dedupe_key: `billing:reconcile-key-pending:${dateKey}`,
+          kind: "billing_reconciliation_configuration_pending",
+          audience: "owner",
+          participant_id: null,
+          payload: {
+            trackedSubscriptions: tracked,
+            checkedAt: new Date().toISOString(),
+          },
+        },
+        { onConflict: "dedupe_key", ignoreDuplicates: true },
+      );
+      if (warningError)
+        throw new Error("Could not queue reconciliation configuration warning.");
+    }
+
+    return {
+      ok: true,
+      mode: "webhook_only",
+      configurationPending: "live_stripe_read_key",
+      tracked,
+      matched: 0,
+      processed: 0,
+      duplicates: 0,
+      missing: 0,
+    };
+  }
+
   const plans = hostingPlans();
   const planByPrice = new Map(plans.map((plan) => [plan.priceId, plan]));
   const seen = new Set<string>();

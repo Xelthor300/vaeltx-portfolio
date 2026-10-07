@@ -26,6 +26,7 @@ const titles: Record<string, string> = {
   billing_invoice_finalization_failed: "HOSTING INVOICE FINALIZATION FAILED",
   billing_invoice_voided: "HOSTING INVOICE VOIDED",
   billing_reconciliation_warning: "HOSTING BILLING RECONCILIATION WARNING",
+  billing_reconciliation_configuration_pending: "HOSTING RECONCILIATION NEEDS LIVE READ ACCESS",
 };
 
 export function renderBillingEmail(input: {
@@ -55,9 +56,11 @@ export function renderBillingEmail(input: {
   add("NEXT PAYMENT ATTEMPT", p.nextPaymentAttempt);
 
   const copy =
-    input.kind === "billing_reconciliation_warning"
-      ? "The scheduled Stripe reconciliation found one or more locally tracked subscriptions that were not returned by Stripe. Review the billing ledger and Stripe before making any client-facing change."
-      : input.kind === "billing_payment_failed"
+    input.kind === "billing_reconciliation_configuration_pending"
+      ? "Managed Hosting webhooks are active, but scheduled Stripe reconciliation cannot read LIVE subscriptions until a LIVE server-side Stripe key is configured. No client site is affected automatically."
+      : input.kind === "billing_reconciliation_warning"
+        ? "The scheduled Stripe reconciliation found one or more locally tracked subscriptions that were not returned by Stripe. Review the billing ledger and Stripe before making any client-facing change."
+        : input.kind === "billing_payment_failed"
       ? "Stripe reported a failed recurring payment. Keep the customer site online during the grace period while Stripe retries; review only if the subscription later becomes unpaid or canceled."
       : input.kind === "billing_checkout_failed"
         ? "Stripe reported that an asynchronous subscription checkout payment failed. Review the Checkout and subscription state before provisioning Managed Hosting & Care."
