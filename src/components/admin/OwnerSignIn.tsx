@@ -8,11 +8,19 @@ type TurnstileClient = {
   remove: (id: string) => void;
 };
 
+type OwnerTarget = "managed-hosting" | "client-ops";
+
 function turnstileClient() {
   return (window as unknown as { turnstile?: TurnstileClient }).turnstile;
 }
 
-export default function OwnerSignIn({ siteKey }: { siteKey: string | null }) {
+export default function OwnerSignIn({
+  siteKey,
+  target = "managed-hosting",
+}: {
+  siteKey: string | null;
+  target?: OwnerTarget;
+}) {
   const box = useRef<HTMLDivElement>(null);
   const widget = useRef<string | null>(null);
   const [token, setToken] = useState("");
@@ -51,7 +59,7 @@ export default function OwnerSignIn({ siteKey }: { siteKey: string | null }) {
       const response = await fetch("/api/vaeltx/admin/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ captchaToken: token }),
+        body: JSON.stringify({ captchaToken: token, target }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Secure sign-in is unavailable.");
