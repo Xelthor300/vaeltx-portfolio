@@ -3,15 +3,13 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import Script from "next/script";
 
-type Turnstile = {
+type TurnstileClient = {
   render: (node: HTMLElement, options: Record<string, unknown>) => string;
   remove: (id: string) => void;
 };
 
-declare global {
-  interface Window {
-    turnstile?: Turnstile;
-  }
+function turnstileClient() {
+  return (window as unknown as { turnstile?: TurnstileClient }).turnstile;
 }
 
 export default function OwnerSignIn({ siteKey }: { siteKey: string | null }) {
@@ -23,8 +21,8 @@ export default function OwnerSignIn({ siteKey }: { siteKey: string | null }) {
   const [message, setMessage] = useState("");
 
   const render = useCallback(() => {
-    if (!box.current || !siteKey || !window.turnstile || widget.current) return;
-    widget.current = window.turnstile.render(box.current, {
+    if (!box.current || !siteKey || !turnstileClient() || widget.current) return;
+    widget.current = turnstileClient().render(box.current, {
       sitekey: siteKey,
       action: "signin",
       theme: "dark",
@@ -38,7 +36,7 @@ export default function OwnerSignIn({ siteKey }: { siteKey: string | null }) {
   useEffect(() => {
     render();
     return () => {
-      if (widget.current && window.turnstile) window.turnstile.remove(widget.current);
+      if (widget.current && turnstileClient()) turnstileClient().remove(widget.current);
       widget.current = null;
     };
   }, [render]);
@@ -62,8 +60,8 @@ export default function OwnerSignIn({ siteKey }: { siteKey: string | null }) {
     } finally {
       setBusy(false);
       setToken("");
-      if (widget.current && window.turnstile) {
-        window.turnstile.remove(widget.current);
+      if (widget.current && turnstileClient()) {
+        turnstileClient().remove(widget.current);
         widget.current = null;
       }
       setTimeout(render, 0);
