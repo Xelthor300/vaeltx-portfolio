@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     const result = await (await auth()).auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: siteURL("/admin/auth/callback"),
+        emailRedirectTo: siteURL("/website-auction/auth/callback?target=managed-hosting"),
         shouldCreateUser: true,
         captchaToken: input.captchaToken,
       },
