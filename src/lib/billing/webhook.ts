@@ -136,6 +136,11 @@ async function normalize(event: Stripe.Event): Promise<Normalized> {
     const plan = planByPaymentLink(paymentLinkId);
     if (!plan) return { objectId: session.id };
     const customer = checkoutCustomer(session, event);
+    const details = session.customer_details as unknown as {
+      email?: string | null;
+      name?: string | null;
+      business_name?: string | null;
+    } | null;
     const subscriptionId = stripeId(session.subscription);
     return {
       objectId: session.id,
@@ -146,9 +151,9 @@ async function normalize(event: Stripe.Event): Promise<Normalized> {
               kind: "billing_subscription_started",
               ...baseNotification(plan, {
                 stripeSubscriptionId: subscriptionId,
-                customerEmail: customer?.email || null,
-                customerName: customer?.full_name || null,
-                businessName: customer?.business_name || null,
+                customerEmail: details?.email || null,
+                customerName: details?.name || null,
+                businessName: details?.business_name || null,
                 stripeStatus: session.status,
               }),
             }
