@@ -46,8 +46,6 @@ Keep the endpoint narrowly scoped. Do not change to `*`.
 - `customer.subscription.deleted`
 - `customer.subscription.paused`
 - `customer.subscription.resumed`
-- `customer.subscription.collection_paused`
-- `customer.subscription.collection_resumed`
 - `invoice.paid`
 - `invoice.payment_failed`
 - `invoice.payment_action_required`
@@ -56,6 +54,8 @@ Keep the endpoint narrowly scoped. Do not change to `*`.
 - `invoice.voided`
 
 The handler is intentionally tolerant of Stripe adding newer event-name literals before the installed SDK widens its TypeScript union.
+
+The code also understands `customer.subscription.collection_paused` and `customer.subscription.collection_resumed` for forward compatibility, but they are **not enabled on the LIVE endpoint** because the current VAELTX Stripe account does not have access to those event types. Add them only after Stripe grants access and the endpoint update is verified.
 
 ## Activation rule
 
