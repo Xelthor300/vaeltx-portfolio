@@ -166,7 +166,7 @@ export default async function Page() {
     return remaining !== null && remaining >= 0 && remaining <= 7;
   });
   const atRisk = active.filter((project) => ["watch", "at_risk", "blocked"].includes(project.risk_level));
-  const outstanding = projects.reduce((sum, project) => sum + Number(project.balance_due || 0), 0);
+  const outstandingProjects = projects.filter((project) => Number(project.balance_due || 0) > 0);
   const activeEffort = active.reduce((sum, project) => sum + Number(project.effort_points || 0), 0);
 
   return (
@@ -190,7 +190,7 @@ export default async function Page() {
         <article><span>Due ≤ 7 days</span><strong>{dueSoon.length}</strong></article>
         <article><span>Risk / blocked</span><strong>{atRisk.length}</strong></article>
         <article><span>Active effort</span><strong>{activeEffort}</strong></article>
-        <article><span>Outstanding</span><strong>{money(outstanding, "USD")}</strong><small>mixed-currency indicator</small></article>
+        <article><span>Balances due</span><strong>{outstandingProjects.length}</strong><small>projects with money outstanding</small></article>
       </section>
 
       <section className="client-ops-rule">
