@@ -21,8 +21,9 @@ export default function OwnerSignIn({ siteKey }: { siteKey: string | null }) {
   const [message, setMessage] = useState("");
 
   const render = useCallback(() => {
-    if (!box.current || !siteKey || !turnstileClient() || widget.current) return;
-    widget.current = turnstileClient().render(box.current, {
+    const client = turnstileClient();
+    if (!box.current || !siteKey || !client || widget.current) return;
+    widget.current = client.render(box.current, {
       sitekey: siteKey,
       action: "signin",
       theme: "dark",
@@ -36,7 +37,8 @@ export default function OwnerSignIn({ siteKey }: { siteKey: string | null }) {
   useEffect(() => {
     render();
     return () => {
-      if (widget.current && turnstileClient()) turnstileClient().remove(widget.current);
+      const client = turnstileClient();
+      if (widget.current && client) client.remove(widget.current);
       widget.current = null;
     };
   }, [render]);
@@ -60,8 +62,9 @@ export default function OwnerSignIn({ siteKey }: { siteKey: string | null }) {
     } finally {
       setBusy(false);
       setToken("");
-      if (widget.current && turnstileClient()) {
-        turnstileClient().remove(widget.current);
+      const client = turnstileClient();
+      if (widget.current && client) {
+        client.remove(widget.current);
         widget.current = null;
       }
       setTimeout(render, 0);
