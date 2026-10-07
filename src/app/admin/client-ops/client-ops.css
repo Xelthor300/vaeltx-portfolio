@@ -502,7 +502,7 @@
   border-radius:50%;
   background:#687181;
 }
-.pill--ready .pill::before,.pill--in_progress::before{background:var(--ops-blue)}
+.pill--ready::before,.pill--in_progress::before{background:var(--ops-blue)}
 .pill--client_review::before,.pill--changes::before{background:var(--ops-yellow)}
 .pill--ready_to_deliver::before,.pill--delivered::before{background:var(--ops-green)}
 .pill--waiting_client::before,.pill--on_hold::before{background:#b78cff}
