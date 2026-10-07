@@ -34,5 +34,6 @@ export const config = {
     "/website-auction/payment",
     "/website-auction/onboarding",
     "/admin/website-auction",
+    "/admin/managed-hosting",
   ],
 };
