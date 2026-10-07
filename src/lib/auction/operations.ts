@@ -151,6 +151,7 @@ const subjects: Record<string, string> = {
   billing_payment_failed: "VAELTX Hosting & Care · payment failed",
   billing_action_required: "VAELTX Hosting & Care · payment action required",
   billing_cancel_scheduled: "VAELTX Hosting & Care · cancellation scheduled",
+  billing_cancel_reversed: "VAELTX Hosting & Care · cancellation reversed",
   billing_subscription_canceled: "VAELTX Hosting & Care · subscription canceled",
   billing_subscription_paused: "VAELTX Hosting & Care · subscription paused",
   billing_subscription_resumed: "VAELTX Hosting & Care · subscription resumed",
