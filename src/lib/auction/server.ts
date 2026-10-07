@@ -155,7 +155,13 @@ export async function rate(
     .update(ip)
     .digest("hex");
   const limits =
-    action === "bid" ? [30, 60] : action === "setup" ? [6, 3600] : [12, 3600];
+    action === "bid"
+      ? [30, 60]
+      : action === "setup"
+        ? [6, 3600]
+        : action === "admin-signin"
+          ? [3, 3600]
+          : [12, 3600];
   for (const key of [
     `network:${hashed}`,
     ...(identity ? [`user:${identity}`] : []),
