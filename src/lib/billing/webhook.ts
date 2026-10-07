@@ -128,7 +128,8 @@ function subscriptionNormalized(subscription: Stripe.Subscription, event: Stripe
 async function normalize(event: Stripe.Event): Promise<Normalized> {
   if (
     event.type === "checkout.session.completed" ||
-    event.type === "checkout.session.async_payment_succeeded"
+    event.type === "checkout.session.async_payment_succeeded" ||
+    event.type === "checkout.session.async_payment_failed"
   ) {
     const session = event.data.object as Stripe.Checkout.Session;
     if (session.mode !== "subscription") return { objectId: session.id };
@@ -157,7 +158,18 @@ async function normalize(event: Stripe.Event): Promise<Normalized> {
                 stripeStatus: session.status,
               }),
             }
-          : null,
+          : event.type === "checkout.session.async_payment_failed"
+            ? {
+                kind: "billing_checkout_failed",
+                ...baseNotification(plan, {
+                  stripeSubscriptionId: subscriptionId,
+                  customerEmail: details?.email || null,
+                  customerName: details?.name || null,
+                  businessName: details?.business_name || null,
+                  stripeStatus: session.status,
+                }),
+              }
+            : null,
     };
   }
 
@@ -192,7 +204,10 @@ async function normalize(event: Stripe.Event): Promise<Normalized> {
           currentPeriodEnd: normalized.subscription.current_period_end,
         }),
       };
-    } else if (event.type === "customer.subscription.paused") {
+    } else if (
+      event.type === "customer.subscription.paused" ||
+      event.type === "customer.subscription.collection_paused"
+    ) {
       notification = {
         kind: "billing_subscription_paused",
         ...baseNotification(normalized.plan, {
@@ -200,7 +215,10 @@ async function normalize(event: Stripe.Event): Promise<Normalized> {
           stripeStatus: subscription.status,
         }),
       };
-    } else if (event.type === "customer.subscription.resumed") {
+    } else if (
+      event.type === "customer.subscription.resumed" ||
+      event.type === "customer.subscription.collection_resumed"
+    ) {
       notification = {
         kind: "billing_subscription_resumed",
         ...baseNotification(normalized.plan, {
@@ -307,6 +325,30 @@ async function normalize(event: Stripe.Event): Promise<Normalized> {
     } else if (event.type === "invoice.marked_uncollectible") {
       notification = {
         kind: "billing_invoice_uncollectible",
+        ...baseNotification(plan, {
+          stripeSubscriptionId: subscriptionId,
+          stripeInvoiceId: invoice.id,
+          customerEmail: invoiceAny.customer_email || null,
+          customerName: invoiceAny.customer_name || null,
+          amountDue: normalizedInvoice.amount_due,
+          stripeStatus: invoiceAny.status,
+        }),
+      };
+    } else if (event.type === "invoice.finalization_failed") {
+      notification = {
+        kind: "billing_invoice_finalization_failed",
+        ...baseNotification(plan, {
+          stripeSubscriptionId: subscriptionId,
+          stripeInvoiceId: invoice.id,
+          customerEmail: invoiceAny.customer_email || null,
+          customerName: invoiceAny.customer_name || null,
+          amountDue: normalizedInvoice.amount_due,
+          stripeStatus: invoiceAny.status,
+        }),
+      };
+    } else if (event.type === "invoice.voided") {
+      notification = {
+        kind: "billing_invoice_voided",
         ...baseNotification(plan, {
           stripeSubscriptionId: subscriptionId,
           stripeInvoiceId: invoice.id,
