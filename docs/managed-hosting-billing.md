@@ -262,3 +262,47 @@ If no LIVE key is available:
 The current production `STRIPE_SECRET_KEY` is intentionally TEST-only for the hidden auction and must not be repurposed or overwritten just to satisfy billing reconciliation.
 
 A LIVE key must be created/managed in Stripe and stored only as a Vercel Sensitive production variable. Do not paste it into source code, GitHub, logs, email, or chat.
+
+
+## Customer self-service portal
+
+VAELTX uses the Stripe-hosted Customer Portal for Managed Hosting & Care customer self-service.
+
+LIVE configuration:
+- Stripe Billing Portal configuration: `bpc_1UNlFU4efgtFxxrtM8pk9DMh`
+- Default portal configuration: yes
+- Hosted login enabled: yes
+- Stable VAELTX entry points:
+  - `https://vaeltx-portfolio.vercel.app/manage-subscription`
+  - `https://vaeltx-portfolio.vercel.app/gestionar-suscripcion`
+
+The stable VAELTX routes redirect to the Stripe-hosted login URL stored in `VAELTX_CUSTOMER_PORTAL_LOGIN_URL`. The Stripe URL is public and is not a secret.
+
+### Customer permissions
+
+Customers can:
+- update their payment method;
+- view and download billing history/invoices;
+- update name, billing address, phone number, and tax ID;
+- cancel Managed Hosting & Care.
+
+Customers cannot:
+- switch plans;
+- change subscription quantity;
+- apply promotion codes through subscription updates;
+- pause the subscription;
+- cancel immediately through the portal.
+
+### Cancellation policy
+
+Portal cancellations use `at_period_end` with no proration. The customer keeps service through the period already paid and Stripe stops the next renewal.
+
+Cancellation reasons are collected. The VAELTX webhook:
+- detects when cancellation is scheduled;
+- includes Stripe cancellation feedback/reason/comment in the owner alert when available;
+- detects when a customer reverses a scheduled cancellation before the period ends;
+- detects the final subscription deletion/end event.
+
+The Stripe no-code login page authenticates customers using the billing email attached to their Stripe Customer. Stripe sends the customer a secure login link; VAELTX does not issue or store a customer portal password.
+
+Do not expose the private `/admin/managed-hosting` route to customers. That dashboard is owner-only and separate from customer self-service.
