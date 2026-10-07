@@ -151,7 +151,10 @@ async function normalize(event: Stripe.Event): Promise<Normalized> {
       objectId: session.id,
       customer,
       notification:
-        event.type === "checkout.session.completed"
+        (event.type === "checkout.session.completed" &&
+          (session.payment_status === "paid" ||
+            session.payment_status === "no_payment_required")) ||
+        event.type === "checkout.session.async_payment_succeeded"
           ? {
               kind: "billing_subscription_started",
               ...baseNotification(plan, {
