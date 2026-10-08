@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { PortfolioPreviewImage } from "@/components/PortfolioPreviewImage";
 import { projectBySlug, projects } from "@/lib/content";
 import { ContentSection, Eyebrow, SiteShell } from "@/components/SiteShell";
 import { ViewportRelay } from "@/components/Interactive";
@@ -30,7 +30,7 @@ export function CaseStudyPage({ slug }: { slug: string }) {
       <div className="case-hero-top"><Eyebrow>INDEPENDENT CONCEPT / {project.name.toUpperCase()}</Eyebrow><span>VAELTX / CASE STUDY 0{index + 1}</span></div>
       <div className="case-hero-title"><h1>{project.caseTitle}</h1><p>{project.caseSummary}</p></div>
       <div className="case-meta"><div><span>SECTOR</span><b>{project.sector}</b></div><div><span>SCOPE</span><b>{project.scope}</b></div><div><span>STATUS</span><b>{project.status}</b></div></div>
-      <div className="case-hero-image"><Image unoptimized width={1400} height={1000} src={`/images/preview-${project.slug}.webp`} alt={`${project.name} concept website interface preview`}/><span>01 / PROJECT APERTURE · CONCEPT INTERFACE PREVIEW</span></div>
+      <div className="case-hero-image"><PortfolioPreviewImage slug={project.slug} width={1400} height={1000} alt={`${project.name} concept website interface preview`}/><span>01 / PROJECT APERTURE · CONCEPT INTERFACE PREVIEW</span></div>
       <p className="case-disclosure">Independent concept by VAELTX. Created to demonstrate strategy, UX, visual design, responsive behavior and implementation intent. Not commissioned client work.</p>
     </section>
 
@@ -56,6 +56,6 @@ export function CaseStudyPage({ slug }: { slug: string }) {
     <section className="case-conclusion"><div className="section-shell"><Eyebrow number="10">WHAT THIS CONCEPT DEMONSTRATES</Eyebrow><h2>{project.objective}</h2><p>{project.tradeoff}</p><div className="case-conclusion-actions"><Link className="button button-primary" href={project.route}>Explore the concept <span aria-hidden="true">↗</span></Link><Link className="button button-secondary" href="/contact">Start a project</Link></div></div></section>
 
     </div>
-    <section className="next-project"><Link href={`/work/${next.slug}`} className="next-project-link" style={{ "--project-color": next.palette } as React.CSSProperties}><span><Eyebrow>0{(index + 1) % projects.length + 1} / NEXT PROJECT · {next.sector.toUpperCase()}</Eyebrow><strong>{next.name}</strong><span className="next-project-title">{next.caseTitle}</span><span className="next-arrow" aria-hidden="true">↗</span></span><Image unoptimized width={230} height={150} src={`/images/preview-${next.slug}.webp`} alt="" loading="lazy"/></Link></section>
+    <section className="next-project"><Link href={`/work/${next.slug}`} className="next-project-link" style={{ "--project-color": next.palette } as React.CSSProperties}><span><Eyebrow>0{(index + 1) % projects.length + 1} / NEXT PROJECT · {next.sector.toUpperCase()}</Eyebrow><strong>{next.name}</strong><span className="next-project-title">{next.caseTitle}</span><span className="next-arrow" aria-hidden="true">↗</span></span><PortfolioPreviewImage slug={next.slug} width={230} height={150} alt="" loading="lazy"/></Link></section>
   </main></SiteShell>;
 }

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { PortfolioPreviewImage } from "@/components/PortfolioPreviewImage";
 import { projects } from "@/lib/content";
 import { ProjectTabs, ViewportRelay, ServiceMapper, FAQList } from "@/components/Interactive";
 import { ContentSection, Eyebrow, SiteShell } from "@/components/SiteShell";
@@ -17,7 +17,7 @@ export function HomePage() {
 
     <section className="work-stage" id="work"><div className="section-shell"><div className="section-kicker"><Eyebrow number="01">SELECTED WORK</Eyebrow><span>FOUR SYSTEMS / FOUR DIFFERENT JOBS</span></div><div className="stage-heading"><h2>Four projects. Four distinct systems.</h2><Link className="text-link" href="/work">View all work <span aria-hidden="true">↗</span></Link></div>
       <div className="project-list">{projects.map((project, index) => <article className={`project-row project-row-${index + 1}`} key={project.slug} style={{ "--project-color": project.palette, "--project-signal": project.signal } as React.CSSProperties}>
-        <Link className="project-image" href={`/work/${project.slug}`}><Image unoptimized width={1400} height={1000} src={`/images/preview-${project.slug}.webp`} alt={`${project.name} concept interface preview`} loading={index > 0 ? "lazy" : "eager"}/><span className="project-open" aria-hidden="true">↗</span></Link>
+        <Link className="project-image" href={`/work/${project.slug}`}><PortfolioPreviewImage slug={project.slug} width={1400} height={1000} alt={`${project.name} concept interface preview`} loading={index > 0 ? "lazy" : "eager"}/><span className="project-open" aria-hidden="true">↗</span></Link>
         <div className="project-copy"><Eyebrow number={`0${index + 1}`}>{project.sector}</Eyebrow><h3><Link href={`/work/${project.slug}`}>{project.name}</Link></h3><p>{project.objective}</p><span className="project-status">{project.status} <span aria-hidden="true">·</span> {project.scope}</span><Link className="text-link" href={`/work/${project.slug}`}>Open case study <span aria-hidden="true">→</span></Link></div>
       </article>)}</div>
       <p className="stage-disclosure">Self-directed concept work, created by VAELTX to demonstrate strategy, UX, visual design, interaction and implementation intent. Not commissioned client work.</p>
