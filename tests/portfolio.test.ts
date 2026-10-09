@@ -6,10 +6,15 @@ import { vaultProducts } from "../src/lib/vault";
 
 test("parent route inventory covers every requested public route", () => {
   assert.deepEqual(parentRoutes, [
-    "work", "work/northstar-roofing", "work/mira-atelier", "work/axiom-strategy", "work/vault-tcg",
+    "work", "work/orynt-ai", "work/aster-form", "work/northstar-roofing", "work/mira-atelier", "work/axiom-strategy", "work/vault-tcg",
     "services", "process", "standards", "about", "contact", "privacy",
   ]);
-  assert.equal(projects.length, 4);
+  assert.equal(projects.length, 6);
+  assert.equal(projects[0].slug, "orynt-ai");
+  assert.equal(projects[0].route, "https://vaeltx-orynt-ai-concept.vercel.app/");
+  assert.equal(projects[1].route, "https://asterandform.vercel.app/preview");
+  assert.match(projects[1].status, /Full-stack certification pending/);
+  assert.deepEqual(projects.slice(2).map(project => project.slug), ["northstar-roofing", "mira-atelier", "axiom-strategy", "vault-tcg"]);
 });
 
 test("four concept route trees are unique and include their required commerce and content patterns", () => {

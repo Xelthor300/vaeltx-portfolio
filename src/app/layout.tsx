@@ -6,6 +6,8 @@ import "./concept-visual-overhaul.css";
 import "./navigation-polish.css";
 import "./contact-polish.css";
 import "./production-polish.css";
+import "./orynt-case.css";
+import "./aster-case.css";
 import localFont from "next/font/local";
 import { getSiteOrigin, isIndexableDeployment } from "@/lib/site";
 import { Suspense } from "react";

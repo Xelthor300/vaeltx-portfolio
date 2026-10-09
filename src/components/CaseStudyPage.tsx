@@ -3,6 +3,8 @@ import { PortfolioPreviewImage } from "@/components/PortfolioPreviewImage";
 import { projectBySlug, projects } from "@/lib/content";
 import { ContentSection, Eyebrow, SiteShell } from "@/components/SiteShell";
 import { ViewportRelay } from "@/components/Interactive";
+import { OryntCaseStudy } from "@/components/OryntCaseStudy";
+import { AsterCaseStudy } from "@/components/AsterCaseStudy";
 
 const performanceSnapshots: Record<string, { desktop: number; desktopLcp: string; mobile: number; mobileLcp: string; repeat?: { score: number; mobileLcp: string } }> = {
   "northstar-roofing": { desktop: 100, desktopLcp: "0.6", mobile: 92, mobileLcp: "2.5", repeat: { score: 98, mobileLcp: "2.3" } },
@@ -19,6 +21,8 @@ const inspectionPaths: Record<string, string> = {
 };
 
 export function CaseStudyPage({ slug }: { slug: string }) {
+  if (slug === "orynt-ai") return <OryntCaseStudy />;
+  if (slug === "aster-form") return <AsterCaseStudy />;
   const project = projectBySlug[slug];
   if (!project) return null;
   const index = projects.findIndex(item => item.slug === slug);
