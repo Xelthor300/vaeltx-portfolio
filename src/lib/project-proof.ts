@@ -31,7 +31,7 @@ export const projectProof: Record<string, ProjectProof> = {
       { label: "Build a report", href: "https://vaeltx-orynt-ai-concept.vercel.app/app/reports", instruction: "Change the period and grouping. Compare the chart with its exact data table and CSV export." },
     ],
     captures: [
-      capture("orynt-projects-desktop", "A useful filter, not a decorative control.", "ORYNT Projects filtered to Operations, with four synthetic results", "https://vaeltx-orynt-ai-concept.vercel.app/app/projects"),
+      capture("orynt-projects-desktop", "A useful filter, not a decorative control.", "ORYNT searchable Projects workspace with twenty synthetic results", "https://vaeltx-orynt-ai-concept.vercel.app/app/projects"),
       capture("orynt-reports-mobile", "Report controls on a real mobile viewport.", "ORYNT mobile report builder with period, team, metric and grouping controls", "https://vaeltx-orynt-ai-concept.vercel.app/app/reports", true),
       { image: "/images/orynt-reports-desktop.webp", width: 1425, height: 891, label: "The chart and the underlying rows.", alt: "ORYNT 30-day report grouped by team with the exact data table", source: "https://vaeltx-orynt-ai-concept.vercel.app/app/reports", viewport: "1440 × 900" },
     ],
