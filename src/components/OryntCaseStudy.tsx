@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ProjectProof } from "@/components/ProjectProof";
 import { ContentSection, Eyebrow, SiteShell } from "@/components/SiteShell";
 import { PortfolioPreviewImage } from "@/components/PortfolioPreviewImage";
 
@@ -19,6 +20,7 @@ export function OryntCaseStudy() {
       <p className="case-disclosure"><strong>Independent Concept Project — Designed and Developed by VAELTX.</strong> Not commissioned client work. Fictional teams and synthetic data. No live commercial AI service.</p>
     </section>
 
+    <ProjectProof slug="orynt-ai" />
     <ContentSection number="01" label="THE DESIGN PROBLEM" title="A useful number needs context."><div className="orynt-copy-grid"><div><span className="case-subhead">CONCEPT BRIEF</span><p>Explore how an operations lead could move from an overview to the projects behind it, understand why a signal appears and build a report without losing context.</p><p>This is a self-directed design problem, not a claim about a real customer or research engagement.</p></div><div><span className="case-subhead">THE RESPONSE</span><p>One connected visual system links a calm product website with a denser workspace. Consistent labels, visible reporting periods and inspectable tables keep the interface grounded in the same dataset.</p><p>VAELTX designed and developed the website, responsive workspace, reusable UI and deterministic reporting logic.</p></div></div></ContentSection>
 
     <section className="orynt-product-stage"><div className="section-shell"><div className="section-kicker"><Eyebrow number="02">THE PRODUCT IN USE</Eyebrow><span>AUTHENTIC PUBLIC APPLICATION CAPTURES</span></div><h2>From overview to understanding.</h2><p className="orynt-stage-intro">The website introduces the idea. The workspace lets visitors examine it: projects, delivery, milestones and attention signals share one fixed synthetic snapshot.</p><figure className="orynt-desktop-capture"><ProductCapture name="workspace-desktop" alt="ORYNT desktop workspace showing a 30-day overview, delivery chart and explainable project signals" /><figcaption>DESKTOP / 1440 × 900 · ACTUAL APPLICATION, SYNTHETIC OBSERVATIONS</figcaption></figure><div className="orynt-feature-grid">{[

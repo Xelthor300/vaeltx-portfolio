@@ -1,5 +1,19 @@
 export type VaultProduct = { slug: string; name: string; set: string; number: string; category: string; illustration: string; condition: string; art: string };
 
+export type CartLine = { slug: string; quantity: number; condition: string };
+
+// A condition is part of the selected item, not a property of the whole card.
+export function removeCartLine(lines: CartLine[], slug: string, condition: string): CartLine[] {
+  return lines.filter(line => line.slug !== slug || line.condition !== condition);
+}
+
+export function changeCartLine(lines: CartLine[], slug: string, condition: string, quantity: number): CartLine[] {
+  if (!Number.isFinite(quantity)) return lines;
+  if (quantity <= 0) return removeCartLine(lines, slug, condition);
+  return lines.map(line => line.slug === slug && line.condition === condition
+    ? { ...line, quantity: Math.min(10, Math.floor(quantity)) } : line);
+}
+
 export const vaultProducts: VaultProduct[] = [
   { slug: "ember-keeper", name: "Ember Keeper", set: "Ember Archive", number: "014", category: "Flame / Keeper", illustration: "ember", condition: "Near mint", art: "A small lantern fox waits beside an imagined observatory." },
   { slug: "tideglass-heron", name: "Tideglass Heron", set: "Tidal Index", number: "008", category: "Tide / Warden", illustration: "heron", condition: "Light play", art: "A glass-feathered bird crosses a quiet reef at dusk." },
