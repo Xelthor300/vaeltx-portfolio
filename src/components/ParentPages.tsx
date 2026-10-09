@@ -15,8 +15,8 @@ const processFaq = [
 ];
 
 function WorkIndex() {
-  return <SiteShell mode="canvas"><main tabIndex={-1} id="main"><PageIntro eyebrow="SELECTED WORK / 04 INDEPENDENT CONCEPTS" title="Four industries. Four different interface systems." description="Each concept is designed from its own audience, business model and conversion path — not a VAELTX template with different colors." />
-    <section className="work-index section-shell">{projects.map((p, i) => <article key={p.slug} className={`work-index-row work-index-row-${i + 1}`} style={{ "--project-color": p.palette, "--project-signal": p.signal } as React.CSSProperties}><Link className="work-index-media" href={`/work/${p.slug}`}><PortfolioPreviewImage slug={p.slug} width={1400} height={1000} alt={`${p.name} concept website interface`} loading="lazy"/><span>OPEN PROJECT ↗</span></Link><div><Eyebrow number={`0${i + 1}`}>{p.sector}</Eyebrow><h2><Link href={`/work/${p.slug}`}>{p.name}</Link></h2><p>{p.objective}</p><dl><div><dt>Scope</dt><dd>{p.scope}</dd></div><div><dt>Status</dt><dd>Independent Concept Project</dd></div></dl><Link className="text-link" href={`/work/${p.slug}`}>Open case study <span aria-hidden="true">→</span></Link></div></article>)}
+  return <SiteShell mode="canvas"><main tabIndex={-1} id="main"><PageIntro eyebrow="SELECTED WORK / 06 INDEPENDENT CONCEPTS" title="Distinct worlds. Considered interfaces." description="Each concept is designed from its own audience, business model and conversion path — not a VAELTX template with different colors." />
+    <section className="work-index section-shell">{projects.map((p, i) => <article key={p.slug} className={`work-index-row work-index-row-${i + 1}`} style={{ "--project-color": p.palette, "--project-signal": p.signal } as React.CSSProperties}><Link className="work-index-media" href={`/work/${p.slug}`}><PortfolioPreviewImage slug={p.slug} width={1400} height={1000} alt={`${p.name} concept website interface`} loading="lazy"/><span>OPEN PROJECT ↗</span></Link><div><Eyebrow number={`0${i + 1}`}>{p.sector}</Eyebrow><h2><Link href={`/work/${p.slug}`}>{p.name}</Link></h2><p>{p.objective}</p><dl><div><dt>Scope</dt><dd>{p.scope}</dd></div><div><dt>Status</dt><dd>{p.status}</dd></div></dl><Link className="text-link" href={`/work/${p.slug}`}>Open case study <span aria-hidden="true">→</span></Link></div></article>)}
       <p className="work-index-disclosure">These are self-directed concepts by VAELTX. They demonstrate work and reasoning, not commissioned client engagements or business outcomes.</p></section>
   </main></SiteShell>;
 }
@@ -96,7 +96,7 @@ export function getParentMetadata(path: string) {
   const project = path.startsWith("work/") ? projects.find(item => item.slug === path.slice(5)) : undefined;
   if (project) return { title: `${project.name} — Independent Concept Case Study`, description: project.caseSummary };
   const labels: Record<string, { title: string; description: string }> = {
-    work: { title: "Selected Work", description: "Four independent concept projects, each built around a different audience and interface system." },
+    work: { title: "Selected Work", description: "Six independent concept projects, each built around a different audience and interface system." },
     services: { title: "Services", description: "Web strategy, UX/UI, responsive systems and scoped implementation support." },
     process: { title: "Process", description: "Five decision gates that make scope, design, build and verification clearer." },
     standards: { title: "Standards", description: "Responsive, accessibility and performance standards with clear evidence status." },

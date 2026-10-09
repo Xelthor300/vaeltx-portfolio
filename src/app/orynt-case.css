@@ -1,0 +1,54 @@
+@layer refinement {
+  .case-orynt-ai { --orynt-field:#183d35; }
+  .orynt-case-hero { background:var(--orynt-field); }
+  .orynt-case-hero .case-hero-top { display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; border-color:#61766e; }
+  .orynt-case-hero .case-hero-top > span:last-child { font:10px var(--font-mono); color:#d2ddd2; }
+  .orynt-case-hero .case-hero-title p, .orynt-case-hero .case-disclosure { color:#dce4dc; }
+  .orynt-hero-actions { display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-top:24px; }
+  .orynt-case-hero .button-primary { background:#ecefe4; color:#183d35; border-color:#ecefe4; }
+  .orynt-hero-contact { color:#f4f2e8; font-size:13px; text-decoration:underline; text-underline-offset:5px; }
+  .orynt-hero-capture { grid-column:2; grid-row:2/span 2; margin:0; align-self:center; padding:12px; border:1px solid #71867a; border-radius:6px; background:#eae9df; }
+  .orynt-hero-capture img { display:block; width:100%; height:auto; border-radius:2px; }
+  .case-orynt-ai figcaption { font:9px/1.5 var(--font-mono); letter-spacing:.035em; padding-top:12px; color:#575c52; }
+  .orynt-copy-grid, .orynt-technical-grid { display:grid; grid-template-columns:1fr 1fr; gap:30px; }
+  .orynt-copy-grid p, .orynt-technical-grid p, .orynt-report-copy p { margin-top:15px; font-size:16px; line-height:1.65; }
+  .orynt-product-stage { padding-block:52px; background:#eaece4; border-block:1px solid var(--line-0); }
+  .orynt-product-stage h2 { max-width:24ch; margin-top:24px; font-size:38px; }
+  .orynt-stage-intro { max-width:65ch; margin:20px 0 32px; color:var(--ink-1); }
+  .orynt-desktop-capture, .orynt-report-capture { margin:0; padding:12px; border:1px solid #c8cec1; border-radius:6px; background:#f5f4ec; }
+  .orynt-desktop-capture img, .orynt-report-capture img { display:block; width:100%; height:auto; }
+  .orynt-feature-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:30px; margin-top:32px; }
+  .orynt-feature-grid article { border-top:1px solid #bec6b9; padding-top:20px; }
+  .orynt-feature-grid article > span { font:10px var(--font-mono); color:#4f5b50; }
+  .orynt-feature-grid h3 { font-size:23px; margin:18px 0 14px; }
+  .orynt-feature-grid p { font-size:15px; line-height:1.6; color:var(--ink-1); }
+  .orynt-report-copy { margin-bottom:24px; }
+  .orynt-responsive { display:grid; grid-template-columns:.85fr 1.2fr; gap:60px; align-items:center; padding-block:60px; border-block:1px solid var(--line-0); }
+  .orynt-responsive h2 { font-size:36px; margin:22px 0; }
+  .orynt-responsive p { font-size:16px; line-height:1.65; margin-bottom:20px; color:var(--ink-1); }
+  .orynt-mobile-pair { display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start; }
+  .orynt-mobile-pair figure { margin:0; min-width:0; }
+  .orynt-mobile-pair img { display:block; width:100%; height:auto; border:1px solid #bec6b9; border-radius:9px; }
+  .orynt-mobile-pair figure:nth-child(2) { margin-top:38px; }
+  .orynt-technical-grid ul { margin-top:18px; padding-left:19px; }
+  .orynt-technical-grid li { padding-block:7px; font-size:15px; line-height:1.5; }
+  .orynt-final-disclosure { margin-top:24px; font-size:11px !important; }
+  .aperture-tabs { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  @media (max-width:1023px) {
+    .orynt-responsive { gap:30px; }
+    .orynt-copy-grid, .orynt-technical-grid { grid-template-columns:1fr; }
+  }
+  @media (max-width:767px) {
+    .orynt-case-hero .case-hero-title { grid-column:1/-1; }
+    .orynt-hero-capture { grid-column:1/-1; grid-row:auto; padding:7px; }
+    .orynt-case-hero .case-meta { grid-column:1/-1; }
+    .orynt-feature-grid, .orynt-responsive { grid-template-columns:1fr; }
+    .orynt-product-stage { padding-block:40px; }
+    .orynt-product-stage h2, .orynt-responsive h2 { font-size:30px; }
+    .orynt-responsive { padding-block:42px; }
+    .orynt-mobile-pair { max-width:530px; gap:12px; }
+    .orynt-desktop-capture, .orynt-report-capture { padding:7px; }
+    .aperture-tabs { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .aperture-tabs button { min-height:54px; font-size:10px; }
+  }
+}

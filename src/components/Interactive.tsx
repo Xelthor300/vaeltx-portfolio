@@ -12,7 +12,7 @@ export function ProjectTabs() {
   const project = projects[active];
   return <div className="project-aperture" aria-label="Explore concept projects">
     <div className="aperture-frame" data-project={project.slug} style={{ "--project-color": project.palette, "--project-signal": project.signal } as React.CSSProperties}>
-      <div className="aperture-meta"><span>{String(active + 1).padStart(2, "0")} / 04</span><span>{project.sector}</span></div>
+      <div className="aperture-meta"><span>{String(active + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}</span><span>{project.sector}</span></div>
       <div className="aperture-media"><Image unoptimized width={1200} height={750} key={project.slug} src={`/images/preview-${project.slug}.webp`} alt={`${project.name} concept interface: ${project.objective}`} /></div>
       <div className="aperture-caption"><div><strong>{project.name}</strong><span className="aperture-disclosure">{project.status}</span></div><Link href={`/work/${project.slug}`} aria-label={`Open ${project.name} case study`}>↗</Link></div>
     </div>
