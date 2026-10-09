@@ -12,9 +12,9 @@
   .proof-gallery figure > a { display:block; background:#25272b; border:1px solid #45464a; border-radius:4px; overflow:hidden; }
   .proof-gallery img { width:100%; height:auto; }
   .proof-desktop img { max-height:580px; object-fit:contain; }
-  .proof-gallery figcaption { padding-top:16px; display:grid; gap:8px; }
+  .proof-gallery figcaption { color:#f5f3ef; padding-top:16px; display:grid; gap:8px; }
   .proof-gallery figcaption > span { color:#c2beb7; font:10px/1.5 var(--font-mono); }
-  .proof-gallery figcaption strong { font-size:15px; line-height:1.5; font-weight:600; }
+  .proof-gallery figcaption strong { color:#f5f3ef; font-family:var(--font-studio); letter-spacing:0; font-size:15px; line-height:1.5; font-weight:600; }
   .proof-gallery figcaption a { font-size:12px; text-decoration:underline; text-underline-offset:4px; color:#ecefe4; }
   .proof-capture-note { margin:24px 0 32px; color:#c2beb7; font-size:11px; line-height:1.6; }
   .proof-paths { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; border-top:1px solid #45464a; }

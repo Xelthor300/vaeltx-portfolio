@@ -47,7 +47,7 @@
           "width": 1425,
           "height": 891,
           "label": "A useful filter, not a decorative control.",
-          "alt": "ORYNT Projects filtered to Operations, with four synthetic results",
+          "alt": "ORYNT searchable Projects workspace with twenty synthetic results",
           "source": "https://vaeltx-orynt-ai-concept.vercel.app/app/projects",
           "viewport": "1440 × 900",
           "mobile": false
