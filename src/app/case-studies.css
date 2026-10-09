@@ -6,6 +6,9 @@
   .case-hero-title { grid-column:1; display:block; padding:8px 0 0; }
   .case-hero-title h1 { max-width:23ch; font-size:54px; margin:0 0 24px; line-height:1.06; }
   .case-hero-title p { max-width:55ch; color:#c2beb7; font-size:16px; }
+  .case-hero-actions { display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-top:24px; }
+  .case-hero-actions .button-primary { background:#ecefe4; color:#141619; border-color:#ecefe4; }
+  .case-hero-contact { color:#f4f2e8; font-size:13px; text-decoration:underline; text-underline-offset:5px; }
   .case-meta { grid-column:1; grid-template-columns:1fr; gap:0; margin:0; padding:8px 0; align-self:end; }
   .case-meta > div, .case-meta > div + div { display:grid; grid-template-columns:80px 1fr; align-items:start; gap:12px; min-height:0; border:0; padding:7px 0; }
   .case-meta b { font-size:11px; }
