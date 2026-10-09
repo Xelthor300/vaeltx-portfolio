@@ -32,7 +32,7 @@ export function CaseStudyPage({ slug }: { slug: string }) {
   return <SiteShell mode={mode} className={`case-study case-${slug}`}><main tabIndex={-1} id="main">
     <section className="case-hero" style={{ "--project-color": project.palette, "--project-signal": project.signal } as React.CSSProperties}>
       <div className="case-hero-top"><Eyebrow>INDEPENDENT CONCEPT / {project.name.toUpperCase()}</Eyebrow><span>VAELTX / CASE STUDY 0{index + 1}</span></div>
-      <div className="case-hero-title"><h1>{project.caseTitle}</h1><p>{project.caseSummary}</p></div>
+      <div className="case-hero-title"><h1>{project.caseTitle}</h1><p>{project.caseSummary}</p><div className="case-hero-actions"><Link className="button button-primary" href={project.route}>Explore the application <span aria-hidden="true">↗</span></Link><Link className="case-hero-contact" href="/contact">Discuss a similar project <span aria-hidden="true">→</span></Link></div></div>
       <div className="case-meta"><div><span>SECTOR</span><b>{project.sector}</b></div><div><span>SCOPE</span><b>{project.scope}</b></div><div><span>STATUS</span><b>{project.status}</b></div></div>
       <div className="case-hero-image"><PortfolioPreviewImage slug={project.slug} width={1400} height={1000} alt={`${project.name} concept website interface preview`}/><span>01 / PROJECT APERTURE · CONCEPT INTERFACE PREVIEW</span></div>
       <p className="case-disclosure">Independent concept by VAELTX. Created to demonstrate strategy, UX, visual design, responsive behavior and implementation intent. Not commissioned client work.</p>
