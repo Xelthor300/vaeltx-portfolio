@@ -8,6 +8,7 @@ import "./contact-polish.css";
 import "./production-polish.css";
 import "./orynt-case.css";
 import "./aster-case.css";
+import "./project-proof.css";
 import localFont from "next/font/local";
 import { getSiteOrigin, isIndexableDeployment } from "@/lib/site";
 import { Suspense } from "react";

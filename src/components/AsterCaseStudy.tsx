@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ProjectProof } from "@/components/ProjectProof";
 import { ContentSection, Eyebrow, SiteShell } from "@/components/SiteShell";
 
 const preview = "https://asterandform.vercel.app/preview";
@@ -18,6 +19,7 @@ export function AsterCaseStudy() {
       <p className="case-disclosure"><strong>Independent Concept Project — Designed and Developed by VAELTX.</strong> Fictional studio and demonstration appointments. No real clients or payments. Production authentication has not been validated for this case study.</p>
     </section>
 
+    <ProjectProof slug="aster-form" />
     <ContentSection number="01" label="DESIGN / SERVICE EXPERIENCE" title="Atmosphere with a clear next step."><div className="aster-copy-grid"><div><span className="case-subhead">THE CONCEPT BRIEF</span><p>Explore a premium studio website that helps visitors understand a visual point of view, compare three consultations and follow a reservation interface without losing the sense of calm.</p><p>The business, services, fees and interior imagery are conceptual. This is not a commissioned interior project or a real booking service.</p></div><div><span className="case-subhead">THE DESIGN RESPONSE</span><p>Warm neutral tones, expressive serif typography and restrained navigation establish the identity. Clear service names, durations and next actions bring structure to an otherwise atmospheric experience.</p><p>VAELTX designed and developed the concept website and its responsive interfaces. The presentation demonstrates design and public preview behavior; full-stack certification remains pending.</p></div></div></ContentSection>
 
     <section className="aster-experience-stage"><div className="section-shell"><div className="section-kicker"><Eyebrow number="02">THE SAFE INTERACTIVE WALKTHROUGH</Eyebrow><span>PREVIEW / SYNTHETIC UI / NO PERSISTENCE</span></div><h2>A reservation journey you can inspect.</h2><p className="aster-stage-intro">Choose a fictional consultation and a sample time, then see a simulated confirmation. The preview explicitly states that it creates no appointment, sends no confirmation email and stores no client record.</p><figure className="aster-wide-capture"><Capture name="reservation-desktop" alt="ASTER synthetic reservation walkthrough with service selection, sample time slots and a simulate confirmation button" /><figcaption>RESERVATION INTERFACE / SAFE PUBLIC PREVIEW · NOT A LIVE RESERVATION</figcaption></figure><div className="aster-feature-grid">{[
